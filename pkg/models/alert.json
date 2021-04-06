@@ -1,0 +1,50 @@
+{
+  "receiver": "sysadmin",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "Linux OS",
+        "alertname": "CPUHigh",
+        "component": "product-cvm-imagestage",
+        "cpu": "cpu-total",
+        "db": "telegraf",
+        "description": "cpu usage is high than 20% for 5 minutes",
+        "host": "10.30.1.160",
+        "product": "cvm",
+        "region": "chongqing",
+        "severity": "warning",
+        "vmalert": "10.30.12.22",
+        "zone": "cqaz1"
+      },
+      "annotations": {},
+      "startsAt": "2021-03-30T20:17:50.814674209+08:00",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://10.30.12.22:8429/api/v1/2026138838271548684/17025577897922373885/status",
+      "fingerprint": "83eb2c81e0da3faf"
+    }
+  ],
+  "groupLabels": {
+    "alertname": "CPUHigh"
+  },
+  "commonLabels": {
+    "alertgroup": "Linux OS",
+    "alertname": "CPUHigh",
+    "component": "product-cvm-imagestage",
+    "cpu": "cpu-total",
+    "db": "telegraf",
+    "description": "cpu usage is high than 20% for 5 minutes",
+    "host": "10.30.1.160",
+    "product": "cvm",
+    "region": "chongqing",
+    "severity": "warning",
+    "vmalert": "10.30.12.22",
+    "zone": "cqaz1"
+  },
+  "commonAnnotations": {},
+  "externalURL": "http://10.30.12.22:9193",
+  "version": "4",
+  "groupKey": "{}:{alertname=\"CPUHigh\"}",
+  "truncatedAlerts": 0
+}

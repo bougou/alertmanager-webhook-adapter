@@ -1,0 +1,71 @@
+{{ define "__subject" -}}
+【{{ .Signature }}】
+{{- if gt (.Alerts.Firing|len) 0 }}告警中:{{ .Alerts.Firing|len }}{{ end }}
+{{- if and (gt (.Alerts.Firing|len) 0) (gt (.Alerts.Resolved|len) 0) }}/{{ end }}
+{{- if gt (.Alerts.Resolved|len) 0 }}已恢复:{{ .Alerts.Resolved |len }}{{ end }}
+{{- ` • ` }}
+{{- .GroupLabels.alertname }}
+{{- ` • ` }}
+{{- if eq (index .Alerts 0).Labels.severity "ok" }} OK{{ end }}
+{{- if eq (index .Alerts 0).Labels.severity "info" }} INFO{{ end }}
+{{- if eq (index .Alerts 0).Labels.severity "warning" }} WARNING{{ end }}
+{{- if eq (index .Alerts 0).Labels.severity "critical" }} CRITICAL{{ end }}
+{{ end }}
+
+
+{{ define "__externalURL" -}}
+{{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }}
+{{- end }}
+
+
+{{ define "__alert_list" }}
+{{ range . }}
+
+<font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}"> ⌜ </font>
+
+<font color="comment"> Alert Name </font>: [{{ .Labels.alertname }}]({{ .GeneratorURL }})
+
+<font color="comment"> Severity </font>:{{ ` ` }}
+{{- if eq .Labels.severity "ok" }}OK{{ end -}}
+{{- if eq .Labels.severity "info" }}INFO{{ end -}}
+{{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
+{{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
+
+<font color="comment"> Identifier </font>: {{ .Labels.identifier }}
+
+<font color="comment"> Status </font>: <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
+
+<font color="comment"> Starts At </font>: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+
+<font color="comment"> Ends At </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
+
+<font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}"> ⌞ </font>
+{{ end }}
+{{ end }}
+
+
+{{ define "prom.title" -}}
+{{ template "__subject" . }}
+{{ end }}
+
+
+{{ define "prom.markdown" }}
+{{ .MessageAt.Format "2006-01-02 15:04:05" }}
+
+### {{ template "__subject" . }}
+{{ if gt (.Alerts.Firing|len ) 0 }}
+#### <font color="warning">☲ Firing {{ .Alerts.Firing|len }} alerts</font>
+{{ template "__alert_list" .Alerts.Firing }}
+{{ end }}
+
+{{ if gt (.Alerts.Resolved|len) 0 }}
+---
+####  <font color="info">✓ Resolved {{ .Alerts.Resolved|len }} alerts</font>
+{{ template "__alert_list" .Alerts.Resolved }}
+{{ end }}
+{{ end }}
+
+
+{{ define "prom.text" }}
+{{ template "prom.markdown" . }}
+{{ end }}

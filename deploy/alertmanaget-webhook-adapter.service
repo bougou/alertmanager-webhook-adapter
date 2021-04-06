@@ -1,0 +1,12 @@
+[Unit]
+Description=alertmanager-webhook-adapter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/alertmanager-webhook-adapter \
+          --listen-address=:8060
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
