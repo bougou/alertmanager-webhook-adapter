@@ -19,11 +19,11 @@ $ go build -v -x
 $ ./alertmanager-webhook-adapter
 
 # see help
-$ ./alertmanager-webhook-adapter --listen-address=:8060
+$ ./alertmanager-webhook-adapter -h
 
-# Add signature for messages
+# Add signature for sent messages
 $ ./alertmanager-webhook-adapter --listen-address=:8060 --signature "Anything-You-Like"
-# the signature normally will be added to the begining of the messsage:
+# the signature will be added to the begining of the messsage:
 # 【Anything-You-Like】this-is-the-the-the-the-the-xxxxxxxxxx-message
 ```
 
@@ -46,9 +46,9 @@ $ systemctl start
 ## Configure Alertmanager to send alert messages to this webhook server
 
 ```bash
-http://<this-webhook-server>:8060/webhook/send?channel_type=dingtalk&token=<token>&msg_type=markdown
+http://<this-webhook-server>:8060/webhook/send?channel_type=dingtalk&token=<token>
 
-http://<this-webhook-server>:8060/webhook/send?channel_type=feishu&token=<token>&msg_type=markdown
+http://<this-webhook-server>:8060/webhook/send?channel_type=feishu&token=<token>
 
-http://<this-webhook-server>:8060/webhook/send?channel_type=weixin&token=<token>&msg_type=markdown
+http://<this-webhook-server>:8060/webhook/send?channel_type=weixin&token=<token>
 ```
