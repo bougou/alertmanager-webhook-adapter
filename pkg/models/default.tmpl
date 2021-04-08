@@ -31,7 +31,7 @@
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
 
-<font color="comment"> Identifier </font>: {{ .Labels.identifier }}
+<font color="comment"> Instance </font>: {{ .Labels.instance }}
 
 <font color="comment"> Status </font>: <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
 

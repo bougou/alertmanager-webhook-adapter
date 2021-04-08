@@ -8,9 +8,9 @@ import (
 )
 
 func createDingtalkSender(request *restful.Request) (*dingtalk.Sender, error) {
-	accessToken := request.QueryParameter("access_token")
-	if accessToken == "" {
-		return nil, fmt.Errorf("not access_token found for dingtalk channel")
+	token := request.QueryParameter("token")
+	if token == "" {
+		return nil, fmt.Errorf("not token found for dingtalk channel")
 	}
 
 	msgType := request.QueryParameter("msg_type")
@@ -18,5 +18,5 @@ func createDingtalkSender(request *restful.Request) (*dingtalk.Sender, error) {
 		return nil, fmt.Errorf("not supported msgtype for dingtalk")
 	}
 
-	return dingtalk.NewSender(accessToken, msgType), nil
+	return dingtalk.NewSender(token, msgType), nil
 }

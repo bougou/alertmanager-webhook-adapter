@@ -9,7 +9,7 @@ import (
 )
 
 //go:embed default.tmpl
-var tmpl string
+var defaultTmpl string
 
 var (
 	topLevelTemplateName = "prom"
@@ -31,7 +31,7 @@ var (
 func init() {
 	var err error
 
-	_, err = UpdateTemplate(tmpl)
+	_, err = LoadDefaultTemplate(defaultTmpl)
 	if err != nil {
 		panic(err)
 	}
@@ -41,7 +41,7 @@ func init() {
 	}
 }
 
-func UpdateTemplate(newTpl string) (oldTpl string, err error) {
+func LoadDefaultTemplate(newTpl string) (oldTpl string, err error) {
 	return promTemplate.UpdateTemplate(newTpl)
 }
 

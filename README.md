@@ -1,5 +1,13 @@
 # alertmanager-webhook-adapter
 
+## Features
+
+- Support Weixin Group Bot / 企业微信群机器人
+- Support Dingtalk Group Bot / 钉钉群机器人
+- Support Feishu Group Bot / 飞书群机器人
+
+> More is comming...
+
 ## Run
 
 ### Build and Run
@@ -17,7 +25,6 @@ $ ./alertmanager-webhook-adapter --listen-address=:8060
 $ ./alertmanager-webhook-adapter --listen-address=:8060 --signature "Anything-You-Like"
 # the signature normally will be added to the begining of the messsage:
 # 【Anything-You-Like】this-is-the-the-the-the-the-xxxxxxxxxx-message
-
 ```
 
 ### Start as systemd service
@@ -34,4 +41,14 @@ $ vim /usr/local/bin/alertmanager-webhook-adapater
 
 $ systemctl daemon-reload
 $ systemctl start
+```
+
+## Configure Alertmanager to send alert messages to this webhook server
+
+```bash
+http://<this-webhook-server>:8060/webhook/send?channel_type=dingtalk&token=<token>&msg_type=markdown
+
+http://<this-webhook-server>:8060/webhook/send?channel_type=feishu&token=<token>&msg_type=markdown
+
+http://<this-webhook-server>:8060/webhook/send?channel_type=weixin&token=<token>&msg_type=markdown
 ```
