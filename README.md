@@ -5,6 +5,7 @@
 - Support Weixin Group Bot / 企业微信群机器人
 - Support Dingtalk Group Bot / 钉钉群机器人
 - Support Feishu Group Bot / 飞书群机器人
+- Support Weixin Application / 企业微信应用
 
 > More is comming...
 
@@ -51,4 +52,6 @@ http://<this-webhook-server>:8060/webhook/send?channel_type=dingtalk&token=<toke
 http://<this-webhook-server>:8060/webhook/send?channel_type=feishu&token=<token>
 
 http://<this-webhook-server>:8060/webhook/send?channel_type=weixin&token=<token>
+
+http://<this-webhook-server>:8060/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>
 ```

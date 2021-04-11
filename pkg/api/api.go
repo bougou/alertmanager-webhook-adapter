@@ -64,6 +64,8 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		sender, err = createDingtalkSender(request)
 	case "feishu":
 		sender, err = createFeishuSender(request)
+	case "weixinapp":
+		sender, err = createWeixinappSender(request)
 	default:
 		response.WriteHeaderAndJson(http.StatusBadRequest, "not supported channel_type", restful.MIME_JSON)
 		return
