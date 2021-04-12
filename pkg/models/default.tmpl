@@ -27,20 +27,38 @@
 {{ define "__alert_list" }}
 {{ range . }}
 > <font color="comment"> Alert Name </font>: {{ if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
-<font color="comment"> Severity </font>:{{ ` ` }}
+>
+> <font color="comment"> Severity </font>:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
-<font color="comment"> Instance </font>: {{ .Labels.instance }}
-{{ if .Labels.region  }}<font color="comment"> Region </font>: {{ .Labels.region }}{{ end }}
-{{ if .Labels.zone  }}<font color="comment"> Zone </font>: {{ .Labels.zone }}{{ end }}
-{{ if .Labels.product  }}<font color="comment"> Product </font>: {{ .Labels.product }}{{ end }}
-{{ if .Labels.component  }}<font color="comment"> Component </font>: {{ .Labels.component }}{{ end }}
-<font color="comment"> Status </font>: <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
-<font color="comment"> Starts At </font>: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
-<font color="comment"> Ends At </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
-<font color="comment"> Description </font>: {{ .Annotations.description }}
+>
+> <font color="comment"> Instance </font>: {{ .Labels.instance }}
+>
+{{- if .Labels.region }}
+> <font color="comment"> Region </font>: {{ .Labels.region }}
+>
+{{- end }}
+{{- if .Labels.zone }}
+> <font color="comment"> Zone </font>: {{ .Labels.zone }}
+>
+{{- end }}
+{{- if .Labels.product }}
+> <font color="comment"> Product </font>: {{ .Labels.product }}
+>
+{{- end }}
+{{- if .Labels.component  }}
+> <font color="comment"> Component </font>: {{ .Labels.component }}
+>
+{{- end }}
+> <font color="comment"> Status </font>: <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
+>
+> <font color="comment"> Starts At </font>: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+>
+> <font color="comment"> Ends At </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
+>
+> <font color="comment"> Description </font>: {{ .Annotations.description }}
 
 {{ end }}
 {{ end }}
@@ -61,11 +79,11 @@
 {{ template "__alert_list" .Alerts.Firing }}
 {{ end }}
 
-
 {{ if gt (.Alerts.Resolved|len) 0 }}
-####  <font color="info">✓ Resolved {{ .Alerts.Resolved|len }} alerts</font>
+#### <font color="info">✓ Resolved {{ .Alerts.Resolved|len }} alerts</font>
 {{ template "__alert_list" .Alerts.Resolved }}
 {{ end }}
+
 {{ end }}
 
 {{ define "prom.text" }}

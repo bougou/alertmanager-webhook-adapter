@@ -27,20 +27,38 @@
 {{ define "__alert_list" }}
 {{ range . }}
 > <font color="comment"> 告警名称 </font>: {{ if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
-<font color="comment"> 告警级别 </font>:{{ ` ` }}
+>
+> <font color="comment"> 告警级别 </font>:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
-<font color="comment"> 实例 </font>: {{ .Labels.instance }}
-{{ if .Labels.region  }}<font color="comment"> 地域 </font>: {{ .Labels.region }}{{ end }}
-{{ if .Labels.zone  }}<font color="comment"> 可用区 </font>: {{ .Labels.zone }}{{ end }}
-{{ if .Labels.product  }}<font color="comment"> 产品 </font>: {{ .Labels.product }}{{ end }}
-{{ if .Labels.component  }}<font color="comment"> 组件 </font>: {{ .Labels.component }}{{ end }}
-<font color="comment"> 状态 </font>: <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
-<font color="comment"> 开始时间 </font>: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
-<font color="comment"> 结束时间 </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
-<font color="comment"> 告警描述 </font>: {{ if .Annotations.description_cn  }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
+>
+> <font color="comment"> 实例 </font>: {{ .Labels.instance }}
+>
+{{- if .Labels.region }}
+> <font color="comment"> 地域 </font>: {{ .Labels.region }}
+>
+{{- end }}
+{{- if .Labels.zone }}
+> <font color="comment"> 可用区 </font>: {{ .Labels.zone }}
+>
+{{- end }}
+{{- if .Labels.product }}
+> <font color="comment"> 产品 </font>: {{ .Labels.product }}
+>
+{{- end }}
+{{- if .Labels.component  }}
+> <font color="comment"> 组件 </font>: {{ .Labels.component }}
+>
+{{- end }}
+> <font color="comment"> 告警状态 </font>: <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
+>
+> <font color="comment"> 开始时间 </font>: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+>
+> <font color="comment"> 结束时间 </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
+>
+> <font color="comment"> 告警描述 </font>: {{ .Annotations.description }}
 
 {{ end }}
 {{ end }}

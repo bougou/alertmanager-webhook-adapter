@@ -1,11 +1,25 @@
 # alertmanager-webhook-adapter
 
+A general webhook server for receiving [Prometheus AlertManager](https://prometheus.io/docs/alerting/latest/configuration/#webhook_config)'s notifications and send them through different channel types.
+
 ## Features
 
 - Support Weixin Group Bot / 企业微信群机器人
+    ```
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixin&token=<token>
+    ```
 - Support Dingtalk Group Bot / 钉钉群机器人
+    ```
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=dingtalk&token=<token>
+    ```
 - Support Feishu Group Bot / 飞书群机器人
+    ```
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=feishu&token=<token>
+    ```
 - Support Weixin Application / 企业微信应用
+    ```
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>
+    ```
 
 > More is comming...
 
@@ -46,12 +60,4 @@ $ systemctl start
 
 ## Configure Alertmanager to send alert messages to this webhook server
 
-```bash
-http://<this-webhook-server>:8060/webhook/send?channel_type=dingtalk&token=<token>
-
-http://<this-webhook-server>:8060/webhook/send?channel_type=feishu&token=<token>
-
-http://<this-webhook-server>:8060/webhook/send?channel_type=weixin&token=<token>
-
-http://<this-webhook-server>:8060/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>
-```
+See **Features** section.
