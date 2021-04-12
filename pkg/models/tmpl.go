@@ -11,6 +11,9 @@ import (
 //go:embed default.tmpl
 var defaultTmpl string
 
+//go:embed default_cn.tmpl
+var defaultTmplCN string
+
 var (
 	topLevelTemplateName = "prom"
 	promTemplate         safeTemplate
@@ -39,6 +42,22 @@ func init() {
 	for _, c := range "_*`" {
 		isMarkdownSpecial[c] = true
 	}
+}
+
+func LoadTemplate(tmplName string) (oldTpl string, err error) {
+	var tmpl string
+
+	switch tmplName {
+	case "default":
+		tmpl = defaultTmpl
+	case "default_cn":
+		tmpl = defaultTmplCN
+	default:
+		tmpl = defaultTmpl
+	}
+
+	return promTemplate.UpdateTemplate(tmpl)
+
 }
 
 func LoadDefaultTemplate(newTpl string) (oldTpl string, err error) {

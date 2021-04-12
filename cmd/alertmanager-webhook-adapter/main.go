@@ -9,6 +9,7 @@ import (
 
 	"github.com/bougou/alertmanager-webhook-adapter/cmd/alertmanager-webhook-adapter/app/options"
 	"github.com/bougou/alertmanager-webhook-adapter/pkg/api"
+	"github.com/bougou/alertmanager-webhook-adapter/pkg/models"
 	restful "github.com/emicklei/go-restful/v3"
 	"github.com/spf13/cobra"
 )
@@ -33,11 +34,15 @@ var rootCmd = &cobra.Command{
 		// Do Stuff Here
 		addr, _ := cmd.Flags().GetString("listen-address")
 		signature, _ := cmd.Flags().GetString("signature")
+		tmplName, _ := cmd.Flags().GetString("tmpl-name")
 
 		appOptions := &options.AppOptions{
 			Addr:      addr,
 			Signature: signature,
+			TmplName:  tmplName,
 		}
+
+		models.LoadTemplate(appOptions.TmplName)
 
 		container := restful.DefaultContainer
 		controller := api.NewController(appOptions)
@@ -56,6 +61,8 @@ var rootCmd = &cobra.Command{
 func run() {
 	rootCmd.Flags().StringP("listen-address", "l", "0.0.0.0:8090", "The address to listen")
 	rootCmd.Flags().StringP("signature", "s", "未知", "the signature")
+	rootCmd.Flags().StringP("tmpl-name", "t", "default", "the tmpl name")
+
 	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
 
 	if err := rootCmd.Execute(); err != nil {
