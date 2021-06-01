@@ -8,7 +8,7 @@
 
 {{- ` • ` }}
 
-{{- if .CommonAnnotations.alertname  }}{{ .CommonAnnotations.alertname }}{{ else }}{{ .GroupLabels.alertname }}{{ end }}
+{{- if .CommonLabels.alertname_custom }}{{ .CommonLabels.alertname_custom }}{{ else if .CommonAnnotations.alertname }}{{ .CommonAnnotations.alertname }}{{ else }}{{ .GroupLabels.alertname }}{{ end }}
 
 {{- ` • ` }}
 
@@ -26,7 +26,7 @@
 
 {{ define "__alert_list" }}
 {{ range . }}
-> <font color="comment"> Alert Name </font>: {{ if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
+> <font color="comment"> Alert Name </font>: {{ if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 >
 > <font color="comment"> Severity </font>:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
