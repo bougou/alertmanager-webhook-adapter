@@ -1,13 +1,22 @@
-package api
+package senders
 
 import (
 	"fmt"
 
 	"github.com/bougou/webhook-adapter/channels/feishu"
+	"github.com/bougou/webhook-adapter/models"
 	restful "github.com/emicklei/go-restful/v3"
 )
 
-func createFeishuSender(request *restful.Request) (*feishu.Sender, error) {
+const (
+	ChannelTypeFeishu = "feishu"
+)
+
+func init() {
+	RegisterChannelsSenderCreator(ChannelTypeFeishu, createFeishuSender)
+}
+
+func createFeishuSender(request *restful.Request) (models.Sender, error) {
 	token := request.QueryParameter("token")
 	if token == "" {
 		return nil, fmt.Errorf("not token found for feishu channel")
@@ -18,5 +27,6 @@ func createFeishuSender(request *restful.Request) (*feishu.Sender, error) {
 		return nil, fmt.Errorf("not supported msgtype for feishu")
 	}
 
-	return feishu.NewSender(token, msgType), nil
+	var sender models.Sender = feishu.NewSender(token, msgType)
+	return sender, nil
 }

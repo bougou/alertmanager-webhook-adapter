@@ -2,22 +2,27 @@ package models
 
 import (
 	"bytes"
-	_ "embed"
+	"errors"
+	"fmt"
+	"os"
+	"path"
 	"strings"
 	"sync"
 	"text/template"
+
+	"github.com/bougou/alertmanager-webhook-adapter/pkg/models/templates"
 )
-
-//go:embed default.tmpl
-var defaultTmpl string
-
-//go:embed default_cn.tmpl
-var defaultTmplCN string
 
 var (
 	topLevelTemplateName = "prom"
-	promTemplate         safeTemplate
-	defaultFuncs         = map[string]interface{}{
+
+	// this is a package-level variable, which stores the loaded template
+	promMsgTemplate *safeTemplate
+
+	// store templates for different channels
+	promMsgTemplatesMap = make(map[string]*safeTemplate)
+
+	defaultFuncs = map[string]interface{}{
 		"toUpper": strings.ToUpper,
 		"toLower": strings.ToLower,
 		"title":   strings.Title,
@@ -34,8 +39,7 @@ var (
 func init() {
 	var err error
 
-	_, err = LoadDefaultTemplate(defaultTmpl)
-	if err != nil {
+	if err = LoadDefaultTemplate(templates.DefaultTmpl); err != nil {
 		panic(err)
 	}
 
@@ -44,24 +48,86 @@ func init() {
 	}
 }
 
-func LoadTemplate(tmplName string) (oldTpl string, err error) {
-	var tmpl string
-
-	switch tmplName {
-	case "default":
-		tmpl = defaultTmpl
-	case "default_cn":
-		tmpl = defaultTmplCN
-	default:
-		tmpl = defaultTmpl
+func LoadDefaultTemplate(defaultTmpl string) error {
+	promMsgTemplate = &safeTemplate{}
+	if err := promMsgTemplate.UpdateTemplate(defaultTmpl); err != nil {
+		msg := fmt.Sprintf("UpdateTemplate for default failed, err: %s", err)
+		return errors.New(msg)
 	}
 
-	return promTemplate.UpdateTemplate(tmpl)
+	for k, v := range templates.ChannelsDefaultTmplMap {
+		t := &safeTemplate{}
+		if err := t.UpdateTemplate(v); err != nil {
+			msg := fmt.Sprintf("UpdateTemplate for (%s) failed, err: %s", k, err)
+			return errors.New(msg)
+		}
+		promMsgTemplatesMap[k] = t
+	}
 
+	return nil
 }
 
-func LoadDefaultTemplate(newTpl string) (oldTpl string, err error) {
-	return promTemplate.UpdateTemplate(newTpl)
+// LoadTemplate loads external templates from specified template dir
+func LoadTemplate(tmplDir, tmplName, tmplDefault string) error {
+
+	// If tmplName is not empty, use the specified tmpl to update the default promMsgTemplate
+	// and clear the promMsgTemplatesMap, thus will use the specified tmpl for all notification channels.
+	if tmplName != "" {
+		for k := range promMsgTemplatesMap {
+			delete(promMsgTemplatesMap, k)
+		}
+
+		tmplFile := path.Join(tmplDir, fmt.Sprintf("%s.%s", tmplName, "tmpl"))
+		b, err := os.ReadFile(tmplFile)
+		if err != nil {
+			msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
+			return errors.New(msg)
+		}
+
+		if err := promMsgTemplate.UpdateTemplate(string(b)); err != nil {
+			msg := fmt.Sprintf("UpdateTemplate for default failed, err: %s", err)
+			return errors.New(msg)
+		}
+
+		return nil
+	}
+
+	var tmplFile string
+	var b []byte
+	var err error
+
+	if tmplDefault != "" {
+		tmplFile = path.Join(tmplDir, fmt.Sprintf("%s.%s", tmplDefault, "tmpl"))
+		b, err = os.ReadFile(tmplFile)
+		if err != nil {
+			msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
+			return errors.New(msg)
+		}
+	}
+
+	// try to find template file named "<channel>.tmpl" and update the promTemplatesMap
+	for channel, t := range promMsgTemplatesMap {
+		tmplFile = path.Join(tmplDir, fmt.Sprintf("%s.%s", channel, "tmpl"))
+		b, err = os.ReadFile(tmplFile)
+
+		if os.IsNotExist(err) {
+			// not found <channel>.tmpl file
+			continue
+		}
+
+		if err != nil {
+			// found <channel>.tmpl file, but read failed
+			msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
+			return errors.New(msg)
+		}
+
+		if err := t.UpdateTemplate(string(b)); err != nil {
+			msg := fmt.Sprintf("UpdateTemplate for (%s) failed, err: %s", channel, err)
+			return errors.New(msg)
+		}
+	}
+
+	return nil
 }
 
 type safeTemplate struct {
@@ -70,7 +136,7 @@ type safeTemplate struct {
 	mu      sync.RWMutex
 }
 
-func (t *safeTemplate) UpdateTemplate(newTpl string) (oldTpl string, err error) {
+func (t *safeTemplate) UpdateTemplate(newTpl string) (err error) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
@@ -82,7 +148,7 @@ func (t *safeTemplate) UpdateTemplate(newTpl string) (oldTpl string, err error) 
 		return
 	}
 
-	oldTpl = t.current
+	_ = t.current // oldtmpl
 	t.Template = tpl
 	t.current = newTpl
 	return
@@ -113,7 +179,7 @@ func ExecuteTextString(text string, data interface{}) (string, error) {
 		return "", nil
 	}
 
-	tmpl, err := promTemplate.Clone()
+	tmpl, err := promMsgTemplate.Clone()
 	if err != nil {
 		return "", err
 	}

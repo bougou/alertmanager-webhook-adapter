@@ -1,16 +1,10 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"log"
-	"net/http"
 	"os"
 
-	"github.com/bougou/alertmanager-webhook-adapter/cmd/alertmanager-webhook-adapter/app/options"
-	"github.com/bougou/alertmanager-webhook-adapter/pkg/api"
-	"github.com/bougou/alertmanager-webhook-adapter/pkg/models"
-	restful "github.com/emicklei/go-restful/v3"
+	"github.com/bougou/alertmanager-webhook-adapter/cmd/alertmanager-webhook-adapter/app"
 	"github.com/spf13/cobra"
 )
 
@@ -23,49 +17,8 @@ func initConfig() {
 }
 
 func main() {
-	run()
-}
-
-var rootCmd = &cobra.Command{
-	Use:   "alertmanager-webhook-adapter",
-	Short: "alertmanager-webhook-adapter",
-	Long:  `alertmanager-webhook-adapter`,
-	Run: func(cmd *cobra.Command, args []string) {
-		// Do Stuff Here
-		addr, _ := cmd.Flags().GetString("listen-address")
-		signature, _ := cmd.Flags().GetString("signature")
-		tmplName, _ := cmd.Flags().GetString("tmpl-name")
-
-		appOptions := &options.AppOptions{
-			Addr:      addr,
-			Signature: signature,
-			TmplName:  tmplName,
-		}
-
-		models.LoadTemplate(appOptions.TmplName)
-
-		container := restful.DefaultContainer
-		controller := api.NewController(appOptions)
-		controller.Install(container)
-
-		s := &http.Server{
-			Addr:    appOptions.Addr,
-			Handler: container,
-		}
-		log.Printf("start listening, %s", s.Addr)
-		log.Fatal(s.ListenAndServe())
-
-	},
-}
-
-func run() {
-	rootCmd.Flags().StringP("listen-address", "l", "0.0.0.0:8090", "The address to listen")
-	rootCmd.Flags().StringP("signature", "s", "未知", "the signature")
-	rootCmd.Flags().StringP("tmpl-name", "t", "default", "the tmpl name")
-
-	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
-
-	if err := rootCmd.Execute(); err != nil {
+	command := app.NewRootCommand()
+	if err := command.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

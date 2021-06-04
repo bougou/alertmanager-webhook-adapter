@@ -14,7 +14,7 @@
 
 {{- if gt (.Alerts.Firing|len) 0 }}告警中:{{ .Alerts.Firing|len }}{{ end }}
 {{- if and (gt (.Alerts.Firing|len) 0) (gt (.Alerts.Resolved|len) 0) }}/{{ end }}
-{{- if gt (.Alerts.Resolved|len) 0 }}已恢复:{{ .Alerts.Resolved |len }}{{ end }}
+{{- if gt (.Alerts.Resolved|len) 0 }}已恢复:{{ .Alerts.Resolved|len }}{{ end }}
 
 {{ end }}
 
@@ -34,7 +34,7 @@
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
 >
-> <font color="comment"> Instance </font>: {{ .Labels.instance }}
+> <font color="comment"> Instance </font>: `{{ .Labels.instance }}`
 >
 {{- if .Labels.region }}
 > <font color="comment"> Region </font>: {{ .Labels.region }}
@@ -57,12 +57,19 @@
 > <font color="comment"> Starts At </font>: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
 >
 > <font color="comment"> Ends At </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
+{{- if eq .Status "firing" }}
 >
 > <font color="comment"> Description </font>: {{ .Annotations.description }}
+{{- end }}
 
 {{ end }}
 {{ end }}
 
+{{ define "__alert_summary" -}}
+{{ range . }}
+<font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Labels.instance }}</font>
+{{ end }}
+{{ end }}
 
 {{ define "prom.title" -}}
 {{ template "__subject" . }}
@@ -70,17 +77,29 @@
 
 
 {{ define "prom.markdown" }}
-### {{ template "__subject" . }}
-
 {{ .MessageAt.Format "2006-01-02 15:04:05" }}
+#### Summary
 
 {{ if gt (.Alerts.Firing|len ) 0 }}
-#### <font color="warning">☲ Firing {{ .Alerts.Firing|len }} alerts</font>
+##### <font color="warning">☲ Firing {{ .Alerts.Firing|len }} alerts</font>
+{{ template "__alert_summary" .Alerts.Firing }}
+{{ end }}
+
+
+{{ if gt (.Alerts.Resolved|len) 0 }}
+#####  <font color="info">✓ Resolved {{ .Alerts.Resolved|len }} alerts</font>
+{{ template "__alert_summary" .Alerts.Resolved }}
+{{ end }}
+
+#### Detail
+
+{{ if gt (.Alerts.Firing|len ) 0 }}
+##### <font color="warning">☲ Firing {{ .Alerts.Firing|len }} alerts</font>
 {{ template "__alert_list" .Alerts.Firing }}
 {{ end }}
 
 {{ if gt (.Alerts.Resolved|len) 0 }}
-#### <font color="info">✓ Resolved {{ .Alerts.Resolved|len }} alerts</font>
+##### <font color="info">✓ Resolved {{ .Alerts.Resolved|len }} alerts</font>
 {{ template "__alert_list" .Alerts.Resolved }}
 {{ end }}
 

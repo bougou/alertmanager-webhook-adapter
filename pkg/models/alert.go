@@ -3,6 +3,7 @@ package models
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -34,17 +35,21 @@ import (
 //   ]
 // }
 
+// AlertManagerWebhookMessage holds data that alertmanager passed to webhook server.
+// https://pkg.go.dev/github.com/prometheus/alertmanager/template#Data already defines
+// a struct type, but here we re-defined it, cause we will fill extra fields into it.
 type AlertmanagerWebhookMessage struct {
-	Version           string           `json:"version"`
-	GroupKey          *json.RawMessage `json:"groupKey"`
-	TruncatedAlerts   int              `json:"truncatedAlerts"`
-	Status            string           `json:"status"`
-	Receiver          string           `json:"receiver"`
-	GroupLabels       KV               `json:"groupLabels"`
-	CommonLabels      KV               `json:"commonLabels"`
-	CommonAnnotations KV               `json:"commonAnnotations"`
-	ExternalURL       string           `json:"externalURL"`
-	Alerts            Alerts           `json:"alerts"`
+	Version         string           `json:"version"`
+	GroupKey        *json.RawMessage `json:"groupKey"`
+	TruncatedAlerts int              `json:"truncatedAlerts"`
+
+	Status            string `json:"status"`
+	Receiver          string `json:"receiver"`
+	Alerts            Alerts `json:"alerts"`
+	GroupLabels       KV     `json:"groupLabels"`
+	CommonLabels      KV     `json:"commonLabels"`
+	CommonAnnotations KV     `json:"commonAnnotations"`
+	ExternalURL       string `json:"externalURL"`
 
 	// extra fields added by us
 	MessageAt time.Time `json:"messageAt"` // the time the webhook message was received
@@ -94,36 +99,46 @@ func (m *AlertmanagerWebhookMessage) SetSignature(s string) *AlertmanagerWebhook
 	return m
 }
 
-func (m *AlertmanagerWebhookMessage) RenderTmpl(tmplName string) (string, error) {
-	tmpl, err := promTemplate.Clone()
+func (m *AlertmanagerWebhookMessage) RenderTmpl(channel string, tmplName string) (string, error) {
+	var safetmpl *safeTemplate
+
+	if t, exists := promMsgTemplatesMap[channel]; !exists {
+		safetmpl = promMsgTemplate
+	} else {
+		safetmpl = t
+	}
+
+	tmpl, err := safetmpl.Clone()
 	if err != nil {
-		return "", err
+		msg := fmt.Sprintf("Clone template failed, err: %s", err)
+		return "", errors.New(msg)
 	}
 
 	var buf bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buf, tmplName, m); err != nil {
-		return "<<<< template error >>>>", err
+		msg := fmt.Sprintf("ExecuteTemplate failed, err: %s", err)
+		return "<<<< template error >>>>", errors.New(msg)
 	}
 
 	return buf.String(), nil
 }
 
-func (m *AlertmanagerWebhookMessage) ToPayload(raw []byte) *models.Payload {
+func (m *AlertmanagerWebhookMessage) ToPayload(channel string, raw []byte) *models.Payload {
 	msg := &models.Payload{Raw: string(raw)}
 
-	title, err := m.RenderTmpl("prom.title")
+	title, err := m.RenderTmpl(channel, "prom.title")
 	if err != nil {
 		fmt.Println(err)
 	}
 	msg.Title = title
 
-	text, err := m.RenderTmpl("prom.text")
+	text, err := m.RenderTmpl(channel, "prom.text")
 	if err != nil {
 		fmt.Println(err)
 	}
 	msg.Text = text
 
-	markdown, err := m.RenderTmpl("prom.markdown")
+	markdown, err := m.RenderTmpl(channel, "prom.markdown")
 	if err != nil {
 		fmt.Println(err)
 	}

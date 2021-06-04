@@ -1,13 +1,22 @@
-package api
+package senders
 
 import (
 	"fmt"
 
 	"github.com/bougou/webhook-adapter/channels/weixin"
+	"github.com/bougou/webhook-adapter/models"
 	restful "github.com/emicklei/go-restful/v3"
 )
 
-func createWeixinSender(request *restful.Request) (*weixin.Sender, error) {
+const (
+	ChannelTypeWeixin = "weixin"
+)
+
+func init() {
+	RegisterChannelsSenderCreator(ChannelTypeWeixin, createWeixinSender)
+}
+
+func createWeixinSender(request *restful.Request) (models.Sender, error) {
 	token := request.QueryParameter("token")
 	if token == "" {
 		return nil, fmt.Errorf("not token found for weixin channel")
@@ -19,5 +28,6 @@ func createWeixinSender(request *restful.Request) (*weixin.Sender, error) {
 
 	}
 
-	return weixin.NewSender(token, msgType), nil
+	var sender models.Sender = weixin.NewSender(token, msgType)
+	return sender, nil
 }

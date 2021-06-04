@@ -1,14 +1,23 @@
-package api
+package senders
 
 import (
 	"fmt"
 	"strconv"
 
 	"github.com/bougou/webhook-adapter/channels/weixinapp"
+	"github.com/bougou/webhook-adapter/models"
 	restful "github.com/emicklei/go-restful/v3"
 )
 
-func createWeixinappSender(request *restful.Request) (*weixinapp.Sender, error) {
+const (
+	ChannelTypeWeixinApp = "weixinapp"
+)
+
+func init() {
+	RegisterChannelsSenderCreator(ChannelTypeWeixinApp, createWeixinappSender)
+}
+
+func createWeixinappSender(request *restful.Request) (models.Sender, error) {
 	corpID := request.QueryParameter("corp_id")
 	if corpID == "" {
 		return nil, fmt.Errorf("not core_id found for weixin channel")
@@ -34,5 +43,6 @@ func createWeixinappSender(request *restful.Request) (*weixinapp.Sender, error) 
 		return nil, fmt.Errorf("not supported msgtype for weixin")
 	}
 
-	return weixinapp.NewSender(corpID, aID, agentSecret, msgType), nil
+	var sender models.Sender = weixinapp.NewSender(corpID, aID, agentSecret, msgType)
+	return sender, nil
 }

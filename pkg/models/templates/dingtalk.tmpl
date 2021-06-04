@@ -1,0 +1,105 @@
+{{ define "__subject" -}}
+【{{ .Signature }}】
+{{- if eq (index .Alerts 0).Labels.severity "ok" }} OK{{ end }}
+{{- if eq (index .Alerts 0).Labels.severity "info" }} INFO{{ end }}
+{{- if eq (index .Alerts 0).Labels.severity "warning" }} WARNING{{ end }}
+{{- if eq (index .Alerts 0).Labels.severity "critical" }} CRITICAL{{ end }}
+{{- ` • ` }}
+{{- if .CommonLabels.alertname_cn }}{{ .CommonLabels.alertname_cn }}{{ else if .CommonLabels.alertname_custom }}{{ .CommonLabels.alertname_custom }}{{ else if .CommonAnnotations.alertname  }}{{ .CommonAnnotations.alertname }}{{ else }}{{ .GroupLabels.alertname }}{{ end }}
+{{- ` • ` }}
+{{- if gt (.Alerts.Firing|len) 0 }}告警中:{{ .Alerts.Firing|len }}{{ end }}
+{{- if and (gt (.Alerts.Firing|len) 0) (gt (.Alerts.Resolved|len) 0) }}/{{ end }}
+{{- if gt (.Alerts.Resolved|len) 0 }}已恢复:{{ .Alerts.Resolved|len }}{{ end }}
+{{ end }}
+
+
+{{ define "__externalURL" -}}
+{{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }}
+{{- end }}
+
+
+{{ define "__alert_list" }}
+{{ range . }}
+---
+> **告警名称**: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
+>
+> **告警级别**: {{ ` ` }}
+{{- if eq .Labels.severity "ok" }}OK{{ end -}}
+{{- if eq .Labels.severity "info" }}INFO{{ end -}}
+{{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
+{{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
+>
+> **实例**: `{{ .Labels.instance }}`
+>
+{{- if .Labels.region }}
+> **地域**: {{ .Labels.region }}
+>
+{{- end }}
+{{- if .Labels.zone }}
+> **可用区**: {{ .Labels.zone }}
+>
+{{- end }}
+{{- if .Labels.product }}
+> **产品**: {{ .Labels.product }}
+>
+{{- end }}
+{{- if .Labels.component  }}
+> **组件**: {{ .Labels.component }}
+>
+{{- end }}
+> **告警状态**: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} {{ .Status | toUpper }}
+>
+> **开始时间**: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+>
+> **结束时间**: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
+>
+{{- if eq .Status "firing" }}
+> 告警描述: {{ if .Annotations.description_cn }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
+>
+{{- end }}
+{{ end }}
+{{ end }}
+
+
+{{ define "__alert_summary" }}
+{{ range . }}- {{ .Labels.instance }}
+{{ end }}
+{{ end }}
+
+{{ define "prom.title" }}
+{{ template "__subject" . }}
+{{ end }}
+
+
+{{ define "prom.markdown" }}
+{{ .MessageAt.Format "2006-01-02 15:04:05" }}
+#### **摘要**
+
+{{ if gt (.Alerts.Firing|len ) 0 }}
+##### **🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
+{{ template "__alert_summary" .Alerts.Firing }}
+{{ end }}
+
+
+{{ if gt (.Alerts.Resolved|len) 0 }}
+##### **✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
+{{ template "__alert_summary" .Alerts.Resolved }}
+{{ end }}
+
+#### **详请**
+
+{{ if gt (.Alerts.Firing|len ) 0 }}
+##### **🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
+{{ template "__alert_list" .Alerts.Firing }}
+{{ end }}
+
+
+{{ if gt (.Alerts.Resolved|len) 0 }}
+##### **✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
+{{ template "__alert_list" .Alerts.Resolved }}
+{{ end }}
+{{ end }}
+
+{{ define "prom.text" }}
+{{ template "prom.markdown" . }}
+{{ end }}

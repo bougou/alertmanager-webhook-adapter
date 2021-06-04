@@ -1,13 +1,22 @@
-package api
+package senders
 
 import (
 	"fmt"
 
 	"github.com/bougou/webhook-adapter/channels/dingtalk"
+	"github.com/bougou/webhook-adapter/models"
 	restful "github.com/emicklei/go-restful/v3"
 )
 
-func createDingtalkSender(request *restful.Request) (*dingtalk.Sender, error) {
+const (
+	ChannelTypeDingtalk = "dingtalk"
+)
+
+func init() {
+	RegisterChannelsSenderCreator(ChannelTypeDingtalk, createDingtalkSender)
+}
+
+func createDingtalkSender(request *restful.Request) (models.Sender, error) {
 	token := request.QueryParameter("token")
 	if token == "" {
 		return nil, fmt.Errorf("not token found for dingtalk channel")
@@ -18,5 +27,6 @@ func createDingtalkSender(request *restful.Request) (*dingtalk.Sender, error) {
 		return nil, fmt.Errorf("not supported msgtype for dingtalk")
 	}
 
-	return dingtalk.NewSender(token, msgType), nil
+	var sender models.Sender = dingtalk.NewSender(token, msgType)
+	return sender, nil
 }

@@ -23,8 +23,16 @@ github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24
 github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+CedLV8=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bketelsen/crypt v0.0.3-0.20200106085610-5cbc8cc4026c/go.mod h1:MKsuJmJgSg28kpZDP6UIiPt0e0Oz0kqKNGyRaWEPv84=
+github.com/bougou/webhook-adapter v0.0.1 h1:n70diB6+10VuEoVfg5t8H97wumaeXYCBUbUXx2TtCdk=
+github.com/bougou/webhook-adapter v0.0.1/go.mod h1:PC84yYizGgkJ9oL3/nzNt/sNmt5HxvZkWRRRULsmhgQ=
+github.com/bougou/webhook-adapter v1.0.1 h1:BMqs1AM/3PzHHvFNGPZ8L1uQz9pcvVYerrL2kcjgEpM=
+github.com/bougou/webhook-adapter v1.0.1/go.mod h1:PC84yYizGgkJ9oL3/nzNt/sNmt5HxvZkWRRRULsmhgQ=
+github.com/bougou/webhook-adapter v1.0.2 h1:OA4Q+tHmlwBbWXukkc8KPiXd4EQw6diPud2hmHLa5E4=
+github.com/bougou/webhook-adapter v1.0.2/go.mod h1:PC84yYizGgkJ9oL3/nzNt/sNmt5HxvZkWRRRULsmhgQ=
 github.com/bougou/webhook-adapter v1.0.8 h1:OLRgDyfHWuV1QQounGIwC7LrqBjgwh3V5DmTOrv89qQ=
 github.com/bougou/webhook-adapter v1.0.8/go.mod h1:PC84yYizGgkJ9oL3/nzNt/sNmt5HxvZkWRRRULsmhgQ=
+github.com/bougou/webhook-adapter v1.0.9-0.20210809084602-1580d25fb61a h1:upHSx+AikxMhrjrbnrlXfMbIO5r4NXSDTFpCigy9dVE=
+github.com/bougou/webhook-adapter v1.0.9-0.20210809084602-1580d25fb61a/go.mod h1:PC84yYizGgkJ9oL3/nzNt/sNmt5HxvZkWRRRULsmhgQ=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=

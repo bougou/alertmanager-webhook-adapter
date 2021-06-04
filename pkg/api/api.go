@@ -6,18 +6,19 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/bougou/alertmanager-webhook-adapter/cmd/alertmanager-webhook-adapter/app/options"
 	promModels "github.com/bougou/alertmanager-webhook-adapter/pkg/models"
-	"github.com/bougou/webhook-adapter/models"
+	"github.com/bougou/alertmanager-webhook-adapter/pkg/senders"
 	restful "github.com/emicklei/go-restful/v3"
 )
 
 type Controller struct {
-	appOptions *options.AppOptions
+	signature string
 }
 
-func NewController(o *options.AppOptions) *Controller {
-	return &Controller{o}
+func NewController(signature string) *Controller {
+	return &Controller{
+		signature: signature,
+	}
 }
 
 func (c *Controller) Install(container *restful.Container) {
@@ -45,9 +46,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		response.WriteHeaderAndJson(http.StatusBadRequest, "unmarshal body failed", restful.MIME_JSON)
 		return
 	}
-	promMsg.SetMessageAt().SetSignature(c.appOptions.Signature)
-
-	payload := promMsg.ToPayload(raw)
+	promMsg.SetMessageAt().SetSignature(c.signature)
 
 	channelType := request.QueryParameter("channel_type")
 	if channelType == "" {
@@ -55,26 +54,19 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		return
 	}
 
-	var sender models.Sender
-
-	switch channelType {
-	case "weixin":
-		sender, err = createWeixinSender(request)
-	case "dingtalk":
-		sender, err = createDingtalkSender(request)
-	case "feishu":
-		sender, err = createFeishuSender(request)
-	case "weixinapp":
-		sender, err = createWeixinappSender(request)
-	default:
+	senderCreator, exists := senders.ChannelsSenderCreatorMap[channelType]
+	if !exists {
 		response.WriteHeaderAndJson(http.StatusBadRequest, "not supported channel_type", restful.MIME_JSON)
 		return
 	}
 
+	sender, err := senderCreator(request)
 	if err != nil {
 		response.WriteHeaderAndJson(http.StatusInternalServerError, fmt.Sprintf("create sender failed, %v", err), restful.MIME_JSON)
 		return
 	}
+
+	payload := promMsg.ToPayload(channelType, raw)
 
 	if err := sender.Send(payload); err != nil {
 		response.WriteHeaderAndJson(http.StatusInternalServerError, fmt.Sprintf("sender send failed, %v", err), restful.MIME_JSON)
