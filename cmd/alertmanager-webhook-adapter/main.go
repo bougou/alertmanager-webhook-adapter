@@ -9,7 +9,6 @@ import (
 )
 
 func init() {
-	// append the user-defined functions in the command's initialization
 	cobra.OnInitialize(initConfig)
 }
 

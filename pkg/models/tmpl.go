@@ -16,7 +16,7 @@ import (
 var (
 	topLevelTemplateName = "prom"
 
-	// this is a package-level variable, which stores the loaded template
+	// store the default templates
 	promMsgTemplate *safeTemplate
 
 	// store templates for different channels
@@ -26,11 +26,7 @@ var (
 		"toUpper": strings.ToUpper,
 		"toLower": strings.ToLower,
 		"title":   strings.Title,
-		// join is equal to strings.Join but inverts the argument order
-		// for easier pipelining in templates.
-		"join": func(sep string, s []string) string {
-			return strings.Join(s, sep)
-		},
+
 		"markdown": markdownEscapeString,
 	}
 	isMarkdownSpecial [128]bool
@@ -92,36 +88,42 @@ func LoadTemplate(tmplDir, tmplName, tmplDefault string) error {
 		return nil
 	}
 
-	var tmplFile string
-	var b []byte
-	var err error
-
+	var customDefaultTmpl string
 	if tmplDefault != "" {
-		tmplFile = path.Join(tmplDir, fmt.Sprintf("%s.%s", tmplDefault, "tmpl"))
-		b, err = os.ReadFile(tmplFile)
+		tmplFile := path.Join(tmplDir, fmt.Sprintf("%s.%s", tmplDefault, "tmpl"))
+		b, err := os.ReadFile(tmplFile)
 		if err != nil {
 			msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
 			return errors.New(msg)
 		}
+		customDefaultTmpl = string(b)
 	}
 
 	// try to find template file named "<channel>.tmpl" and update the promTemplatesMap
 	for channel, t := range promMsgTemplatesMap {
-		tmplFile = path.Join(tmplDir, fmt.Sprintf("%s.%s", channel, "tmpl"))
-		b, err = os.ReadFile(tmplFile)
+		var channelTmpl string
+
+		tmplFile := path.Join(tmplDir, fmt.Sprintf("%s.%s", channel, "tmpl"))
+		b, err := os.ReadFile(tmplFile)
 
 		if os.IsNotExist(err) {
-			// not found <channel>.tmpl file
-			continue
+			// case 1: <channel>.tmpl file does not exist, and not specified custom default, use continue the next loop
+			if tmplDefault == "" {
+				continue
+			}
+			// case 2: <channel>.tmpl file does not exist, but specified custom default, use custom default as tmpl
+			channelTmpl = customDefaultTmpl
+		} else {
+			// case 3: <channel>.tmpl exists, but read failed, error and return
+			if err != nil {
+				msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
+				return errors.New(msg)
+			}
+			// case 4: <channel>.tmpl exists, and read succeeded, use file content as tmpl
+			channelTmpl = string(b)
 		}
 
-		if err != nil {
-			// found <channel>.tmpl file, but read failed
-			msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
-			return errors.New(msg)
-		}
-
-		if err := t.UpdateTemplate(string(b)); err != nil {
+		if err := t.UpdateTemplate(channelTmpl); err != nil {
 			msg := fmt.Sprintf("UpdateTemplate for (%s) failed, err: %s", channel, err)
 			return errors.New(msg)
 		}

@@ -81,7 +81,7 @@ You can use the following three options to acheive this purpose.
 -  `--tmpl-name (-t)`
 -  `--tmpl-default (-n)`
 
-The `--tmpl-dir` is a MUST if you must to load your custom templates. `--tmpl-name` and `--tmpl-default` is optional. So, there are THREE use cases when combining those options.
+The `--tmpl-dir` is a MUST if you want to load your custom templates. `--tmpl-name` and `--tmpl-default` is optional. So, there are THREE use cases when combining those options.
 
 1. `--tmpl-dir <somepath>`
 2. `--tmpl-dir <somepath> --tmpl-name <tmplname>`
