@@ -117,7 +117,7 @@ $ ./alertmanager-webhook-adapter -s Bougou --tmpl-dir ./templates/
 
 Create your own template file, like `custom.tmpl`, the filename without suffix will be the template name, and put it under the template dir.
 
-The program will **try to found `<tmplName>.tmpl` files** under the tmpl dir. The choosed tmpl file will be used for all notification channels. If not found, error and exit.
+The program will **try to found `<tmplName>.tmpl` file** under the tmpl dir. The choosed tmpl file will be used for all notification channels. If not found, error and exit.
 
 ```bash
 # use templtes/custom.tmpl for all channels.
