@@ -23,7 +23,10 @@ func createDingtalkSender(request *restful.Request) (models.Sender, error) {
 	}
 
 	msgType := request.QueryParameter("msg_type")
-	if !(msgType == "" || dingtalk.ValidMsgtype(msgType)) {
+	if msgType == "" {
+		msgType = "markdown"
+	}
+	if !(dingtalk.ValidMsgtype(msgType)) {
 		return nil, fmt.Errorf("not supported msgtype for dingtalk")
 	}
 

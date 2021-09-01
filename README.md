@@ -21,6 +21,10 @@ A general webhook server for receiving [Prometheus AlertManager](https://prometh
     ```
     http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>
     ```
+- `slack`, Slack App
+    ```
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=slack&token=<token>&channel=<channel>
+    ```
 
 > More is comming...
 
@@ -67,7 +71,7 @@ See **Features** section.
 ```yaml
 - name: 'sre-team'
   webhook_configs:
-  - url: "http://10.0.0.1:8090/webhook/send?channel_type=weixin&msg_type=markdown&token=1234-1234-1234"
+  - url: "http://10.0.0.1:8090/webhook/send?channel_type=weixin&token=1234-1234-1234"
 ```
 
 ## Custom Templates
@@ -176,3 +180,7 @@ All template files MUST define the following template parts in the template file
 | 企业微信机器人                              | 企业微信应用                                   | 钉钉群机器人                                  | 飞书群机器人                                |
 | ------------------------------------------- | ---------------------------------------------- | --------------------------------------------- | ------------------------------------------- |
 | <img src="docs/weixin_zh.png" width="200"/> | <img src="docs/weixinapp_zh.png" width="200"/> | <img src="docs/dingtalk_zh.png" width="200"/> | <img src="docs/feishu_zh.png" width="200"/> |
+
+| Slack App                                  |
+| ------------------------------------------ |
+| <img src="docs/slack_zh.png" width="200"/> |

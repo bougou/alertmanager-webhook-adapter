@@ -23,7 +23,10 @@ func createWeixinSender(request *restful.Request) (models.Sender, error) {
 	}
 
 	msgType := request.QueryParameter("msg_type")
-	if !(msgType == "" || weixin.ValidMsgtype(msgType)) {
+	if msgType == "" {
+		msgType = "markdown"
+	}
+	if !(weixin.ValidMsgtype(msgType)) {
 		return nil, fmt.Errorf("not supported msgtype for weixin")
 
 	}

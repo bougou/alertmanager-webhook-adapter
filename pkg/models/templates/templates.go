@@ -19,10 +19,14 @@ var DefaultTmplDingTalk string
 //go:embed feishu.tmpl
 var DefaultTmplFeishu string
 
+//go:embed slack.tmpl
+var DefaultTmplSlack string
+
 // Must define for every supported channel
 var ChannelsDefaultTmplMap = map[string]string{
 	"weixin":    DefaultTmplWeixin,
 	"weixinapp": DefaultTmplWeixinapp,
 	"dingtalk":  DefaultTmplDingTalk,
 	"feishu":    DefaultTmplFeishu,
+	"slack":     DefaultTmplSlack,
 }
