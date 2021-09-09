@@ -93,7 +93,7 @@ The `--tmpl-dir` is a MUST if you want to load your custom templates. `--tmpl-na
 
 > If `--tmpl-name` and `--tmpl-default` are both specified, `--tmpl-default` will be ignored.
 
-These there use cases are used for different purposes.
+These three use cases are used for different purposes.
 
 
 ### `--tmpl-dir`
