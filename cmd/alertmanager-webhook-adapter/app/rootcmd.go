@@ -18,7 +18,7 @@ func NewRootCommand() *cobra.Command {
 		Long:  `alertmanager-webhook-adapter`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if err := o.Run(); err != nil {
-				fmt.Println(err)
+				fmt.Println("Error:", err)
 				os.Exit(1)
 				return
 			}
@@ -30,6 +30,7 @@ func NewRootCommand() *cobra.Command {
 	rootCmd.Flags().StringVarP(&o.TmplDir, "tmpl-dir", "d", "", "the tmpl dir")
 	rootCmd.Flags().StringVarP(&o.TmplName, "tmpl-name", "t", "", "the tmpl name")
 	rootCmd.Flags().StringVarP(&o.TmplDefault, "tmpl-default", "n", "", "the default tmpl name")
+	rootCmd.Flags().StringVarP(&o.TmplLang, "tmpl-lang", "", "", "the language for template filename")
 
 	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
 

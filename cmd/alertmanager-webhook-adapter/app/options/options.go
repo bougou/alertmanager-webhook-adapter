@@ -12,6 +12,7 @@ import (
 
 	"github.com/bougou/alertmanager-webhook-adapter/pkg/api"
 	"github.com/bougou/alertmanager-webhook-adapter/pkg/models"
+	"github.com/bougou/alertmanager-webhook-adapter/pkg/models/templates"
 )
 
 type AppOptions struct {
@@ -20,6 +21,7 @@ type AppOptions struct {
 	TmplDir     string
 	TmplName    string
 	TmplDefault string
+	TmplLang    string
 }
 
 func NewAppOptions() *AppOptions {
@@ -30,6 +32,16 @@ func (o *AppOptions) Run() error {
 	execFile, err := os.Executable()
 	if err != nil {
 		panic("fatal")
+	}
+
+	// If using builtin templates (o.TmplDir == ""), then we must check whether or not the specified lang is supported.
+	if o.TmplLang != "" && o.TmplDir == "" {
+		if _, exists := templates.DefaultTmplByLang[o.TmplLang]; !exists {
+			return fmt.Errorf("the builtin templates does not support specified lang: (%s)", o.TmplLang)
+		}
+		if err := models.LoadDefaultTemplate(o.TmplLang); err != nil {
+			return fmt.Errorf("load default template for lang (%s) failed, err: %s", o.TmplLang, err)
+		}
 	}
 
 	if o.TmplDir == "" && (o.TmplName != "" || o.TmplDefault != "") {
@@ -46,7 +58,7 @@ func (o *AppOptions) Run() error {
 			o.TmplDir = filepath.Join(filepath.Dir(execFile), o.TmplDir)
 		}
 
-		if err := models.LoadTemplate(o.TmplDir, o.TmplName, o.TmplDefault); err != nil {
+		if err := models.LoadTemplate(o.TmplDir, o.TmplName, o.TmplDefault, o.TmplLang); err != nil {
 			msg := fmt.Sprintf("Load templates from dir (%s) failed, err: %s", o.TmplDir, err)
 			return errors.New(msg)
 		}

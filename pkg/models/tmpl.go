@@ -35,7 +35,7 @@ var (
 func init() {
 	var err error
 
-	if err = LoadDefaultTemplate(templates.DefaultTmpl); err != nil {
+	if err = LoadDefaultTemplate("en"); err != nil {
 		panic(err)
 	}
 
@@ -44,14 +44,17 @@ func init() {
 	}
 }
 
-func LoadDefaultTemplate(defaultTmpl string) error {
+// LoadDefaultTemplate set default for the package level variables: promMsgTemplate and promMsgTemplatesMap.
+func LoadDefaultTemplate(tmplLang string) error {
+	defaultTmpl := templates.DefaultTmplByLang[tmplLang]
 	promMsgTemplate = &safeTemplate{}
 	if err := promMsgTemplate.UpdateTemplate(defaultTmpl); err != nil {
 		msg := fmt.Sprintf("UpdateTemplate for default failed, err: %s", err)
 		return errors.New(msg)
 	}
 
-	for k, v := range templates.ChannelsDefaultTmplMap {
+	channelsDefaultTmpls := templates.ChannelsDefaultTmplMapByLang[tmplLang]
+	for k, v := range channelsDefaultTmpls {
 		t := &safeTemplate{}
 		if err := t.UpdateTemplate(v); err != nil {
 			msg := fmt.Sprintf("UpdateTemplate for (%s) failed, err: %s", k, err)
@@ -63,8 +66,8 @@ func LoadDefaultTemplate(defaultTmpl string) error {
 	return nil
 }
 
-// LoadTemplate loads external templates from specified template dir
-func LoadTemplate(tmplDir, tmplName, tmplDefault string) error {
+// LoadTemplate loads external templates from specified template dir.
+func LoadTemplate(tmplDir, tmplName, tmplDefault, tmplLang string) error {
 
 	// If tmplName is not empty, use the specified tmpl to update the default promMsgTemplate
 	// and clear the promMsgTemplatesMap, thus will use the specified tmpl for all notification channels.
@@ -74,6 +77,9 @@ func LoadTemplate(tmplDir, tmplName, tmplDefault string) error {
 		}
 
 		tmplFile := path.Join(tmplDir, fmt.Sprintf("%s.%s", tmplName, "tmpl"))
+		if tmplLang != "" && tmplLang != "en" {
+			tmplFile = path.Join(tmplDir, fmt.Sprintf("%s.%s.%s", tmplName, tmplLang, "tmpl"))
+		}
 		b, err := os.ReadFile(tmplFile)
 		if err != nil {
 			msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
@@ -91,6 +97,9 @@ func LoadTemplate(tmplDir, tmplName, tmplDefault string) error {
 	var customDefaultTmpl string
 	if tmplDefault != "" {
 		tmplFile := path.Join(tmplDir, fmt.Sprintf("%s.%s", tmplDefault, "tmpl"))
+		if tmplLang != "" && tmplLang != "en" {
+			tmplFile = path.Join(tmplDir, fmt.Sprintf("%s.%s.%s", tmplDefault, tmplLang, "tmpl"))
+		}
 		b, err := os.ReadFile(tmplFile)
 		if err != nil {
 			msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
@@ -99,27 +108,31 @@ func LoadTemplate(tmplDir, tmplName, tmplDefault string) error {
 		customDefaultTmpl = string(b)
 	}
 
-	// try to find template file named "<channel>.tmpl" and update the promTemplatesMap
+	// try to find template file named "<channel>[.<lang>].tmpl" and update the promTemplatesMap
 	for channel, t := range promMsgTemplatesMap {
 		var channelTmpl string
 
 		tmplFile := path.Join(tmplDir, fmt.Sprintf("%s.%s", channel, "tmpl"))
+		if tmplLang != "" && tmplLang != "en" {
+			tmplFile = path.Join(tmplDir, fmt.Sprintf("%s.%s.%s", channel, tmplLang, "tmpl"))
+		}
 		b, err := os.ReadFile(tmplFile)
-
 		if os.IsNotExist(err) {
-			// case 1: <channel>.tmpl file does not exist, and not specified custom default, use continue the next loop
+			// case 1: <channel>[.<lang>].tmpl file does not exist, and not specified custom default
+			// then will use the builtin default, continue the next loop
 			if tmplDefault == "" {
 				continue
 			}
-			// case 2: <channel>.tmpl file does not exist, but specified custom default, use custom default as tmpl
+			// case 2: <channel>[.<lang>].tmpl file does not exist, but specified custom default
+			// then will use custom default as tmpl
 			channelTmpl = customDefaultTmpl
 		} else {
-			// case 3: <channel>.tmpl exists, but read failed, error and return
+			// case 3: <channel>[.<lang>].tmpl exists, but read failed, error and return
 			if err != nil {
 				msg := fmt.Sprintf("read file (%s) failed, err: %s", tmplFile, err)
 				return errors.New(msg)
 			}
-			// case 4: <channel>.tmpl exists, and read succeeded, use file content as tmpl
+			// case 4: <channel>[.<lang>].tmpl exists, and read succeeded, use file content as tmpl
 			channelTmpl = string(b)
 		}
 

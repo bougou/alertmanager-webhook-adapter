@@ -173,7 +173,38 @@ All template files MUST define the following template parts in the template file
 - `prom.text`
 - `prom.markdown`
 
+## Language for template files
 
+When loading template files, the program defaults to try to load files with name `<channelName>.tmpl` or `<tmplName>.tmpl` or `<tmplDefault>.tmpl`.
+
+But you can specify the option `--tmpl-lang <lang>` to change the behaviour.
+
+If `--tmpl-lang <lang>` is specified, **and the specified lang is NOT equal to `en`**, the program will try to load files with name `<channelName>.<lang>.tmpl` or `<tmplName>.<lang>.tmpl` or `<tmplDefault>.<lang>.tmpl`. If `<lang>` equals to `en`, the default loading behaviour is NOT changed.
+
+The `<lang>` can be any string, just make sure it matches your desired file names.
+
+This project already builtin supports two languages, `en` for english, `zh` for chinese. It defaults to `en` if `--tmpl-lang` is not specified.
+
+> The `--tmpl-lang` only impacts which files will be loaded, it does not care the contents of the files.
+
+## Command
+
+```
+$ ./alertmanager-webhook-adapter -h
+alertmanager-webhook-adapter
+
+Usage:
+  alertmanager-webhook-adapter [flags]
+
+Flags:
+  -h, --help                    help for alertmanager-webhook-adapter
+  -l, --listen-address string   the address to listen (default "0.0.0.0:8090")
+  -s, --signature string        the signature (default "未知")
+  -n, --tmpl-default string     the default tmpl name
+  -d, --tmpl-dir string         the tmpl dir
+      --tmpl-lang string        the language for template filename
+  -t, --tmpl-name string        the tmpl name
+```
 
 ## Builtin Templates Notification Screenshots
 
