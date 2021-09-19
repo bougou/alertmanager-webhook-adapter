@@ -208,10 +208,12 @@ Flags:
 
 ## Builtin Templates Notification Screenshots
 
-| 企业微信机器人                              | 企业微信应用                                   | 钉钉群机器人                                  | 飞书群机器人                                |
-| ------------------------------------------- | ---------------------------------------------- | --------------------------------------------- | ------------------------------------------- |
-| <img src="docs/weixin_zh.png" width="200"/> | <img src="docs/weixinapp_zh.png" width="200"/> | <img src="docs/dingtalk_zh.png" width="200"/> | <img src="docs/feishu_zh.png" width="200"/> |
+- [Chinese](./docs/screenshot-zh.md)
 
-| Slack App                                  |
-| ------------------------------------------ |
-| <img src="docs/slack_zh.png" width="200"/> |
+| WeixinGroupBot                                | WeixinApp                                        | DingTalkGroupBot                                | FeishuGroupBot                                |
+| --------------------------------------------- | ------------------------------------------------ | ----------------------------------------------- | --------------------------------------------- |
+| <img src="./docs/weixin_en.png" width="200"/> | <img src="./docs/weixinapp_en.png" width="200"/> | <img src="./docs/dingtalk_en.png" width="200"/> | <img src="./docs/feishu_en.png" width="200"/> |
+
+| Slack App                                    |
+| -------------------------------------------- |
+| <img src="./docs/slack_en.png" width="200"/> |
