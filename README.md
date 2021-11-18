@@ -74,6 +74,37 @@ See **Features** section.
   - url: "http://10.0.0.1:8090/webhook/send?channel_type=weixin&token=1234-1234-1234"
 ```
 
+## Command
+
+```
+$ ./alertmanager-webhook-adapter -h
+alertmanager-webhook-adapter
+
+Usage:
+  alertmanager-webhook-adapter [flags]
+
+Flags:
+  -h, --help                    help for alertmanager-webhook-adapter
+  -l, --listen-address string   the address to listen (default "0.0.0.0:8090")
+  -s, --signature string        the signature (default "未知")
+  -n, --tmpl-default string     the default tmpl name
+  -d, --tmpl-dir string         the tmpl dir
+      --tmpl-lang string        the language for template filename
+  -t, --tmpl-name string        the tmpl name
+```
+
+## Builtin Templates Notification Screenshots
+
+- [Chinese](./docs/screenshot-zh.md)
+
+| WeixinGroupBot                                | WeixinApp                                        | DingTalkGroupBot                                | FeishuGroupBot                                |
+| --------------------------------------------- | ------------------------------------------------ | ----------------------------------------------- | --------------------------------------------- |
+| <img src="./docs/weixin_en.png" width="200"/> | <img src="./docs/weixinapp_en.png" width="200"/> | <img src="./docs/dingtalk_en.png" width="200"/> | <img src="./docs/feishu_en.png" width="200"/> |
+
+| Slack App                                    |
+| -------------------------------------------- |
+| <img src="./docs/slack_en.png" width="200"/> |
+
 ## Custom Templates
 
 The project already has builtin templates for all supported notifiction channels.
@@ -186,34 +217,3 @@ The `<lang>` can be any string, just make sure it matches your desired file name
 This project already builtin supports two languages, `en` for english, `zh` for chinese. It defaults to `en` if `--tmpl-lang` is not specified.
 
 > The `--tmpl-lang` only impacts which files will be loaded, it does not care the contents of the files.
-
-## Command
-
-```
-$ ./alertmanager-webhook-adapter -h
-alertmanager-webhook-adapter
-
-Usage:
-  alertmanager-webhook-adapter [flags]
-
-Flags:
-  -h, --help                    help for alertmanager-webhook-adapter
-  -l, --listen-address string   the address to listen (default "0.0.0.0:8090")
-  -s, --signature string        the signature (default "未知")
-  -n, --tmpl-default string     the default tmpl name
-  -d, --tmpl-dir string         the tmpl dir
-      --tmpl-lang string        the language for template filename
-  -t, --tmpl-name string        the tmpl name
-```
-
-## Builtin Templates Notification Screenshots
-
-- [Chinese](./docs/screenshot-zh.md)
-
-| WeixinGroupBot                                | WeixinApp                                        | DingTalkGroupBot                                | FeishuGroupBot                                |
-| --------------------------------------------- | ------------------------------------------------ | ----------------------------------------------- | --------------------------------------------- |
-| <img src="./docs/weixin_en.png" width="200"/> | <img src="./docs/weixinapp_en.png" width="200"/> | <img src="./docs/dingtalk_en.png" width="200"/> | <img src="./docs/feishu_en.png" width="200"/> |
-
-| Slack App                                    |
-| -------------------------------------------- |
-| <img src="./docs/slack_en.png" width="200"/> |
