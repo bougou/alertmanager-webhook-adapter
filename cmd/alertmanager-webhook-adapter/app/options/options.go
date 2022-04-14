@@ -22,6 +22,7 @@ type AppOptions struct {
 	TmplName    string
 	TmplDefault string
 	TmplLang    string
+	Version     bool
 }
 
 func NewAppOptions() *AppOptions {

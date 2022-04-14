@@ -67,7 +67,7 @@ type Alert struct {
 	GeneratorURL string    `json:"generatorURL"`
 }
 
-// Firing Alerts the subset of alerts that are firing.
+// Firing returns the subset of alerts that are firing.
 func (as Alerts) Firing() []Alert {
 	res := []Alert{}
 	for _, a := range as {

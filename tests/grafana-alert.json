@@ -1,0 +1,45 @@
+{
+  "receiver": "test-webhook",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "CPU Usage High",
+        "grafana_folder": "alert",
+        "testkey": "testvalue"
+      },
+      "annotations": {},
+      "startsAt": "2023-03-29T09:41:10Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://localhost/grafana/alerting/grafana/fOO_kffVz/view?orgId=1",
+      "fingerprint": "68d4e65db3ad9208",
+      "silenceURL": "http://localhost/grafana/alerting/silence/new?alertmanager=grafana\u0026matcher=alertname%3DCPU+Usage+High\u0026matcher=grafana_folder%3Dalert\u0026matcher=testkey%3Dtestvalue",
+      "dashboardURL": "http://localhost/grafana/d/200ac8fdbfbb74b39aff88118e4d1c2c?orgId=1",
+      "panelURL": "http://localhost/grafana/d/200ac8fdbfbb74b39aff88118e4d1c2c?orgId=1\u0026viewPanel=1",
+      "values": {
+        "C": 12,
+        "D": 1
+      },
+      "valueString": "[ var='D' labels={} value=1 ], [ var='C' labels={} value=12 ]"
+    }
+  ],
+  "groupLabels": {
+    "alertname": "CPU Usage High",
+    "grafana_folder": "alert"
+  },
+  "commonLabels": {
+    "alertname": "CPU Usage High",
+    "grafana_folder": "alert",
+    "testkey": "testvalue"
+  },
+  "commonAnnotations": {},
+  "externalURL": "http://localhost/grafana/",
+  "version": "1",
+  "groupKey": "{}/{}:{alertname=\"CPU Usage High\", grafana_folder=\"alert\"}",
+  "truncatedAlerts": 0,
+  "orgId": 1,
+  "title": "[FIRING:1] CPU Usage High alert (testvalue)",
+  "state": "alerting",
+  "message": "**Firing**\n\nValue: C=12, D=1\nLabels:\n - alertname = CPU Usage High\n - grafana_folder = alert\n - testkey = testvalue\nAnnotations:\nSource: http://localhost/grafana/alerting/grafana/fOO_kffVz/view?orgId=1\nSilence: http://localhost/grafana/alerting/silence/new?alertmanager=grafana\u0026matcher=alertname%3DCPU+Usage+High\u0026matcher=grafana_folder%3Dalert\u0026matcher=testkey%3Dtestvalue\nDashboard: http://localhost/grafana/d/200ac8fdbfbb74b39aff88118e4d1c2c?orgId=1\nPanel: http://localhost/grafana/d/200ac8fdbfbb74b39aff88118e4d1c2c?orgId=1\u0026viewPanel=1\n"
+}
