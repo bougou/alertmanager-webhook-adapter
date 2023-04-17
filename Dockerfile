@@ -3,8 +3,9 @@ FROM golang:1.18
 COPY / /src
 
 RUN cd /src \
-  && cd "cmd/alertmanager-webhook-adapter" \
-  && go build -v -o /alertmanager-webhook-adapter \
+  && make build \
+  && mv /src/_output/alertmanager-webhook-adapter /alertmanager-webhook-adapter \
+  && rm -rf /src \
   && true
 
 ENTRYPOINT [ "/alertmanager-webhook-adapter" ]
