@@ -38,6 +38,14 @@ func createWeixinappSender(request *restful.Request) (models.Sender, error) {
 		return nil, fmt.Errorf("not agent_secret found for weixin channel")
 	}
 
+	toUser := request.QueryParameter("to_user")
+	toParty := request.QueryParameter("to_party")
+	toTag := request.QueryParameter("to_tag")
+
+	if toUser == "" && toParty == "" && toTag == "" {
+		return nil, fmt.Errorf("must specify one of to_user,to_party,to_tag")
+	}
+
 	msgType := request.QueryParameter("msg_type")
 	if msgType == "" {
 		msgType = "markdown"

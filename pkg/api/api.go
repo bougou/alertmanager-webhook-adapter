@@ -62,7 +62,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 
 	sender, err := senderCreator(request)
 	if err != nil {
-		response.WriteHeaderAndJson(http.StatusInternalServerError, fmt.Sprintf("create sender failed, %v", err), restful.MIME_JSON)
+		response.WriteHeaderAndJson(http.StatusBadRequest, fmt.Sprintf("create sender failed, %v", err), restful.MIME_JSON)
 		return
 	}
 

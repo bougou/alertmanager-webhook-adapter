@@ -18,8 +18,11 @@ A general webhook server for receiving [Prometheus AlertManager](https://prometh
     http(s)://<this-webhook-server-addr>/webhook/send?channel_type=feishu&token=<token>
     ```
 - `weixinapp`, Weixin Application / 企业微信应用
-    ```
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>
+    ```bash
+    # Must specify one of to_user, to_party, to_tag parameter
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>&to_user='@all'     # 指定接收消息的成员
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>&to_party='Dev'     # 指定接收消息的部门
+    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>&to_tag='VIP'       # 指定接收消息的客户标签
     ```
 - `slack`, Slack App
     ```
