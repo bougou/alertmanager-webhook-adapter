@@ -7,26 +7,33 @@ A general webhook server for receiving [Prometheus AlertManager](https://prometh
 
 - `weixin`, Weixin Group Bot / 企业微信群机器人
     ```
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixin&token=<token>
+    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=weixin&token={token}
     ```
 - `dingtalk`, Dingtalk Group Bot / 钉钉群机器人
     ```
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=dingtalk&token=<token>
+    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=dingtalk&token={token}
     ```
 - `feishu`, Feishu Group Bot / 飞书群机器人
     ```
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=feishu&token=<token>
+    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=feishu&token={token}
     ```
 - `weixinapp`, Weixin Application / 企业微信应用
     ```bash
     # Must specify one of to_user, to_party, to_tag parameter
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>&to_user='@all'     # 指定接收消息的成员
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>&to_party='Dev'     # 指定接收消息的部门
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=weixinapp&corp_id=<corp_id>&agent_id=<agent_id>&agent_secret=<agent_secret>&to_tag='VIP'       # 指定接收消息的客户标签
+    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=weixinapp&corp_id={corp_id}&agent_id={agent_id}&agent_secret={agent_secret}&to_user={user_id}&to_party={party_id}&to_tag={tag_id}
+
+    # to_user 指定接收消息的成员，成员 ID 列表（多个接收者用 '|' 分隔，最多支持 1000 个）
+    # 指定为 "@all"，则向该企业应用的全部成员发送
+
+    # to_party 指定接收消息的部门，部门 ID 列表，多个接收者用 '|' 分隔，最多支持 100 个
+    # 当 to_user 为 "@all" 时忽略本参数
+
+    # to_tag 指定接收消息的标签，标签 ID  列表，多个接收者用 '|' 分隔，最多支持 100 个
+    # 当 to_user 为 "@all" 时忽略本参数
     ```
 - `slack`, Slack App
     ```
-    http(s)://<this-webhook-server-addr>/webhook/send?channel_type=slack&token=<token>&channel=<channel>
+    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=slack&token=<token>&channel=<channel>
     ```
 
 > More is comming...
