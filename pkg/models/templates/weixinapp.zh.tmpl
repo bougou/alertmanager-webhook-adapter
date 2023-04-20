@@ -55,9 +55,9 @@
 {{- end }}
 > <font color="comment"> 告警状态 </font>: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
 >
-> <font color="comment"> 开始时间 </font>: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
+> <font color="comment"> 开始时间 </font>: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
 >
-> <font color="comment"> 结束时间 </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05" }}{{ else }}Not End{{ end }}
+> <font color="comment"> 结束时间 </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
 {{- if eq .Status "firing" }}
 >
 > <font color="comment"> 告警描述 </font>: {{ if .Annotations.description_cn }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
@@ -78,7 +78,7 @@
 
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02 15:04:05" }}
+{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
 #### 摘要
 
 {{ if gt (.Alerts.Firing|len ) 0 }}
