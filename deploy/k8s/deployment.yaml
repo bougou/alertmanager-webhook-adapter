@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager-webhook-adapter
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager-webhook-adapter
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: alertmanager-webhook-adapter
+    spec:
+      containers:
+      - name: webhook
+        image: bougou/alertmanager-webhook-adapter:v1.1.4
+        command:
+        - /alertmanager-webhook-adapter
+        - --listen-address=:8090
+        - --signature=MyIDC
+        - --tmpl-lang=zh
+        resources:
+          requests:
+            memory: 50Mi
+            cpu:    100m
+          limits:
+            memory: 250Mi
+            cpu: 500m
+      restartPolicy: Always

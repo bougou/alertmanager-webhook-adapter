@@ -47,7 +47,7 @@ weixin() {
 
 weixinapp() {
   corpID="${WEIXIN_APP_CORP_ID}"
-  agentID=1
+  agentID=${WEIXIN_APP_AGENT_ID}
   agentSecret="${WEIXIN_APP_SECRET}"
 
   toParty=2

@@ -74,6 +74,14 @@ $ systemctl daemon-reload
 $ systemctl start
 ```
 
+### Run in K8S
+
+```
+cd deploy/k8s
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+```
+
 ## Configure Alertmanager to send alert messages to this webhook server
 
 See **Features** section.
