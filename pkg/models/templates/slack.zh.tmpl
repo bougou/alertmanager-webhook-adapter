@@ -23,6 +23,16 @@
 {{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }}
 {{- end }}
 
+{{ define "__alertinstance" -}}
+{{- if ne .Labels.alertinstance nil -}}{{ .Labels.alertinstance }}
+{{- else if ne .Labels.instance nil -}}{{ .Labels.instance }}
+{{- else if ne .Labels.node nil -}}{{ .Labels.node }}
+{{- else if ne .Labels.nodename nil -}}{{ .Labels.nodename }}
+{{- else if ne .Labels.host nil -}}{{ .Labels.host }}
+{{- else if ne .Labels.hostname nil -}}{{ .Labels.hostname }}
+{{- else if ne .Labels.ip nil -}}{{ .Labels.ip }}
+{{- end -}}
+{{- end }}
 
 {{ define "__alert_list" }}
 {{ range . }}
@@ -32,7 +42,7 @@
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
-> 实例: `{{ .Labels.instance }}`
+> 实例: `{{ template "__alertinstance" . }}`
 {{- if .Labels.region }}
 > 地域: {{ .Labels.region }}
 {{- end }}
@@ -51,14 +61,13 @@
 {{- if eq .Status "firing" }}
 > 告警描述: {{ if .Annotations.description_cn }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
 {{- end }}
-
 {{ end }}
-{{ end }}
+{{- end }}
 
 
 {{ define "__alert_summary" -}}
 {{ range . -}}
-• {{ .Labels.instance }}
+• {{ template "__alertinstance" . }}
 {{ end }}
 {{ end }}
 
@@ -66,29 +75,36 @@
 {{ template "__subject" . }}
 {{ end }}
 
-
 {{ define "prom.markdown" }}
 {{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
 
 *摘要*
 
-{{ if gt (.Alerts.Firing|len ) 0 }}
+{{ if gt (.Alerts.Firing|len ) 0 -}}
 🚨 触发中告警 [{{ .Alerts.Firing|len }}]
+
 {{ template "__alert_summary" .Alerts.Firing }}
-{{ end }}
-{{ if gt (.Alerts.Resolved|len) 0 }}
+{{- end -}}
+
+{{ if gt (.Alerts.Resolved|len) 0 -}}
 ✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]
+
 {{ template "__alert_summary" .Alerts.Resolved }}
-{{ end }}
+{{- end -}}
+
 *详请*
-{{ if gt (.Alerts.Firing|len ) 0 }}
+
+{{ if gt (.Alerts.Firing|len ) 0 -}}
 🚨 触发中告警 [{{ .Alerts.Firing|len }}]
-{{ template "__alert_list" .Alerts.Firing }}
-{{ end }}
+
+{{- template "__alert_list" .Alerts.Firing }}
+{{- end -}}
+
 {{ if gt (.Alerts.Resolved|len) 0 }}
 ✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]
-{{ template "__alert_list" .Alerts.Resolved }}
-{{ end }}
+
+{{- template "__alert_list" .Alerts.Resolved }}
+{{- end -}}
 {{ end }}
 
 {{ define "prom.text" }}

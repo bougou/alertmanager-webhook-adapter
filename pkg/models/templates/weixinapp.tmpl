@@ -24,53 +24,54 @@
 {{- end }}
 
 
+{{ define "__alertinstance" -}}
+{{- if ne .Labels.alertinstance nil -}}{{ .Labels.alertinstance }}
+{{- else if ne .Labels.instance nil -}}{{ .Labels.instance }}
+{{- else if ne .Labels.node nil -}}{{ .Labels.node }}
+{{- else if ne .Labels.nodename nil -}}{{ .Labels.nodename }}
+{{- else if ne .Labels.host nil -}}{{ .Labels.host }}
+{{- else if ne .Labels.hostname nil -}}{{ .Labels.hostname }}
+{{- else if ne .Labels.ip nil -}}{{ .Labels.ip }}
+{{- end -}}
+{{- end }}
+
 {{ define "__alert_list" }}
 {{ range . }}
-⋅
+<font color="comment"></font>
 > <font color="comment"> Alert Name </font>: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
->
-> <font color="comment"> Alert Level </font>:{{ ` ` }}
+<font color="comment"> Alert Level </font>:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
->
-> <font color="comment"> Instance </font>: `{{ .Labels.instance }}`
->
+<font color="comment"> Alert Instance </font>: `{{ template "__alertinstance" . }}`
 {{- if .Labels.region }}
-> <font color="comment"> Region </font>: {{ .Labels.region }}
->
+<font color="comment"> Region </font>: {{ .Labels.region }}
 {{- end }}
 {{- if .Labels.zone }}
-> <font color="comment"> Zone </font>: {{ .Labels.zone }}
->
+<font color="comment"> Zone </font>: {{ .Labels.zone }}
 {{- end }}
 {{- if .Labels.product }}
-> <font color="comment"> Product </font>: {{ .Labels.product }}
->
+<font color="comment"> Product </font>: {{ .Labels.product }}
 {{- end }}
 {{- if .Labels.component  }}
-> <font color="comment"> Component </font>: {{ .Labels.component }}
->
+<font color="comment"> Component </font>: {{ .Labels.component }}
 {{- end }}
-> <font color="comment"> Alert Status </font>: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
->
-> <font color="comment"> Start At </font>: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
->
-> <font color="comment"> End At </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+<font color="comment"> Alert Status </font>: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
+<font color="comment"> Start At </font>: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
+<font color="comment"> End At </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
 {{- if eq .Status "firing" }}
->
-> <font color="comment"> Description </font>: {{ if .Annotations.description_en }}{{ .Annotations.description_en }}{{ else }}{{ .Annotations.description }}{{ end }}
-{{ end }}
-{{ end }}
-{{ end }}
+<font color="comment"> Description </font>: {{ if .Annotations.description_en }}{{ .Annotations.description_en }}{{ else }}{{ .Annotations.description }}{{ end }}
+{{- end }}
 
+{{ end }}
+{{ end }}
 
 {{ define "__alert_summary" -}}
 {{ range . }}
-<font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Labels.instance }}</font>
-{{ end }}
-{{ end }}
+<font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ template "__alertinstance" . }}</font>
+{{- end }}
+{{- end }}
 
 {{ define "prom.title" -}}
 {{ template "__subject" . }}
@@ -78,30 +79,31 @@
 
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
-#### Summary
+<font color="comment">{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}</font>
+
+### Alerts Summary
 
 {{ if gt (.Alerts.Firing|len ) 0 }}
-##### <font color="warning">🚨 Firing [{{ .Alerts.Firing|len }}] alerts</font>
+#### <font color="warning">🚨 Firing [{{ .Alerts.Firing|len }}] alerts</font>
 {{ template "__alert_summary" .Alerts.Firing }}
 {{ end }}
 
 
 {{ if gt (.Alerts.Resolved|len) 0 }}
-#####  <font color="info">✅ Resolved [{{ .Alerts.Resolved|len }}] alerts</font>
+####  <font color="info">✅ Resolved [{{ .Alerts.Resolved|len }}] alerts</font>
 {{ template "__alert_summary" .Alerts.Resolved }}
 {{ end }}
 
-#### Detail
+### Alerts Detail
 
 {{ if gt (.Alerts.Firing|len ) 0 }}
-##### <font color="warning">🚨 Firing [{{ .Alerts.Firing|len }}] alerts</font>
+#### <font color="warning">🚨 Firing [{{ .Alerts.Firing|len }}] alerts</font>
 {{ template "__alert_list" .Alerts.Firing }}
 {{ end }}
 
 
 {{ if gt (.Alerts.Resolved|len) 0 }}
-#####  <font color="info">✅ Resolved [{{ .Alerts.Resolved|len }}] alerts</font>
+####  <font color="info">✅ Resolved [{{ .Alerts.Resolved|len }}] alerts</font>
 {{ template "__alert_list" .Alerts.Resolved }}
 {{ end }}
 {{ end }}
