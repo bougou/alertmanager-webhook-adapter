@@ -17,16 +17,19 @@ spec:
     spec:
       containers:
       - name: webhook
-        image: bougou/alertmanager-webhook-adapter:v1.1.4
+        image: bougou/alertmanager-webhook-adapter:v1.1.5
         command:
         - /alertmanager-webhook-adapter
         - --listen-address=:8090
         - --signature=MyIDC
         - --tmpl-lang=zh
+        env:
+        - name: TZ
+          value: Asia/Shanghai
         resources:
           requests:
             memory: 50Mi
-            cpu:    100m
+            cpu: 100m
           limits:
             memory: 250Mi
             cpu: 500m
