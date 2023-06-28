@@ -151,7 +151,7 @@ These three use cases are used for different purposes.
 
 First, create a dir to store your template files, like `templates`. And then put your template files under the template dir.
 
-The program will **try to found `<channel>.tmpl` files** under the tmpl dir for all supported channels,
+The program will **try to search `<channel>.tmpl` files** under the tmpl dir for all supported channels,
 and use the founded file as the template for the corresponding channel. If not found, use builtin template.
 
 ```bash
@@ -168,9 +168,11 @@ $ ./alertmanager-webhook-adapter -s Bougou --tmpl-dir ./templates/
 
 > **Purpose**: Use one custom template for all channels.
 
-Create your own template file, like `custom.tmpl`, the filename without suffix will be the template name, and put it under the template dir.
+Create your own template file, like `custom.tmpl`, and put it under the template dir.
 
-The program will **try to found `<tmplName>.tmpl` file** under the tmpl dir. The choosed tmpl file will be used for all notification channels. If not found, error and exit.
+The filename with suffix removed will be the template name and be used as value of the `--tmpl-name` parameter.
+
+The program will **try to search `<tmplName>.tmpl` file** under the tmpl dir. The choosed tmpl file will be used for all notification channels. If not found, error and exit.
 
 ```bash
 # use templates/custom.tmpl for all channels.
@@ -235,3 +237,20 @@ The `<lang>` can be any string, just make sure it matches your desired file name
 This project already builtin supports two languages, `en` for english, `zh` for chinese. It defaults to `en` if `--tmpl-lang` is not specified.
 
 > The `--tmpl-lang` only impacts which files will be loaded, it does not care the contents of the files.
+
+## How AlertInstance is determined?
+
+The default notification templates will try its best to print the alert instance information for each alert.
+The alert instance is determined from the labels of the alerts.
+
+The following labels are sought by priority order and choosed as "alert instance" if the label is found.
+
+- `alertinstance`
+- `instance`
+- `node`
+- `nodename`
+- `host`
+- `hostname`
+- `ip`
+
+In prometheus, most metrics may provide `instance` label, but its value may not be suitable for alert information. Then, I recommend to use PromQL function [`label_join`](https://prometheus.io/docs/prometheus/latest/querying/functions/#label_join) to construct an  `alertinstance` label when writing alert rules.
