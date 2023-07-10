@@ -243,7 +243,7 @@ This project already builtin supports two languages, `en` for english, `zh` for 
 The default notification templates will try its best to print the alert instance information for each alert.
 The alert instance is determined from the labels of the alerts.
 
-The following labels are sought by priority order and choosed as "alert instance" if the label is found.
+The following labels of the alerts are sought by priority order and choosed as "alert instance" if the label is found.
 
 - `alertinstance`
 - `instance`
@@ -253,4 +253,32 @@ The following labels are sought by priority order and choosed as "alert instance
 - `hostname`
 - `ip`
 
-In prometheus, most metrics may provide `instance` label, but its value may not be suitable for alert information. Then, I recommend to use PromQL function [`label_join`](https://prometheus.io/docs/prometheus/latest/querying/functions/#label_join) to construct an  `alertinstance` label when writing alert rules.
+In prometheus, most metrics may provide `instance`, or `node` or `ip` label, but its value may not be suitable for alert information. Then, I recommend to use
+the following two methods to add an extra `alertinstance` label when writing alert rules..
+
+1. use PromQL function [`label_join`](https://prometheus.io/docs/prometheus/latest/querying/functions/#label_join), eg:
+
+```yaml
+- alert: KubePodCrashLooping
+  expr: label_join(max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics", namespace=~".*"}[5m]) >= 1, 'alertinstance', '/', 'namespace', 'pod')
+  for: 15m
+  labels:
+    severity: warning
+  annotations:
+    description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: "CrashLoopBackOff").'
+    summary: Pod is crash looping.
+```
+
+2. (Prefered) directly add `alertinstance` label, eg:
+
+```yaml
+- alert: KubePodCrashLooping
+  expr: max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics", namespace=~".*"}[5m]) >= 1
+  for: 15m
+  labels:
+    severity: warning
+    alertinstance: '{{ $labels.namespace }}/{{ $labels.pod }}'
+  annotations:
+    description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: "CrashLoopBackOff").'
+    summary: Pod is crash looping.
+```
