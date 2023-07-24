@@ -258,27 +258,27 @@ the following two methods to add an extra `alertinstance` label when writing ale
 
 1. use PromQL function [`label_join`](https://prometheus.io/docs/prometheus/latest/querying/functions/#label_join), eg:
 
-```yaml
-- alert: KubePodCrashLooping
-  expr: label_join(max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics", namespace=~".*"}[5m]) >= 1, 'alertinstance', '/', 'namespace', 'pod')
-  for: 15m
-  labels:
-    severity: warning
-  annotations:
-    description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: "CrashLoopBackOff").'
-    summary: Pod is crash looping.
-```
+    ```yaml
+    - alert: KubePodCrashLooping
+      expr: label_join(max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics", namespace=~".*"}[5m]) >= 1, 'alertinstance', '/', 'namespace', 'pod')
+      for: 15m
+      labels:
+        severity: warning
+      annotations:
+        description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: "CrashLoopBackOff").'
+        summary: Pod is crash looping.
+    ```
 
 2. (Prefered) directly add `alertinstance` label, eg:
 
-```yaml
-- alert: KubePodCrashLooping
-  expr: max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics", namespace=~".*"}[5m]) >= 1
-  for: 15m
-  labels:
-    severity: warning
-    alertinstance: '{{ $labels.namespace }}/{{ $labels.pod }}'
-  annotations:
-    description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: "CrashLoopBackOff").'
-    summary: Pod is crash looping.
-```
+    ```yaml
+    - alert: KubePodCrashLooping
+      expr: max_over_time(kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff", job="kube-state-metrics", namespace=~".*"}[5m]) >= 1
+      for: 15m
+      labels:
+        severity: warning
+        alertinstance: '{{ $labels.namespace }}/{{ $labels.pod }}'
+      annotations:
+        description: 'Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: "CrashLoopBackOff").'
+        summary: Pod is crash looping.
+    ```

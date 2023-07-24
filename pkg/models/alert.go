@@ -89,6 +89,73 @@ func (as Alerts) Resolved() []Alert {
 	return res
 }
 
+func (alert *Alert) UnmarshalJSON(data []byte) error {
+	m := make(map[string]interface{})
+
+	if err := json.Unmarshal(data, &m); err != nil {
+		return err
+	}
+
+	for k, v := range m {
+		switch k {
+		case "startsAt":
+			_t := v.(string)
+			t, err := parseTimeFromStr(_t)
+			if err != nil {
+				return err
+			}
+			alert.StartsAt = t
+
+		case "endsAt":
+			_t := v.(string)
+			t, err := parseTimeFromStr(_t)
+			if err != nil {
+				return err
+			}
+			alert.EndsAt = t
+
+		case "status":
+			alert.Status = v.(string)
+
+		case "generatorURL":
+			alert.GeneratorURL = v.(string)
+
+		case "labels":
+			s, err := json.Marshal(v)
+			if err != nil {
+				return err
+			}
+			kv := KV{}
+			if err := json.Unmarshal(s, &kv); err != nil {
+				return err
+			}
+			alert.Labels = kv
+
+		case "annotations":
+			s, err := json.Marshal(v)
+			if err != nil {
+				return err
+			}
+			kv := KV{}
+			if err := json.Unmarshal(s, &kv); err != nil {
+				return err
+			}
+			alert.Annotations = kv
+		}
+	}
+
+	return nil
+}
+
+func parseTimeFromStr(timeStr string) (time.Time, error) {
+	t, err := time.Parse(time.RFC3339, timeStr)
+	if err != nil {
+		return t, err
+	}
+
+	return t.In(time.Local), nil
+}
+
 func (m *AlertmanagerWebhookMessage) SetMessageAt() *AlertmanagerWebhookMessage {
 	m.MessageAt = time.Now()
 	return m
