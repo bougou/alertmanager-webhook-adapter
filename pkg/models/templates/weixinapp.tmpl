@@ -37,6 +37,7 @@
 
 {{ define "__alert_list" }}
 {{ range . }}
+⁣
 <font color="comment"></font>
 > <font color="comment"> Alert Name </font>: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 <font color="comment"> Alert Level </font>:{{ ` ` }}
