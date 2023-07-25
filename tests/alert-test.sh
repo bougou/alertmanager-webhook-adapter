@@ -59,3 +59,18 @@ weixinapp() {
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&msg_type=${msg_type}&corp_id=${corpID}&agent_id=${agentID}&agent_secret=${agentSecret}&to_party=${toParty}" -d @-
 }
+
+failed-test-1() {
+  corpID="${WEIXIN_APP_CORP_ID}"
+  agentID=${WEIXIN_APP_AGENT_ID}
+  agentSecret="${WEIXIN_APP_SECRET}"
+
+  toParty=2
+
+  channel_type="notsupported"
+  msg_type="markdown"
+
+  payload=$(cat ./alert.json)
+
+  echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&msg_type=${msg_type}&corp_id=${corpID}&agent_id=${agentID}&agent_secret=${agentSecret}&to_party=${toParty}" -d @-
+}

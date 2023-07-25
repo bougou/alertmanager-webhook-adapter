@@ -190,26 +190,26 @@ func (m *AlertmanagerWebhookMessage) RenderTmpl(channel string, tmplName string)
 	return buf.String(), nil
 }
 
-func (m *AlertmanagerWebhookMessage) ToPayload(channel string, raw []byte) *models.Payload {
+func (m *AlertmanagerWebhookMessage) ToPayload(channel string, raw []byte) (*models.Payload, error) {
 	msg := &models.Payload{Raw: string(raw)}
 
 	title, err := m.RenderTmpl(channel, "prom.title")
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 	msg.Title = title
 
 	text, err := m.RenderTmpl(channel, "prom.text")
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 	msg.Text = text
 
 	markdown, err := m.RenderTmpl(channel, "prom.markdown")
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 	msg.Markdown = markdown
 
-	return msg
+	return msg, nil
 }

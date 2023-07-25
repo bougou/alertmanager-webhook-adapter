@@ -13,12 +13,21 @@ import (
 
 type Controller struct {
 	signature string
+	debug     bool
 }
 
 func NewController(signature string) *Controller {
 	return &Controller{
 		signature: signature,
 	}
+}
+
+func (c *Controller) WithDebug(debug bool) *Controller {
+	if debug {
+		fmt.Println("debug mode enabled")
+	}
+	c.debug = debug
+	return c
 }
 
 func (c *Controller) Install(container *restful.Container) {
@@ -33,43 +42,80 @@ func (c *Controller) Install(container *restful.Container) {
 	container.Add(ws)
 }
 
+func (c *Controller) logf(format string, a ...any) error {
+	if c.debug {
+		_, err := fmt.Printf(format, a...)
+		return err
+	}
+
+	return nil
+}
+
+func (c *Controller) log(a ...any) error {
+	if c.debug {
+		_, err := fmt.Println(a...)
+		return err
+	}
+
+	return nil
+}
+
 func (c *Controller) send(request *restful.Request, response *restful.Response) {
+	c.logf("Got: %s\n", request.Request.URL.String())
 
 	raw, err := ioutil.ReadAll(request.Request.Body)
 	if err != nil {
-		response.WriteHeaderAndJson(http.StatusBadRequest, "read request body failed", restful.MIME_JSON)
+		errmsg := "read request body failed"
+		c.log(errmsg)
+		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
 	}
 
 	promMsg := &promModels.AlertmanagerWebhookMessage{}
 	if err := json.Unmarshal(raw, promMsg); err != nil {
-		response.WriteHeaderAndJson(http.StatusBadRequest, "unmarshal body failed", restful.MIME_JSON)
+		errmsg := "unmarshal body failed"
+		c.log(errmsg)
+		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
 	}
 	promMsg.SetMessageAt().SetSignature(c.signature)
 
 	channelType := request.QueryParameter("channel_type")
 	if channelType == "" {
-		response.WriteHeaderAndJson(http.StatusBadRequest, "not channel_type found", restful.MIME_JSON)
+		errmsg := "no channel_type found"
+		c.log(errmsg)
+		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
 	}
 
 	senderCreator, exists := senders.ChannelsSenderCreatorMap[channelType]
 	if !exists {
-		response.WriteHeaderAndJson(http.StatusBadRequest, "not supported channel_type", restful.MIME_JSON)
+		errmsg := "not supported channel_type"
+		c.log(errmsg)
+		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
 	}
 
 	sender, err := senderCreator(request)
 	if err != nil {
-		response.WriteHeaderAndJson(http.StatusBadRequest, fmt.Sprintf("create sender failed, %v", err), restful.MIME_JSON)
+		errmsg := fmt.Sprintf("create sender failed, %v", err)
+		c.log(errmsg)
+		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
 	}
 
-	payload := promMsg.ToPayload(channelType, raw)
+	payload, err := promMsg.ToPayload(channelType, raw)
+	if err != nil {
+		errmsg := fmt.Sprintf("create msg payload failed, %v", err)
+		c.log(errmsg)
+		response.WriteHeaderAndJson(http.StatusInternalServerError, errmsg, restful.MIME_JSON)
+		return
+	}
 
 	if err := sender.Send(payload); err != nil {
-		response.WriteHeaderAndJson(http.StatusInternalServerError, fmt.Sprintf("sender send failed, %v", err), restful.MIME_JSON)
+		errmsg := fmt.Sprintf("sender send failed, %v", err)
+		c.log(errmsg)
+		response.WriteHeaderAndJson(http.StatusInternalServerError, errmsg, restful.MIME_JSON)
 		return
 	}
 

@@ -47,6 +47,7 @@ func NewRootCommand() *cobra.Command {
 	rootCmd.Flags().StringVarP(&o.TmplDefault, "tmpl-default", "n", "", "the default tmpl name")
 	rootCmd.Flags().StringVarP(&o.TmplLang, "tmpl-lang", "", "", "the language for template filename")
 	rootCmd.Flags().BoolVarP(&o.Version, "version", "v", false, "show version")
+	rootCmd.Flags().BoolVarP(&o.Debug, "debug", "", false, "enable verbose output ")
 
 	rootCmd.Flags().AddGoFlagSet(flag.CommandLine)
 

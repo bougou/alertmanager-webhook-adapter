@@ -23,6 +23,7 @@ type AppOptions struct {
 	TmplDefault string
 	TmplLang    string
 	Version     bool
+	Debug       bool
 }
 
 func NewAppOptions() *AppOptions {
@@ -66,13 +67,16 @@ func (o *AppOptions) Run() error {
 	}
 
 	container := restful.DefaultContainer
+
 	controller := api.NewController(o.Signature)
+	controller.WithDebug(o.Debug)
+
 	controller.Install(container)
 
 	s := &http.Server{
 		Addr:    o.Addr,
 		Handler: container,
 	}
-	log.Printf("start listening, %s", s.Addr)
+	log.Printf("start listening at %s", s.Addr)
 	return s.ListenAndServe()
 }
