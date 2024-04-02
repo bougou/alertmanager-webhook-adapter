@@ -84,8 +84,6 @@ kubectl apply -f service.yaml
 
 ## Configure Alertmanager to send alert messages to this webhook server
 
-See **Features** section.
-
 ```yaml
 - name: 'sre-team'
   webhook_configs:
@@ -144,7 +142,6 @@ The `--tmpl-dir` is a MUST if you want to load your custom templates. `--tmpl-na
 
 These three use cases are used for different purposes.
 
-
 ### `--tmpl-dir`
 
 > **Purpose**: Use different template files for different channels
@@ -169,10 +166,10 @@ $ ./alertmanager-webhook-adapter -s Bougou --tmpl-dir ./templates/
 > **Purpose**: Use one custom template for all channels.
 
 Create your own template file, like `custom.tmpl`, and put it under the template dir.
-
 The filename with suffix removed will be the template name and be used as value of the `--tmpl-name` parameter.
 
-The program will **try to search `<tmplName>.tmpl` file** under the tmpl dir. The choosed tmpl file will be used for all notification channels. If not found, error and exit.
+The program will **try to search `<tmplName>.tmpl` file** under the tmpl dir.
+The choosed tmpl file will be used for all notification channels. If not found, error and exit.
 
 ```bash
 # use templates/custom.tmpl for all channels.
@@ -230,7 +227,8 @@ When loading template files, the program defaults to try to load files with name
 
 But you can specify the option `--tmpl-lang <lang>` to change the behaviour.
 
-If `--tmpl-lang <lang>` is specified, **and the specified lang is NOT equal to `en`**, the program will try to load files with name `<channelName>.<lang>.tmpl` or `<tmplName>.<lang>.tmpl` or `<tmplDefault>.<lang>.tmpl`. If `<lang>` equals to `en`, the default loading behaviour is NOT changed.
+If `--tmpl-lang <lang>` is specified, **and the specified lang is NOT equal to `en`**, the program will try to load files with name `<channelName>.<lang>.tmpl` or `<tmplName>.<lang>.tmpl` or `<tmplDefault>.<lang>.tmpl`.
+If `<lang>` equals to `en`, the default loading behaviour is NOT changed.
 
 The `<lang>` can be any string, just make sure it matches your desired file names.
 
@@ -254,9 +252,9 @@ The following labels of the alerts are sought by priority order and choosed as "
 - `ip`
 
 In prometheus, most metrics may provide `instance`, or `node` or `ip` label, but its value may not be suitable for alert information. Then, I recommend to use
-the following two methods to add an extra `alertinstance` label when writing alert rules..
+the following two methods to add an extra `alertinstance` label when writing alert rules.
 
-1. use PromQL function [`label_join`](https://prometheus.io/docs/prometheus/latest/querying/functions/#label_join), eg:
+1. Use PromQL function [`label_join`](https://prometheus.io/docs/prometheus/latest/querying/functions/#label_join), eg:
 
     ```yaml
     - alert: KubePodCrashLooping
@@ -269,7 +267,7 @@ the following two methods to add an extra `alertinstance` label when writing ale
         summary: Pod is crash looping.
     ```
 
-2. (Prefered) directly add `alertinstance` label, eg:
+2. (Prefered) Directly add `alertinstance` label, eg:
 
     ```yaml
     - alert: KubePodCrashLooping
