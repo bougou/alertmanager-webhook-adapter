@@ -29,73 +29,73 @@
 {{- end }}
 
 {{ define "__alert_list" }}
+{{ $timeFormat:="2006-01-02 15:04:05" }}
 {{ range . }}
----
-告警名称: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
+- 告警名称: <text_tag color='blue'>{{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}</text_tag>
 告警级别:{{ ` ` }}
-{{- if eq .Labels.severity "ok" }}OK{{ end -}}
-{{- if eq .Labels.severity "info" }}INFO{{ end -}}
-{{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
-{{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
-实例: `{{ template "__alertinstance" . }}`
+{{- if eq .Labels.severity "ok" }}<text_tag color='purple'>OK</text_tag>{{ end -}}
+{{- if eq .Labels.severity "info" }}<text_tag color='lime'>INFO</text_tag>{{ end -}}
+{{- if eq .Labels.severity "warning" }}<text_tag color='yellow'>WARNING</text_tag>{{ end -}}
+{{- if eq .Labels.severity "critical" }}<text_tag color='red'>CRITICAL</text_tag>{{ end }}
+实例: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
 {{- if .Labels.region }}
-地域: {{ .Labels.region }}
+地域: <text_tag color='neutral'>{{ .Labels.region }}</text_tag>
 {{- end }}
 {{- if .Labels.zone }}
-可用区: {{ .Labels.zone }}
+可用区: <text_tag color='neutral'>{{ .Labels.zone }}</text_tag>
 {{- end }}
 {{- if .Labels.product }}
-产品: {{ .Labels.product }}
+产品: <text_tag color='neutral'>{{ .Labels.product }}</text_tag>
 {{- end }}
 {{- if .Labels.component  }}
-组件: {{ .Labels.component }}
+组件: <text_tag color='neutral'>{{ .Labels.component }}</text_tag>
 {{- end }}
-告警状态: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} {{ .Status | toUpper }}
-开始时间: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
-结束时间: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+告警状态: {{ if eq .Status "firing" }}🚨 <text_tag color='carmine'>{{ .Status | toUpper }}</text_tag>{{ else }}✅ <text_tag color='green'>{{ .Status | toUpper }}</text_tag>{{ end }}
+开始: <text_tag color='neutral'>{{ .StartsAt.Format $timeFormat }}</text_tag>
+结束: <text_tag color='neutral'>{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}Not End{{ end }}</text_tag>
 {{- if eq .Status "firing" }}
 告警描述: {{ if .Annotations.description_cn }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
+{{ end }}
+{{ end }}{{ end }}
+
+{{ define "__alert_summary" }}
+{{ range . -}}
+- {{ if eq .Status "firing" -}}
+<text_tag color='red'>{{ template "__alertinstance" . }}</text_tag>
+{{- else -}}
+<text_tag color='green'>{{ template "__alertinstance" . }}</text_tag>
 {{- end }}
 {{ end }}
-{{ end }}
-
-
-{{ define "__alert_summary" -}}
-{{ range . }}{{ template "__alertinstance" . }}
-{{ end }}
-{{ end }}
+{{- end }}
 
 {{ define "prom.title" -}}
-{{ template "__subject" . -}}
-{{ end }}
+{{ template "__subject" . -}}{{ end }}
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
-#### **摘要**
+<font color='grey'>{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}</font>
+---
+**摘要**
 
-{{ if gt (.Alerts.Firing|len ) 0 }}
-##### **🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
-{{ template "__alert_summary" .Alerts.Firing }}
-{{ end }}
+{{ if gt (.Alerts.Firing|len ) 0 -}}
+**🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
 
+{{ template "__alert_summary" .Alerts.Firing }}{{ end }}
 
-{{ if gt (.Alerts.Resolved|len) 0 }}
-##### **✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
-{{ template "__alert_summary" .Alerts.Resolved }}
-{{ end }}
+{{ if gt (.Alerts.Resolved|len) 0 -}}
+**✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
 
-#### **详请**
+{{ template "__alert_summary" .Alerts.Resolved }}{{ end }}
 
-{{ if gt (.Alerts.Firing|len ) 0 }}
-##### **🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
-{{ template "__alert_list" .Alerts.Firing }}
-{{ end }}
+---
+**详请**
 
+{{ if gt (.Alerts.Firing|len ) 0 -}}
+**🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
+{{ template "__alert_list" .Alerts.Firing }}{{ end }}
 
-{{ if gt (.Alerts.Resolved|len) 0 }}
-##### **✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
-{{ template "__alert_list" .Alerts.Resolved }}
-{{ end }}
+{{ if gt (.Alerts.Resolved|len) 0 -}}
+**✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
+{{ template "__alert_list" .Alerts.Resolved }}{{ end }}
 {{ end }}
 
 {{ define "prom.text" }}

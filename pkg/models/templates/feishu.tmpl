@@ -29,74 +29,73 @@
 {{- end }}
 
 {{ define "__alert_list" }}
+{{ $timeFormat:="2006-01-02 15:04:05" }}
 {{ range . }}
----
-**Alert Name**: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
+- **Alert Name**: <text_tag color='blue'>{{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}</text_tag>
 **Alert Level**:{{ ` ` }}
-{{- if eq .Labels.severity "ok" }}OK{{ end -}}
-{{- if eq .Labels.severity "info" }}INFO{{ end -}}
-{{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
-{{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
-**Instance**: `{{ template "__alertinstance" . }}`
+{{- if eq .Labels.severity "ok" }}<text_tag color='purple'>OK</text_tag>{{ end -}}
+{{- if eq .Labels.severity "info" }}<text_tag color='lime'>INFO</text_tag>{{ end -}}
+{{- if eq .Labels.severity "warning" }}<text_tag color='yellow'>WARNING</text_tag>{{ end -}}
+{{- if eq .Labels.severity "critical" }}<text_tag color='red'>CRITICAL</text_tag>{{ end }}
+**Instance**: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
 {{- if .Labels.region }}
-**Region**: {{ .Labels.region }}
+**Region**: <text_tag color='neutral'>{{ .Labels.region }}</text_tag>
 {{- end }}
 {{- if .Labels.zone }}
-**Zone**: {{ .Labels.zone }}
+**Zone**: <text_tag color='neutral'>{{ .Labels.zone }}</text_tag>
 {{- end }}
 {{- if .Labels.product }}
-**Product**: {{ .Labels.product }}
+**Product**: <text_tag color='neutral'>{{ .Labels.product }}</text_tag>
 {{- end }}
 {{- if .Labels.component  }}
-**Component**: {{ .Labels.component }}
+**Component**: <text_tag color='neutral'>{{ .Labels.component }}</text_tag>
 {{- end }}
-**Alert Status**: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} {{ .Status | toUpper }}
-**Start At**: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
-**End At**: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+**Alert Status**: {{ if eq .Status "firing" }}🚨 <text_tag color='carmine'>{{ .Status | toUpper }}</text_tag>{{ else }}✅ <text_tag color='green'>{{ .Status | toUpper }}</text_tag>{{ end }}
+**Start At**: <text_tag color='neutral'>{{ .StartsAt.Format $timeFormat }}</text_tag>
+**End At**: <text_tag color='neutral'>{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}Not End{{ end }}</text_tag>
 {{- if eq .Status "firing" }}
 **Description**: {{ if .Annotations.description_en }}{{ .Annotations.description_en }}{{ else }}{{ .Annotations.description }}{{ end }}
+{{ end }}
+{{ end }}{{ end }}
+
+{{ define "__alert_summary" }}
+{{ range . -}}
+- {{ if eq .Status "firing" -}}
+<text_tag color='red'>{{ template "__alertinstance" . }}</text_tag>
+{{- else -}}
+<text_tag color='green'>{{ template "__alertinstance" . }}</text_tag>
 {{- end }}
 {{ end }}
-{{ end }}
-
-
-{{ define "__alert_summary" -}}
-{{ range . }}{{ template "__alertinstance" . }}
-{{ end }}
-{{ end }}
+{{- end }}
 
 {{ define "prom.title" -}}
-{{ template "__subject" . -}}
-{{ end }}
-
+{{ template "__subject" . -}}{{ end }}
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
-#### **Summary**
+<font color='grey'>{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}</font>
+---
+**Summary**
 
-{{ if gt (.Alerts.Firing|len ) 0 }}
-##### **🚨 Firing [{{ .Alerts.Firing|len }}] alerts**
-{{ template "__alert_summary" .Alerts.Firing }}
-{{ end }}
+{{ if gt (.Alerts.Firing|len ) 0 -}}
+**🚨 Firing [{{ .Alerts.Firing|len }}] alerts**
 
+{{ template "__alert_summary" .Alerts.Firing }}{{ end }}
 
-{{ if gt (.Alerts.Resolved|len) 0 }}
-##### **✅ Resolved [{{ .Alerts.Resolved|len }}] alerts**
-{{ template "__alert_summary" .Alerts.Resolved }}
-{{ end }}
+{{ if gt (.Alerts.Resolved|len) 0 -}}
+**✅ Resolved [{{ .Alerts.Resolved|len }}] alerts**
 
-#### **Detail**
+{{ template "__alert_summary" .Alerts.Resolved }}{{ end }}
 
-{{ if gt (.Alerts.Firing|len ) 0 }}
-##### **🚨 Firing [{{ .Alerts.Firing|len }}] alerts**
-{{ template "__alert_list" .Alerts.Firing }}
-{{ end }}
+---
+**Detail**
 
+{{ if gt (.Alerts.Firing|len ) 0 -}}
+**🚨 Firing [{{ .Alerts.Firing|len }}] alerts**
+{{ template "__alert_list" .Alerts.Firing }}{{ end }}
 
-{{ if gt (.Alerts.Resolved|len) 0 }}
-##### **✅ Resolved [{{ .Alerts.Resolved|len }}] alerts**
-{{ template "__alert_list" .Alerts.Resolved }}
-{{ end }}
+{{ if gt (.Alerts.Resolved|len) 0 -}}
+**✅ Resolved [{{ .Alerts.Resolved|len }}] alerts**
+{{ template "__alert_list" .Alerts.Resolved }}{{ end }}
 {{ end }}
 
 {{ define "prom.text" }}
