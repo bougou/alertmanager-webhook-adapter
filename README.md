@@ -74,6 +74,13 @@ $ systemctl daemon-reload
 $ systemctl start
 ```
 
+### Run as Docker container
+
+```bash
+# expose the host port (127.0.0.1:8090) to container port (8090)
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.7
+```
+
 ### Run in K8S
 
 ```
