@@ -9,4 +9,4 @@ RUN cd /src \
   && true
 
 ENTRYPOINT [ "/alertmanager-webhook-adapter" ]
-CMD ["-v"]
+CMD ["--debug"]

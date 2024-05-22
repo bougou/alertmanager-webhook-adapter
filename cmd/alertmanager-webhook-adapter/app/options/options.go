@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	restful "github.com/emicklei/go-restful/v3"
 
@@ -39,7 +40,7 @@ func (o *AppOptions) Run() error {
 	// If using builtin templates (o.TmplDir == ""), then we must check whether or not the specified lang is supported.
 	if o.TmplLang != "" && o.TmplDir == "" {
 		if _, exists := templates.DefaultTmplByLang[o.TmplLang]; !exists {
-			return fmt.Errorf("the builtin templates does not support specified lang: (%s)", o.TmplLang)
+			return fmt.Errorf("the builtin templates does not support specified lang (%s), builtin supported langs: (%s)", o.TmplLang, strings.Join(templates.DefaultSupportedLangs(), ","))
 		}
 		if err := models.LoadDefaultTemplate(o.TmplLang); err != nil {
 			return fmt.Errorf("load default template for lang (%s) failed, err: %s", o.TmplLang, err)
@@ -47,7 +48,7 @@ func (o *AppOptions) Run() error {
 	}
 
 	if o.TmplDir == "" && (o.TmplName != "" || o.TmplDefault != "") {
-		fmt.Println("Warning, there is no meaning to specify --tmpl-name or --tmpl-default option without specify --tmpl-dir option, just ingored.")
+		fmt.Println("Warning, there is no meaning to specify --tmpl-name or --tmpl-default option without specify --tmpl-dir option, just ignored.")
 	}
 
 	if o.TmplDir != "" {
@@ -64,6 +65,11 @@ func (o *AppOptions) Run() error {
 			msg := fmt.Sprintf("Load templates from dir (%s) failed, err: %s", o.TmplDir, err)
 			return errors.New(msg)
 		}
+	}
+
+	fmt.Println("Signature: ", o.Signature)
+	if o.Signature == "未知" {
+		fmt.Println("Warn, you are using the default signature, we suggest to specify a custom signature by --signature option.")
 	}
 
 	container := restful.DefaultContainer

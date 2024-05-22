@@ -56,7 +56,7 @@
       "status": "firing",
       "labels": {
         "alertgroup": "Linux",
-        "alertname": "CPUHigh",
+        "alertname": "CPUHigh1",
         "component": "component-x",
         "cpu": "cpu-total",
         "db": "telegraf",
@@ -65,7 +65,32 @@
         "instance": "10.30.1.162",
         "product": "product-x",
         "region": "region-x",
-        "severity": "warning",
+        "severity": "critical",
+        "vmalert": "10.30.12.22",
+        "zone": "zone-x"
+      },
+      "annotations": {
+        "description": "cpu usage is high than 20% for 5 minutes"
+      },
+      "startsAt": "2021-03-30T20:17:50.814674209+08:00",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://10.30.12.22:8429/api/v1/2026138838271548684/17025577897922373885/status",
+      "fingerprint": "83eb2c81e0da3faf"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertgroup": "Linux",
+        "alertname": "CPUHigh2",
+        "component": "component-x",
+        "cpu": "cpu-total",
+        "db": "telegraf",
+        "description": "cpu usage is high than 20% for 5 minutes",
+        "host": "10.30.1.163",
+        "instance": "10.30.1.163",
+        "product": "product-x",
+        "region": "region-x",
+        "severity": "info",
         "vmalert": "10.30.12.22",
         "zone": "zone-x"
       },

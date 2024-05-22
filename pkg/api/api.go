@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	promModels "github.com/bougou/alertmanager-webhook-adapter/pkg/models"
@@ -63,9 +63,9 @@ func (c *Controller) log(a ...any) error {
 func (c *Controller) send(request *restful.Request, response *restful.Response) {
 	c.logf("Got: %s\n", request.Request.URL.String())
 
-	raw, err := ioutil.ReadAll(request.Request.Body)
+	raw, err := io.ReadAll(request.Request.Body)
 	if err != nil {
-		errmsg := "read request body failed"
+		errmsg := fmt.Sprintf("read request body failed, err: %s", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
@@ -73,7 +73,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 
 	promMsg := &promModels.AlertmanagerWebhookMessage{}
 	if err := json.Unmarshal(raw, promMsg); err != nil {
-		errmsg := "unmarshal body failed"
+		errmsg := fmt.Sprintf("unmarshal body failed, err: %s", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
@@ -119,4 +119,5 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		return
 	}
 
+	response.WriteHeader(http.StatusNoContent)
 }

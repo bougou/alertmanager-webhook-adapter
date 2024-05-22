@@ -62,3 +62,11 @@ var ChannelsDefaultTmplMapByLang = map[string]map[string]string{
 		"weixinapp": DefaultTmplWeixinappZH,
 	},
 }
+
+func DefaultSupportedLangs() []string {
+	res := make([]string, 0)
+	for k := range DefaultTmplByLang {
+		res = append(res, k)
+	}
+	return res
+}
