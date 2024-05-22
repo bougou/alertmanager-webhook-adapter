@@ -2,7 +2,7 @@
 
 | 企业微信机器人                           | 企业微信应用                                | 钉钉群机器人                               | 飞书群机器人                             |
 | ---------------------------------------- | ------------------------------------------- | ------------------------------------------ | ---------------------------------------- |
-| <img src="./weixin_zh.png" width="200"/> | <img src="./weixinapp_zh.png" width="200"/> | <img src="./dingtalk_zh.png" width="200"/> | <img src="./feishu_zh.png" width="200"/> |
+| <img src="./weixin_zh.png" width="200"/> | <img src="./weixinapp_zh.png" width="200"/> | <img src="./dingtalk_zh.png" width="200"/> | <img src="./feishu_zh_2.png" width="200"/> |
 
 | Slack App                               |
 | --------------------------------------- |

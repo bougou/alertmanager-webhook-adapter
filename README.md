@@ -79,6 +79,8 @@ $ systemctl start
 ```bash
 # expose the host port (127.0.0.1:8090) to container port (8090)
 docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.7
+
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.7 --signature MyIDC --debug
 ```
 
 ### Run in K8S
@@ -122,7 +124,7 @@ Flags:
 
 | WeixinGroupBot                                | WeixinApp                                        | DingTalkGroupBot                                | FeishuGroupBot                                |
 | --------------------------------------------- | ------------------------------------------------ | ----------------------------------------------- | --------------------------------------------- |
-| <img src="./docs/weixin_en.png" width="200"/> | <img src="./docs/weixinapp_en.png" width="200"/> | <img src="./docs/dingtalk_en.png" width="200"/> | <img src="./docs/feishu_en.png" width="200"/> |
+| <img src="./docs/weixin_en.png" width="200"/> | <img src="./docs/weixinapp_en.png" width="200"/> | <img src="./docs/dingtalk_en.png" width="200"/> | <img src="./docs/feishu_en_2.png" width="200"/> |
 
 | Slack App                                    |
 | -------------------------------------------- |

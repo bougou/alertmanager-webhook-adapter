@@ -1,4 +1,6 @@
 ---
+# Release files to GitHub Releases
+
 name: Tagged Release CI
 
 on:
