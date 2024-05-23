@@ -19,3 +19,5 @@
 - https://open.dingtalk.com/document/orgapp/enterprise-internal-robots-send-markdown-messages
 
 ### slack
+
+- https://api.slack.com/reference/surfaces/formatting#basic-formatting

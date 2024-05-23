@@ -61,11 +61,11 @@ func (c *Controller) log(a ...any) error {
 }
 
 func (c *Controller) send(request *restful.Request, response *restful.Response) {
-	c.logf("Got: %s\n", request.Request.URL.String())
+	c.logf("Got request : %s\n", request.Request.URL.String())
 
 	raw, err := io.ReadAll(request.Request.Body)
 	if err != nil {
-		errmsg := fmt.Sprintf("read request body failed, err: %s", err)
+		errmsg := fmt.Sprintf("Err: read request body failed, err: %s", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
@@ -73,7 +73,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 
 	promMsg := &promModels.AlertmanagerWebhookMessage{}
 	if err := json.Unmarshal(raw, promMsg); err != nil {
-		errmsg := fmt.Sprintf("unmarshal body failed, err: %s", err)
+		errmsg := fmt.Sprintf("Err: unmarshal body failed, err: %s", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
@@ -82,7 +82,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 
 	channelType := request.QueryParameter("channel_type")
 	if channelType == "" {
-		errmsg := "no channel_type found"
+		errmsg := "Err: no channel_type found"
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
@@ -90,7 +90,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 
 	senderCreator, exists := senders.ChannelsSenderCreatorMap[channelType]
 	if !exists {
-		errmsg := "not supported channel_type"
+		errmsg := fmt.Sprintf("Err: not supported channel_type of (%s)", channelType)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
@@ -98,7 +98,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 
 	sender, err := senderCreator(request)
 	if err != nil {
-		errmsg := fmt.Sprintf("create sender failed, %v", err)
+		errmsg := fmt.Sprintf("Err: create sender failed, %v", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
@@ -106,18 +106,19 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 
 	payload, err := promMsg.ToPayload(channelType, raw)
 	if err != nil {
-		errmsg := fmt.Sprintf("create msg payload failed, %v", err)
+		errmsg := fmt.Sprintf("Err: create msg payload failed, %v", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusInternalServerError, errmsg, restful.MIME_JSON)
 		return
 	}
 
 	if err := sender.Send(payload); err != nil {
-		errmsg := fmt.Sprintf("sender send failed, %v", err)
+		errmsg := fmt.Sprintf("Err: sender send failed, %v", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusInternalServerError, errmsg, restful.MIME_JSON)
 		return
 	}
 
+	c.logf("Send succeed: %s\n", request.Request.URL.String())
 	response.WriteHeader(http.StatusNoContent)
 }
