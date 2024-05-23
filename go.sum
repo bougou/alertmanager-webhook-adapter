@@ -23,8 +23,8 @@ github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24
 github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+CedLV8=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bketelsen/crypt v0.0.3-0.20200106085610-5cbc8cc4026c/go.mod h1:MKsuJmJgSg28kpZDP6UIiPt0e0Oz0kqKNGyRaWEPv84=
-github.com/bougou/webhook-adapter v0.0.3 h1:Jw78NPC9+C4BYLR/ontDhw86Zc8u8clezzrPjDwJjUU=
-github.com/bougou/webhook-adapter v0.0.3/go.mod h1:m1RF6fddsW6r8OthX3oNBJ/J0kE9U+cpGYekxxP4Ze4=
+github.com/bougou/webhook-adapter v0.0.5-0.20240523101812-90b09a78a33d h1:pbi8u5vuBTFHVc+grlSEXmI55aj0Fv7en6OIoVzzBDU=
+github.com/bougou/webhook-adapter v0.0.5-0.20240523101812-90b09a78a33d/go.mod h1:aaHou84BMPhK/cn/ZpsfYpqA4I3l0TmlwFQPhtQ2Aq0=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
