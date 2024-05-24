@@ -35,10 +35,6 @@ func createSlackSender(request *restful.Request) (models.Sender, error) {
 	if msgType == "" {
 		msgType = "markdown"
 	}
-	if !(slack.ValidMsgtype(msgType)) {
-		return nil, fmt.Errorf("not supported msgtype for slack")
-
-	}
 
 	var sender models.Sender = slack.NewSender(token, channel, msgType)
 	return sender, nil

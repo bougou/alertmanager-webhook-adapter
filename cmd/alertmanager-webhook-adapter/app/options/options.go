@@ -72,6 +72,16 @@ func (o *AppOptions) Run() error {
 		fmt.Println("Warn, you are using the default signature, we suggest to specify a custom signature by --signature option.")
 	}
 
+	httpProxy := os.Getenv("HTTP_PROXY")
+	httpsProxy := os.Getenv("HTTPS_PROXY")
+	noProxy := os.Getenv("NO_PROXY")
+	if httpProxy != "" || httpsProxy != "" {
+		fmt.Println("Found http proxy from environment variables:")
+		fmt.Printf("  HTTP_PROXY: (%s)\n", httpProxy)
+		fmt.Printf("  HTTPS_PROXY: (%s)\n", httpsProxy)
+		fmt.Printf("  NO_PROXY: (%s)\n", noProxy)
+	}
+
 	container := restful.DefaultContainer
 
 	controller := api.NewController(o.Signature)

@@ -26,9 +26,6 @@ func createFeishuSender(request *restful.Request) (models.Sender, error) {
 	if msgType == "" {
 		msgType = "markdown"
 	}
-	if !(feishu.ValidMsgtype(msgType)) {
-		return nil, fmt.Errorf("not supported msgtype for feishu")
-	}
 
 	var sender models.Sender = feishu.NewSender(token, msgType)
 	return sender, nil
