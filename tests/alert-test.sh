@@ -45,6 +45,15 @@ weixin() {
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&token=${token}&msg_type=${msg_type}" -d @-
 }
 
+weixin_template_card() {
+  token="${WEIXIN_TOKEN}"
+  channel_type="weixin"
+  msg_type="template_card"
+
+  payload=$(cat ./alert.json)
+  echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&token=${token}&msg_type=${msg_type}" -d @-
+}
+
 weixinapp() {
   corpID="${WEIXIN_APP_CORP_ID}"
   agentID=${WEIXIN_APP_AGENT_ID}
