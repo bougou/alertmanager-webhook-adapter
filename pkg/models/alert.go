@@ -170,7 +170,7 @@ func (m *AlertmanagerWebhookMessage) RenderTmpl(channel string, tmplName string)
 	var safetmpl *safeTemplate
 
 	if t, exists := promMsgTemplatesMap[channel]; !exists {
-		safetmpl = promMsgTemplate
+		safetmpl = promMsgTemplateDefault
 	} else {
 		safetmpl = t
 	}
@@ -191,25 +191,25 @@ func (m *AlertmanagerWebhookMessage) RenderTmpl(channel string, tmplName string)
 }
 
 func (m *AlertmanagerWebhookMessage) ToPayload(channel string, raw []byte) (*models.Payload, error) {
-	msg := &models.Payload{Raw: string(raw)}
+	payload := &models.Payload{Raw: string(raw)}
 
 	title, err := m.RenderTmpl(channel, "prom.title")
 	if err != nil {
 		return nil, err
 	}
-	msg.Title = title
+	payload.Title = title
 
 	text, err := m.RenderTmpl(channel, "prom.text")
 	if err != nil {
 		return nil, err
 	}
-	msg.Text = text
+	payload.Text = text
 
 	markdown, err := m.RenderTmpl(channel, "prom.markdown")
 	if err != nil {
 		return nil, err
 	}
-	msg.Markdown = markdown
+	payload.Markdown = markdown
 
-	return msg, nil
+	return payload, nil
 }

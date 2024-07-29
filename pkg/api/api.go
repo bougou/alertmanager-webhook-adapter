@@ -9,6 +9,7 @@ import (
 	promModels "github.com/bougou/alertmanager-webhook-adapter/pkg/models"
 	"github.com/bougou/alertmanager-webhook-adapter/pkg/senders"
 	restful "github.com/emicklei/go-restful/v3"
+	"github.com/kr/pretty"
 )
 
 type Controller struct {
@@ -110,6 +111,12 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusInternalServerError, errmsg, restful.MIME_JSON)
 		return
+	}
+	if c.debug {
+		pretty.Println(payload)
+
+		fmt.Println(">>> Payload Markdown")
+		fmt.Print(payload.Markdown)
 	}
 
 	if err := sender.Send(payload); err != nil {

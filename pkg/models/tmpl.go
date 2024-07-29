@@ -10,6 +10,8 @@ import (
 	"sync"
 	"text/template"
 
+	"golang.org/x/text/cases"
+
 	"github.com/bougou/alertmanager-webhook-adapter/pkg/models/templates"
 )
 
@@ -17,16 +19,15 @@ var (
 	topLevelTemplateName = "prom"
 
 	// store the default templates
-	promMsgTemplate *safeTemplate
+	promMsgTemplateDefault *safeTemplate
 
 	// store templates for different channels
 	promMsgTemplatesMap = make(map[string]*safeTemplate)
 
 	defaultFuncs = map[string]interface{}{
-		"toUpper": strings.ToUpper,
-		"toLower": strings.ToLower,
-		"title":   strings.Title,
-
+		"toUpper":  strings.ToUpper,
+		"toLower":  strings.ToLower,
+		"title":    cases.Title,
 		"markdown": markdownEscapeString,
 	}
 	isMarkdownSpecial [128]bool
@@ -47,8 +48,8 @@ func init() {
 // LoadDefaultTemplate set default for the package level variables: promMsgTemplate and promMsgTemplatesMap.
 func LoadDefaultTemplate(tmplLang string) error {
 	defaultTmpl := templates.DefaultTmplByLang[tmplLang]
-	promMsgTemplate = &safeTemplate{}
-	if err := promMsgTemplate.UpdateTemplate(defaultTmpl); err != nil {
+	promMsgTemplateDefault = &safeTemplate{}
+	if err := promMsgTemplateDefault.UpdateTemplate(defaultTmpl); err != nil {
 		msg := fmt.Sprintf("UpdateTemplate for default failed, err: %s", err)
 		return errors.New(msg)
 	}
@@ -86,7 +87,7 @@ func LoadTemplate(tmplDir, tmplName, tmplDefault, tmplLang string) error {
 			return errors.New(msg)
 		}
 
-		if err := promMsgTemplate.UpdateTemplate(string(b)); err != nil {
+		if err := promMsgTemplateDefault.UpdateTemplate(string(b)); err != nil {
 			msg := fmt.Sprintf("UpdateTemplate for default failed, err: %s", err)
 			return errors.New(msg)
 		}
@@ -163,7 +164,7 @@ func (t *safeTemplate) UpdateTemplate(newTpl string) (err error) {
 		return
 	}
 
-	_ = t.current // oldtmpl
+	_ = t.current // old template
 	t.Template = tpl
 	t.current = newTpl
 	return
@@ -194,7 +195,7 @@ func ExecuteTextString(text string, data interface{}) (string, error) {
 		return "", nil
 	}
 
-	tmpl, err := promMsgTemplate.Clone()
+	tmpl, err := promMsgTemplateDefault.Clone()
 	if err != nil {
 		return "", err
 	}

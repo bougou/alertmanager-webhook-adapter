@@ -6,35 +6,54 @@ A general webhook server for receiving [Prometheus AlertManager](https://prometh
 ## Supported Notification Channels
 
 - `weixin`, Weixin Group Bot / 企业微信群机器人
-    ```
-    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=weixin&token={token}
-    ```
+
+  ```
+  http(s)://{this-webhook-server-addr}/webhook/send?channel_type=weixin&token={token}
+  ```
+
 - `dingtalk`, Dingtalk Group Bot / 钉钉群机器人
-    ```
-    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=dingtalk&token={token}
-    ```
+
+  ```
+  http(s)://{this-webhook-server-addr}/webhook/send?channel_type=dingtalk&token={token}
+  ```
+
 - `feishu`, Feishu Group Bot / 飞书群机器人
-    ```
-    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=feishu&token={token}
-    ```
+
+  ```
+  http(s)://{this-webhook-server-addr}/webhook/send?channel_type=feishu&token={token}
+  ```
+
 - `weixinapp`, Weixin Application / 企业微信应用
-    ```bash
-    # Must specify one of to_user, to_party, to_tag parameter
-    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=weixinapp&corp_id={corp_id}&agent_id={agent_id}&agent_secret={agent_secret}&to_user={user_id}&to_party={party_id}&to_tag={tag_id}
 
-    # to_user 指定接收消息的成员，成员 ID 列表（多个接收者用 '|' 分隔，最多支持 1000 个）
-    # 指定为 "@all"，则向该企业应用的全部成员发送
+  ```bash
+  # Must specify one of to_user, to_party, to_tag parameter
+  http(s)://{this-webhook-server-addr}/webhook/send?channel_type=weixinapp&corp_id={corp_id}&agent_id={agent_id}&agent_secret={agent_secret}&to_user={user_id}&to_party={party_id}&to_tag={tag_id}
 
-    # to_party 指定接收消息的部门，部门 ID 列表，多个接收者用 '|' 分隔，最多支持 100 个
-    # 当 to_user 为 "@all" 时忽略本参数
+  # to_user 指定接收消息的成员，成员 ID 列表（多个接收者用 '|' 分隔，最多支持 1000 个）
+  # 指定为 "@all"，则向该企业应用的全部成员发送
 
-    # to_tag 指定接收消息的标签，标签 ID  列表，多个接收者用 '|' 分隔，最多支持 100 个
-    # 当 to_user 为 "@all" 时忽略本参数
-    ```
+  # to_party 指定接收消息的部门，部门 ID 列表，多个接收者用 '|' 分隔，最多支持 100 个
+  # 当 to_user 为 "@all" 时忽略本参数
+
+  # to_tag 指定接收消息的标签，标签 ID  列表，多个接收者用 '|' 分隔，最多支持 100 个
+  # 当 to_user 为 "@all" 时忽略本参数
+  ```
+
 - `slack`, Slack App
-    ```
-    http(s)://{this-webhook-server-addr}/webhook/send?channel_type=slack&token=<token>&channel=<channel>
-    ```
+
+  ```
+  http(s)://{this-webhook-server-addr}/webhook/send?channel_type=slack&token=<token>&channel=<channel>
+  ```
+
+- `discord-webhook`, Discord Webhook
+
+  ```bash
+  http(s)://{this-webhook-server-addr}/webhook/send?channel_type=discord-webhook&id={id}&token={token}
+
+  # discord webhook url:
+  # https://discord.com/api/webhooks/{id}/{token}
+  # https://discord.com/api/webhooks/12673xx/adruxxx
+  ```
 
 > More is comming...
 
@@ -53,16 +72,16 @@ $ ./alertmanager-webhook-adapter -h
 
 # Add signature for sent messages
 $ ./alertmanager-webhook-adapter --listen-address=:8060 --signature "Anything-You-Like"
-# the signature will be added to the begining of the messsage:
+# the signature will be added to the beginning of the message:
 # 【Anything-You-Like】this-is-the-xxxxxxxxxx-message
 ```
 
 ### Start as systemd service
 
 ```bash
-# Install the binary alertmanager-webhook-adpater file to some directory
-# like /usr/local/bin/alertmanager-webhook-adapater
-# and chmod +x /usr/local/bin/alertmanager-webhook-adapater
+# Install the binary alertmanager-webhook-adapter file to some directory
+# like /usr/local/bin/alertmanager-webhook-adapter
+# and chmod +x /usr/local/bin/alertmanager-webhook-adapter
 
 $ cp deploy/alertmanager-webhook-adapter.service /etc/systemd/system/
 
@@ -132,10 +151,10 @@ Flags:
 
 ## Custom Templates
 
-The project already has builtin templates for all supported notifiction channels.
+The project already has builtin templates for all supported notification channels.
 But you can use your own template file(s) to override those defaults.
 
-You can use the following three options to acheive this purpose.
+You can use the following three options.
 
 -  `--tmpl-dir (-d)`
 -  `--tmpl-name (-t)`
@@ -178,7 +197,7 @@ Create your own template file, like `custom.tmpl`, and put it under the template
 The filename with suffix removed will be the template name and be used as value of the `--tmpl-name` parameter.
 
 The program will **try to search `<tmplName>.tmpl` file** under the tmpl dir.
-The choosed tmpl file will be used for all notification channels. If not found, error and exit.
+The selected tmpl file will be used for all notification channels. If not found, error and exit.
 
 ```bash
 # use templates/custom.tmpl for all channels.
@@ -234,10 +253,10 @@ All template files MUST define the following template parts in the template file
 
 When loading template files, the program defaults to try to load files with name `<channelName>.tmpl` or `<tmplName>.tmpl` or `<tmplDefault>.tmpl`.
 
-But you can specify the option `--tmpl-lang <lang>` to change the behaviour.
+But you can specify the option `--tmpl-lang <lang>` to change the loading rule.
 
 If `--tmpl-lang <lang>` is specified, **and the specified lang is NOT equal to `en`**, the program will try to load files with name `<channelName>.<lang>.tmpl` or `<tmplName>.<lang>.tmpl` or `<tmplDefault>.<lang>.tmpl`.
-If `<lang>` equals to `en`, the default loading behaviour is NOT changed.
+If `<lang>` equals to `en`, the default loading rule is NOT changed.
 
 The `<lang>` can be any string, just make sure it matches your desired file names.
 
@@ -250,7 +269,7 @@ This project already builtin supports two languages, `en` for english, `zh` for 
 The default notification templates will try its best to print the alert instance information for each alert.
 The alert instance is determined from the labels of the alerts.
 
-The following labels of the alerts are sought by priority order and choosed as "alert instance" if the label is found.
+The following labels of the alerts are sought by priority order and selected as "alert instance" if the label is found.
 
 - `alertinstance`
 - `instance`
@@ -276,7 +295,7 @@ the following two methods to add an extra `alertinstance` label when writing ale
         summary: Pod is crash looping.
     ```
 
-2. (Prefered) Directly add `alertinstance` label, eg:
+2. (Preferred) Directly add `alertinstance` label, eg:
 
     ```yaml
     - alert: KubePodCrashLooping
