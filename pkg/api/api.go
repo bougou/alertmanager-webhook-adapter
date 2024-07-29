@@ -97,17 +97,17 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		return
 	}
 
-	sender, err := senderCreator(request)
+	sender, converter, err := senderCreator(request)
 	if err != nil {
-		errmsg := fmt.Sprintf("Err: create sender failed, %v", err)
+		errmsg := fmt.Sprintf("Err: create sender failed, err: %s", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusBadRequest, errmsg, restful.MIME_JSON)
 		return
 	}
 
-	payload, err := promMsg.ToPayload(channelType, raw)
+	msg, err := converter.Convert(raw, promMsg)
 	if err != nil {
-		errmsg := fmt.Sprintf("Err: create msg payload failed, %v", err)
+		errmsg := fmt.Sprintf("Err: convert the prom msg failed, err: %s", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusInternalServerError, errmsg, restful.MIME_JSON)
 		return
@@ -119,7 +119,7 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		fmt.Print(payload.Markdown)
 	}
 
-	if err := sender.Send(payload); err != nil {
+	if err := sender.SendMsg(msg); err != nil {
 		errmsg := fmt.Sprintf("Err: sender send failed, %v", err)
 		c.log(errmsg)
 		response.WriteHeaderAndJson(http.StatusInternalServerError, errmsg, restful.MIME_JSON)
