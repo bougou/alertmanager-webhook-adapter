@@ -43,6 +43,7 @@ jobs:
       with:
         push: true
         context: .
+        platforms: linux/amd64,linux/arm64
         tags: |
           bougou/alertmanager-webhook-adapter:latest
           bougou/alertmanager-webhook-adapter:${{ steps.prepare_tag.outputs.image_tag }}
