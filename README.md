@@ -97,14 +97,16 @@ $ systemctl start
 
 ```bash
 # expose the host port (127.0.0.1:8090) to container port (8090)
-docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.7
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.8
 
-docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.7 --signature MyIDC --debug
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.8 --signature MyIDC --lang zh --debug
 ```
 
 ### Run in K8S
 
-```
+Apply manifests:
+
+```bash
 cd deploy/k8s
 kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml

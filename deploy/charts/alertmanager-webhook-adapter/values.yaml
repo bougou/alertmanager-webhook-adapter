@@ -1,0 +1,6 @@
+image:
+  name: bougou/alertmanager-webhook-adapter
+  tag: v1.1.8
+signature: MyIDC
+lang: en
+timezone: Asia/Shanghai

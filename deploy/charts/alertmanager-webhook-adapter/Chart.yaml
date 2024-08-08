@@ -1,0 +1,8 @@
+apiVersion: v2
+appVersion: 1.1.8
+description: helm chart for alertmanager webhook adapter
+name: alertmanager-webhook-adapter
+version: 1.0.0
+type: application
+maintainers:
+  - name: bougou

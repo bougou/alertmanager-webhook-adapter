@@ -1,31 +1,35 @@
 ---
-# Release files to GitHub Releases
-
-name: Tagged Release CI
+name: Release binary
 
 on:
   push:
+    branches:
+      - "main"
     tags:
       - "v*"
 
 jobs:
-  tagged-release:
-    name: Tagged Release
+
+  binary-release:
+    name: binary release
     runs-on: ubuntu-latest
+    if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Go
+
+      - name: set up Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.18
 
-      - name: Build & test
+      - name: build & test
         run: |
           make dependencies
           make build-all
 
-      - uses: marvinpinto/action-automatic-releases@latest
+      - name: release
+        uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false

@@ -2,8 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alertmanager-webhook-adapter
-  namespace: infra
+  name: {{ include "awa.fullname" . }}
+  namespace: {{ include "awa.namespace" . }}
 spec:
   replicas: 1
   selector:
@@ -16,15 +16,15 @@ spec:
     spec:
       containers:
       - name: webhook
-        image: bougou/alertmanager-webhook-adapter:v1.1.8
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
         command:
         - /alertmanager-webhook-adapter
         - --listen-address=:8090
-        - --signature=MyIDC
-        - --tmpl-lang=zh
+        - --signature={{ .Values.signature }}
+        - --tmpl-lang={{ .Values.lang | default "en" }}
         env:
         - name: TZ
-          value: Asia/Shanghai
+          value: {{ .Values.timezone }}
         resources:
           requests:
             memory: 50Mi
