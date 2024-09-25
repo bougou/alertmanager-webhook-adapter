@@ -39,3 +39,4 @@ dist
 *.out
 
 .DS_Store
+deploy/charts/alertmanager-webhook-adapter-*.tgz

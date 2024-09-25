@@ -112,6 +112,24 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 ```
 
+Or Deploy with Helm
+
+```bash
+# prepare custom values.yaml
+# see: https://github.com/bougou/alertmanager-webhook-adapter/blob/main/deploy/charts/alertmanager-webhook-adapter/values.yaml
+vim values.yaml
+
+helm repo add bougoucharts https://bougou.github.io/charts
+helm repo update
+
+helm upgrade alertmanager-webhook-adapter \
+  bougoucharts/alertmanager-webhook-adapter \
+  --install \
+  --namespace infra \
+  --version v1.0.0 \
+  --values values.yaml
+```
+
 ## Configure Alertmanager to send alert messages to this webhook server
 
 ```yaml

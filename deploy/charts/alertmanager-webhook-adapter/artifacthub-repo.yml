@@ -1,0 +1,9 @@
+# Artifact Hub repository metadata file
+#
+# ref: https://github.com/artifacthub/hub/blob/master/docs/metadata/artifacthub-repo.yml
+
+repositoryID: alertmanager-webhook-adapter
+owners:
+  - name: bougou
+    email: bougou@126.com
+ignore: []
