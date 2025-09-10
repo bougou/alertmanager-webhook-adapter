@@ -5,7 +5,7 @@ go 1.20
 replace github.com/bougou/alertmanager-webhook-adapter v0.0.0 => ./
 
 require (
-	github.com/bougou/webhook-adapter v0.1.1-0.20240703072345-7b063adf6949
+	github.com/bougou/webhook-adapter v0.1.1
 	github.com/emicklei/go-restful/v3 v3.4.0
 	github.com/kr/pretty v0.1.0
 	github.com/spf13/cobra v1.1.3

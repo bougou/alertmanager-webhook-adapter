@@ -23,8 +23,8 @@ github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24
 github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+CedLV8=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bketelsen/crypt v0.0.3-0.20200106085610-5cbc8cc4026c/go.mod h1:MKsuJmJgSg28kpZDP6UIiPt0e0Oz0kqKNGyRaWEPv84=
-github.com/bougou/webhook-adapter v0.1.1-0.20240703072345-7b063adf6949 h1:VfgzHX4bgBoa/o5czoNlzU8clC+rAyFL4jqMEPsmVo8=
-github.com/bougou/webhook-adapter v0.1.1-0.20240703072345-7b063adf6949/go.mod h1:GYAmLIjZqdf6kBKea+odq3RtTTf3B/tji1DPuFFOT14=
+github.com/bougou/webhook-adapter v0.1.1 h1:MYQhQfpH5N66HLLPiayZ1DSRdZKtUPr4te6w+dF/gUs=
+github.com/bougou/webhook-adapter v0.1.1/go.mod h1:GYAmLIjZqdf6kBKea+odq3RtTTf3B/tji1DPuFFOT14=
 github.com/bwmarrin/discordgo v0.28.1 h1:gXsuo2GBO7NbR6uqmrrBDplPUx2T3nzu775q/Rd1aG4=
 github.com/bwmarrin/discordgo v0.28.1/go.mod h1:NJZpH+1AfhIcyQsPeuBKsUtYrRnjkyu0kIVMCHkZtRY=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
