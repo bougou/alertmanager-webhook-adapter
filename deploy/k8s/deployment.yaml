@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webhook
-        image: bougou/alertmanager-webhook-adapter:v1.1.8
+        image: bougou/alertmanager-webhook-adapter:v1.1.10
         command:
         - /alertmanager-webhook-adapter
         - --listen-address=:8090
