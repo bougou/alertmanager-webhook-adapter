@@ -72,6 +72,8 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 		return
 	}
 
+	c.logf("Received raw body: %s\n", string(raw))
+
 	promMsg := &promModels.AlertmanagerWebhookMessage{}
 	if err := json.Unmarshal(raw, promMsg); err != nil {
 		errmsg := fmt.Sprintf("Err: unmarshal body failed, err: %s", err)
@@ -115,8 +117,8 @@ func (c *Controller) send(request *restful.Request, response *restful.Response) 
 	if c.debug {
 		pretty.Println(payload)
 
-		fmt.Println(">>> Payload Markdown")
-		fmt.Print(payload.Markdown)
+		c.log(">>> Payload Markdown")
+		c.log(payload.Markdown)
 	}
 
 	if err := sender.Send(payload); err != nil {

@@ -195,19 +195,19 @@ func (m *AlertmanagerWebhookMessage) ToPayload(channel string, raw []byte) (*mod
 
 	title, err := m.RenderTmpl(channel, "prom.title")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("render prom.title failed, err: %s", err)
 	}
 	payload.Title = title
 
 	text, err := m.RenderTmpl(channel, "prom.text")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("render prom.text failed, err: %s", err)
 	}
 	payload.Text = text
 
 	markdown, err := m.RenderTmpl(channel, "prom.markdown")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("render prom.markdown failed, err: %s", err)
 	}
 	payload.Markdown = markdown
 
