@@ -97,9 +97,9 @@ $ systemctl start
 
 ```bash
 # expose the host port (127.0.0.1:8090) to container port (8090)
-docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.10
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.11
 
-docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.10 --signature MyIDC --lang zh --debug
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.11 --signature MyIDC --lang zh --debug
 ```
 
 ### Run in K8S
