@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bougou/webhook-adapter/models"
+	"github.com/bougou/alertmanager-webhook-adapter/pkg/webhook-adapter/models"
 )
 
 // ref: https://prometheus.io/docs/alerting/latest/configuration/#webhook_config

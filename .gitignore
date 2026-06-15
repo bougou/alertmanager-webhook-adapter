@@ -40,3 +40,5 @@ dist
 
 .DS_Store
 deploy/charts/alertmanager-webhook-adapter-*.tgz
+
+.claude

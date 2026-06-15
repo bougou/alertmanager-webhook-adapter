@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bougou/webhook-adapter/channels/slack"
-	"github.com/bougou/webhook-adapter/models"
+	"github.com/bougou/alertmanager-webhook-adapter/pkg/webhook-adapter/channels/slack"
+	"github.com/bougou/alertmanager-webhook-adapter/pkg/webhook-adapter/models"
 	restful "github.com/emicklei/go-restful/v3"
 )
 
