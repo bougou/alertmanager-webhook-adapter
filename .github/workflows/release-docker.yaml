@@ -9,48 +9,100 @@ on:
       - "v*"
 
 jobs:
-  docker-release:
-    name: docker release
+  prepare:
+    name: prepare tags
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: prepare short tag
+        id: prepare_short_tag
+        run: |
+          SHORT_TAG=`git describe --abbrev=5 --dirty --tags --always`
+          echo "image_short_tag=$SHORT_TAG" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Build Image Short Tag::$SHORT_TAG"
+      - name: prepare tag
+        id: prepare_tag
+        run: |
+          TIME_TAG=`TZ=Zero date +"%y%m%d%H%M%S"`
+          COMMIT_TAG=`echo $GITHUB_SHA | cut -c 1-7`
+          TAG="$TIME_TAG-$COMMIT_TAG"
+          echo "image_tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "::notice title=Build Image Tag::$TAG"
+    outputs:
+      image_tag: ${{ steps.prepare_tag.outputs.image_tag }}
+      image_short_tag: ${{ steps.prepare_short_tag.outputs.image_short_tag }}
+
+  build:
+    name: build (${{ matrix.arch }})
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            platform: linux/amd64
+            runs-on: ubuntu-latest
+          - arch: arm64
+            platform: linux/arm64
+            runs-on: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: AutoModality/action-clean@v1
+
+      - uses: actions/checkout@v4
+
+      - name: set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+
+      - name: build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: .
+          platforms: ${{ matrix.platform }}
+          tags: |
+            bougou/alertmanager-webhook-adapter:latest-${{ matrix.arch }}
+            bougou/alertmanager-webhook-adapter:${{ needs.prepare.outputs.image_tag }}-${{ matrix.arch }}
+            bougou/alertmanager-webhook-adapter:${{ needs.prepare.outputs.image_short_tag }}-${{ matrix.arch }}
+
+  manifest:
+    name: publish multi-arch manifest
+    needs: [prepare, build]
     runs-on: ubuntu-latest
 
     steps:
-    - uses: AutoModality/action-clean@v1
+      - name: set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - uses: actions/checkout@v2
+      - name: docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
 
-    - name: set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: create and push multi-arch manifest
+        run: |
+          IMAGE=bougou/alertmanager-webhook-adapter
+          TAG="${{ needs.prepare.outputs.image_tag }}"
+          SHORT_TAG="${{ needs.prepare.outputs.image_short_tag }}"
 
-    - name: docker login
-      uses: docker/login-action@v1.10.0
-      with:
-        # registry: ${{ secrets.DOCKERHUB_ADDR }}
-        username: ${{ secrets.DOCKERHUB_USER }}
-        password: ${{ secrets.DOCKERHUB_PASS }}
+          docker buildx imagetools create \
+            -t "${IMAGE}:latest" \
+            "${IMAGE}:latest-amd64" \
+            "${IMAGE}:latest-arm64"
 
-    - name: prepare short tag
-      id: prepare_short_tag
-      run: |
-        SHORT_TAG=`git describe --abbrev=5 --dirty --tags --always`
-        echo "::set-output name=image_short_tag::$SHORT_TAG"
-        echo "::notice title=Build Image Short Tag::$SHORT_TAG"
+          docker buildx imagetools create \
+            -t "${IMAGE}:${TAG}" \
+            "${IMAGE}:${TAG}-amd64" \
+            "${IMAGE}:${TAG}-arm64"
 
-    - name: prepare tag
-      id: prepare_tag
-      run: |
-        TIME_TAG=`TZ=Zero date +"%y%m%d%H%M%S"`
-        COMMIT_TAG=`echo $GITHUB_SHA | cut -c 1-7`
-        TAG="$TIME_TAG-$COMMIT_TAG"
-        echo "::set-output name=image_tag::$TAG"
-        echo "::notice title=Build Image Tag::$TAG"
-
-    - name: build and push
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        context: .
-        platforms: linux/amd64,linux/arm64
-        tags: |
-          bougou/alertmanager-webhook-adapter:latest
-          bougou/alertmanager-webhook-adapter:${{ steps.prepare_tag.outputs.image_tag }}
-          bougou/alertmanager-webhook-adapter:${{ steps.prepare_short_tag.outputs.image_short_tag }}
+          docker buildx imagetools create \
+            -t "${IMAGE}:${SHORT_TAG}" \
+            "${IMAGE}:${SHORT_TAG}-amd64" \
+            "${IMAGE}:${SHORT_TAG}-arm64"

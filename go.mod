@@ -1,6 +1,6 @@
 module github.com/bougou/alertmanager-webhook-adapter
 
-go 1.20
+go 1.26.0
 
 require (
 	github.com/bwmarrin/discordgo v0.28.1

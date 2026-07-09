@@ -42,3 +42,5 @@ dist
 deploy/charts/alertmanager-webhook-adapter-*.tgz
 
 .claude
+
+.tool-versions
