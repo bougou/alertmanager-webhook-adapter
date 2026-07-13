@@ -3,35 +3,39 @@ name: Release binary
 
 on:
   push:
-    branches:
-      - "main"
     tags:
       - "v*"
 
-jobs:
+permissions:
+  contents: write
 
+jobs:
   binary-release:
     name: binary release
     runs-on: ubuntu-latest
-    if: startsWith(github.event.ref, 'refs/tags/v')
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: set up Go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v4
         with:
-          go-version: 1.26.0
+          fetch-depth: 0
 
-      - name: build & test
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build
+        run: make build-all
+
+      - name: Generate checksums
         run: |
-          make dependencies
-          make build-all
+          cd _output
+          sha256sum * > SHA256SUMS
 
-      - name: release
-        uses: marvinpinto/action-automatic-releases@latest
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
           files: |
             _output/*
+          generate_release_notes: true
