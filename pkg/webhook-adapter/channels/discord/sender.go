@@ -15,8 +15,6 @@ import (
 //
 //	XXX is the webhookID
 //	YYY is the webhookAuthToken
-//
-// https://discord.com/api/webhooks/1257662116761174016/YDmFPVBP4XJ7UNveeowbcv78PySW5GRI-yStxBXgo2El4y64snfXaHZDCsKcXvNK8f8x
 type WebhookSender struct {
 	ID    string // webhook ID
 	Token string // webhook auth token
