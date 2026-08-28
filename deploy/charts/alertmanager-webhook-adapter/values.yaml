@@ -1,6 +1,223 @@
+# Default values for alertmanager-webhook-adapter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## @param replicaCount Number of replicas to deploy
+replicaCount: 1
+
+## Image configuration
+## @param image.repository Container image repository
+## @param image.tag Container image tag (defaults to Chart appVersion)
+## @param image.pullPolicy Container image pull policy
+## @param image.pullSecrets Container registry pull secrets
 image:
-  name: bougou/alertmanager-webhook-adapter
-  tag: v1.1.11
-signature: MyIDC
-lang: en
-timezone: Asia/Shanghai
+  repository: bougou/alertmanager-webhook-adapter
+  tag: ""
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+  # Deprecated: use image.repository instead
+  name: ""
+
+## @param nameOverride Override the chart name
+nameOverride: ""
+## @param fullnameOverride Override the full resource name
+fullnameOverride: ""
+## @param namespaceOverride Override the deployment namespace
+namespaceOverride: ""
+
+## Application configuration
+config:
+  ## @param config.signature Alert signature shown in notifications
+  signature: MyIDC
+  ## @param config.lang Template language (en, zh, etc.)
+  lang: en
+  ## @param config.timezone Timezone for the container (TZ env var)
+  timezone: Asia/Shanghai
+  ## @param config.listenAddress Address the server listens on
+  listenAddress: ":8090"
+  ## @param config.debug Enable debug logging
+  debug: false
+  ## @param config.tmplDir Custom template directory (absolute or relative path)
+  tmplDir: ""
+  ## @param config.tmplName Template name when using tmplDir
+  tmplName: ""
+  ## @param config.tmplDefault Default template name when using tmplDir
+  tmplDefault: ""
+
+# Deprecated top-level keys (kept for backward compatibility)
+signature: ""
+lang: ""
+timezone: ""
+
+## @param command Override the container entrypoint command
+command: []
+## @param extraArgs Additional arguments appended to the default args
+extraArgs: []
+
+## Service account configuration
+serviceAccount:
+  ## @param serviceAccount.create Create a service account
+  create: true
+  ## @param serviceAccount.automount Automount service account token
+  automount: true
+  ## @param serviceAccount.annotations Service account annotations
+  annotations: {}
+  ## @param serviceAccount.name Service account name (generated if empty)
+  name: ""
+
+## Pod metadata
+## @param podAnnotations Pod annotations
+podAnnotations: {}
+## @param podLabels Extra pod labels
+podLabels: {}
+
+## Deployment metadata
+## @param deploymentAnnotations Deployment annotations
+deploymentAnnotations: {}
+## @param deploymentLabels Extra deployment labels
+deploymentLabels: {}
+
+## @param podSecurityContext Pod security context
+podSecurityContext: {}
+  # fsGroup: 2000
+
+## @param securityContext Container security context
+securityContext: {}
+  #capabilities:
+  #  drop:
+  #  - ALL
+  #readOnlyRootFilesystem: true
+  #runAsNonRoot: true
+  #runAsUser: 1000
+
+## Service configuration
+service:
+  ## @param service.type Kubernetes service type
+  type: ClusterIP
+  ## @param service.port Service port
+  port: 80
+  ## @param service.targetPort Container port
+  targetPort: 8090
+  ## @param service.nodePort Node port (only used when service.type is NodePort)
+  nodePort: null
+  ## @param service.clusterIP Static cluster IP ("" for auto-assignment)
+  clusterIP: ""
+  ## @param service.annotations Service annotations
+  annotations: {}
+  ## @param service.labels Extra service labels
+  labels: {}
+
+## Ingress configuration
+ingress:
+  ## @param ingress.enabled Enable ingress
+  enabled: false
+  ## @param ingress.className Ingress class name
+  className: ""
+  ## @param ingress.annotations Ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  ## @param ingress.hosts Ingress host rules
+  hosts:
+  - host: alertmanager-webhook-adapter.local
+    paths:
+    - path: /
+      pathType: Prefix
+  ## @param ingress.tls Ingress TLS configuration
+  tls: []
+  #- secretName: alertmanager-webhook-adapter-tls
+  #  hosts:
+  #  - alertmanager-webhook-adapter.local
+
+## Resource limits and requests
+## @param resources Resource limits and requests for the container
+resources:
+  requests:
+    memory: 50Mi
+    cpu: 100m
+  limits:
+    memory: 250Mi
+    cpu: 500m
+
+## Probe configuration (TCP socket on the HTTP port)
+livenessProbe:
+  ## @param livenessProbe.enabled Enable liveness probe
+  enabled: true
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+readinessProbe:
+  ## @param readinessProbe.enabled Enable readiness probe
+  enabled: true
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+  successThreshold: 1
+
+## @param nodeSelector Node labels for pod assignment
+nodeSelector: {}
+
+## @param tolerations Tolerations for pod assignment
+tolerations: []
+
+## @param affinity Affinity rules for pod assignment
+affinity: {}
+
+## @param topologySpreadConstraints Topology spread constraints
+topologySpreadConstraints: []
+
+## @param priorityClassName Priority class name
+priorityClassName: ""
+
+## @param hostAliases Pod host aliases
+hostAliases: []
+#- ip: "127.0.0.1"
+#  hostnames:
+#  - "foo.local"
+
+## @param extraEnv Extra environment variables
+extraEnv: []
+#- name: HTTP_PROXY
+#  value: http://proxy.example.com:8080
+
+## @param extraEnvFrom Extra envFrom sources
+extraEnvFrom: []
+#- secretRef:
+#    name: my-secret
+
+## @param extraVolumes Extra volumes
+extraVolumes: []
+
+## @param extraVolumeMounts Extra volume mounts
+extraVolumeMounts: []
+
+## @param initContainers Init containers
+initContainers: []
+
+## Deployment strategy
+## @param strategy Deployment update strategy
+strategy: {}
+  # type: RollingUpdate
+  # rollingUpdate:
+  #   maxUnavailable: 0
+  #   maxSurge: 1
+
+## Custom notification templates
+templates:
+  ## @param templates.enabled Mount custom templates via ConfigMap
+  enabled: false
+  ## @param templates.existingConfigMap Use an existing ConfigMap instead of creating one
+  existingConfigMap: ""
+  ## @param templates.mountPath Mount path inside the container
+  mountPath: /etc/alertmanager-webhook-adapter/templates
+  ## @param templates.data Template files (key = filename, value = content)
+  data: {}
+    # default.tmpl: |
+    #   {{ define "default.title" }}...{{ end }}
+
+## @param commonLabels Labels added to all resources
+commonLabels: {}

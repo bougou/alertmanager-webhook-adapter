@@ -1,0 +1,14 @@
+{{- if and .Values.templates.enabled (not .Values.templates.existingConfigMap) (gt (len .Values.templates.data) 0) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "awa.templates.configMapName" . }}
+  namespace: {{ include "awa.namespace" . }}
+  labels:
+    {{- include "awa.labels" . | nindent 4 }}
+data:
+  {{- range $key, $value := .Values.templates.data }}
+  {{ $key }}: |
+    {{- $value | nindent 4 }}
+  {{- end }}
+{{- end }}

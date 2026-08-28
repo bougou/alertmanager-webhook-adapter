@@ -1,0 +1,10 @@
+# Patterns for files to ignore when building packages
+.git/
+.gitignore
+*.swp
+*.bak
+*.tmp
+*.orig
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,86 @@
+---
+name: Release chart
+
+on:
+  pull_request:
+    paths:
+      - "deploy/charts/**"
+      - "scripts/publish-chart.sh"
+      - ".github/workflows/release-chart.yaml"
+  push:
+    branches:
+      - main
+    tags:
+      - "chart-*"
+  workflow_dispatch:
+    inputs:
+      skip_index_update:
+        description: Push to OCI only, skip bougou/charts index update
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate chart
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name != 'push' ||
+      github.ref == 'refs/heads/main' ||
+      startsWith(github.ref, 'refs/tags/chart-')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+
+      - name: Lint and render chart
+        run: ./scripts/publish-chart.sh lint
+
+  publish:
+    name: publish chart
+    needs: validate
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      startsWith(github.ref, 'refs/tags/chart-')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Check publish secrets
+        env:
+          DOCKERHUB_CHARTS_USER: ${{ secrets.DOCKERHUB_CHARTS_USER }}
+          DOCKERHUB_CHARTS_PASS: ${{ secrets.DOCKERHUB_CHARTS_PASS }}
+          CHARTS_REPO_TOKEN: ${{ secrets.CHARTS_REPO_TOKEN }}
+          SKIP_INDEX_UPDATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.skip_index_update == 'true' }}
+        run: |
+          : "${DOCKERHUB_CHARTS_USER:?DOCKERHUB_CHARTS_USER secret is required (bougoucharts Docker Hub account)}"
+          : "${DOCKERHUB_CHARTS_PASS:?DOCKERHUB_CHARTS_PASS secret is required (bougoucharts Docker Hub PAT)}"
+          if [[ "${SKIP_INDEX_UPDATE}" != "true" ]]; then
+            : "${CHARTS_REPO_TOKEN:?CHARTS_REPO_TOKEN secret is required unless skip_index_update is enabled}"
+          fi
+
+      - name: Publish chart
+        env:
+          DOCKERHUB_CHARTS_USER: ${{ secrets.DOCKERHUB_CHARTS_USER }}
+          DOCKERHUB_CHARTS_PASS: ${{ secrets.DOCKERHUB_CHARTS_PASS }}
+          CHARTS_REPO_TOKEN: ${{ secrets.CHARTS_REPO_TOKEN }}
+          SKIP_INDEX_UPDATE: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.skip_index_update == 'true' }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
+        run: ./scripts/publish-chart.sh publish

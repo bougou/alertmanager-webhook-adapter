@@ -104,7 +104,7 @@ docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v
 
 ### Run in K8S
 
-Apply manifests:
+#### Directly apply manifests
 
 ```bash
 cd deploy/k8s
@@ -112,13 +112,13 @@ kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 ```
 
-Or Deploy with Helm
+#### Deploy with Helm
+
+Customize `values.yaml` first. See [chart values](./deploy/charts/alertmanager-webhook-adapter/values.yaml) for available options (signature, lang, image tag, resources, ingress, etc.).
+
+From the Helm repository:
 
 ```bash
-# prepare custom values.yaml
-# see: https://github.com/bougou/alertmanager-webhook-adapter/blob/main/deploy/charts/alertmanager-webhook-adapter/values.yaml
-vim values.yaml
-
 helm repo add bougoucharts https://bougou.github.io/charts
 helm repo update
 
@@ -126,9 +126,22 @@ helm upgrade alertmanager-webhook-adapter \
   bougoucharts/alertmanager-webhook-adapter \
   --install \
   --namespace infra \
-  --version v1.0.1 \
+  --version 1.1.0 \
   --values values.yaml
 ```
+
+Or install directly from OCI:
+
+```bash
+helm upgrade alertmanager-webhook-adapter \
+  oci://registry-1.docker.io/bougoucharts/alertmanager-webhook-adapter \
+  --install \
+  --namespace infra \
+  --version 1.1.0 \
+  --values values.yaml
+```
+
+**Note:** Upgrading from chart versions before `1.1.0` may require uninstalling the old release first, because Deployment selector labels changed in `1.1.0`.
 
 ## Configure Alertmanager to send alert messages to this webhook server
 

@@ -46,6 +46,20 @@ vet:
 lint:
 	$(BINDIR)/golangci-lint run --timeout 2m0s ./pkg/... ./cmd/...
 
+CHART_DIR := deploy/charts/alertmanager-webhook-adapter
+
+# Validate Helm chart
+chart-lint:
+	./scripts/publish-chart.sh lint
+
+# Package Helm chart locally
+chart-package:
+	./scripts/publish-chart.sh package
+
+# Publish Helm chart to OCI and update bougou/charts index
+chart-publish:
+	./scripts/publish-chart.sh publish
+
 dependencies:
 	test -d $(BINDIR) || mkdir $(BINDIR)
 	GOBIN=$(BINDIR) go install github.com/onsi/ginkgo/ginkgo@v1.16.4

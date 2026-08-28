@@ -1,35 +1,149 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "awa.fullname" . }}
   namespace: {{ include "awa.namespace" . }}
+  labels:
+    {{- include "awa.labels" . | nindent 4 }}
+    {{- with .Values.deploymentLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
+  {{- with .Values.strategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
-      app: alertmanager-webhook-adapter
+      {{- include "awa.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: alertmanager-webhook-adapter
+        {{- include "awa.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      serviceAccountName: {{ include "awa.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . | quote }}
+      {{- end }}
+      {{- with .Values.hostAliases }}
+      hostAliases:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       containers:
       - name: webhook
-        image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+        {{- with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        image: {{ include "awa.image" . | quote }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- with .Values.command }}
+        command:
+        {{- toYaml . | nindent 8 }}
+        {{- else }}
         command:
         - /alertmanager-webhook-adapter
-        - --listen-address=:8090
-        - --signature={{ .Values.signature }}
-        - --tmpl-lang={{ .Values.lang | default "en" }}
+        {{- end }}
+        args:
+        {{- include "awa.containerArgs" . | nindent 8 }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.targetPort }}
+          protocol: TCP
         env:
         - name: TZ
-          value: {{ .Values.timezone }}
+          value: {{ include "awa.config.timezone" . | quote }}
+        {{- with .Values.extraEnv }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- with .Values.extraEnvFrom }}
+        envFrom:
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+        {{- end }}
+        {{- with .Values.resources }}
         resources:
-          requests:
-            memory: 50Mi
-            cpu: 100m
-          limits:
-            memory: 250Mi
-            cpu: 500m
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- if or (include "awa.templates.mountEnabled" .) .Values.extraVolumeMounts }}
+        volumeMounts:
+        {{- if include "awa.templates.mountEnabled" . }}
+        - name: templates
+          mountPath: {{ .Values.templates.mountPath }}
+          readOnly: true
+        {{- end }}
+        {{- with .Values.extraVolumeMounts }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+      {{- if or (include "awa.templates.mountEnabled" .) .Values.extraVolumes }}
+      volumes:
+      {{- if include "awa.templates.mountEnabled" . }}
+      - name: templates
+        configMap:
+          name: {{ include "awa.templates.configMapName" . }}
+      {{- end }}
+      {{- with .Values.extraVolumes }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       restartPolicy: Always

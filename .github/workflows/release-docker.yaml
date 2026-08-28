@@ -106,3 +106,13 @@ jobs:
             -t "${IMAGE}:${SHORT_TAG}" \
             "${IMAGE}:${SHORT_TAG}-amd64" \
             "${IMAGE}:${SHORT_TAG}-arm64"
+
+          # Also publish semver tag without "v" prefix for Helm appVersion compatibility.
+          if [[ "${SHORT_TAG}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            STRIP_TAG="${SHORT_TAG#v}"
+            docker buildx imagetools create \
+              -t "${IMAGE}:${STRIP_TAG}" \
+              "${IMAGE}:${SHORT_TAG}-amd64" \
+              "${IMAGE}:${SHORT_TAG}-arm64"
+            echo "::notice title=Also published tag::${IMAGE}:${STRIP_TAG}"
+          fi
