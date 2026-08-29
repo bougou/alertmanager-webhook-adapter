@@ -1,0 +1,79 @@
+{
+  "receiver": "devops_team",
+  "status": "resolved",
+  "alerts": [
+    {
+      "status": "resolved",
+      "labels": {
+        "alertgroup": "Linux",
+        "alertname": "CPUHigh",
+        "component": "component-y",
+        "cpu": "cpu-total",
+        "db": "telegraf",
+        "description": "cpu usage is high than 20% for 5 minutes",
+        "host": "10.30.1.161",
+        "instance": "10.30.1.161",
+        "product": "product-y",
+        "region": "region-y",
+        "severity": "warning",
+        "vmalert": "10.30.12.22",
+        "zone": "zone-y"
+      },
+      "annotations": {
+        "description": "cpu usage is high than 20% for 5 minutes"
+      },
+      "startsAt": "2021-03-30T20:17:50.814674209+08:00",
+      "endsAt": "2021-03-30T21:17:50.814674209+08:00",
+      "generatorURL": "http://10.30.12.22:8429/api/v1/2026138838271548684/17025577897922373885/status",
+      "fingerprint": "83eb2c81e0da3faf"
+    },
+    {
+      "status": "resolved",
+      "labels": {
+        "alertgroup": "Linux",
+        "alertname": "CPUHigh",
+        "component": "component-y",
+        "cpu": "cpu-total",
+        "db": "telegraf",
+        "description": "cpu usage is high than 20% for 5 minutes",
+        "host": "10.30.1.164",
+        "instance": "10.30.1.164",
+        "product": "product-y",
+        "region": "region-y",
+        "severity": "warning",
+        "vmalert": "10.30.12.22",
+        "zone": "zone-y"
+      },
+      "annotations": {
+        "description": "cpu usage is high than 20% for 5 minutes"
+      },
+      "startsAt": "2021-03-30T20:17:50.814674209+08:00",
+      "endsAt": "2021-03-30T21:17:50.814674209+08:00",
+      "generatorURL": "http://10.30.12.22:8429/api/v1/2026138838271548684/17025577897922373885/status",
+      "fingerprint": "83eb2c81e0da3faf"
+    }
+  ],
+  "groupLabels": {
+    "alertname": "CPUHigh"
+  },
+  "commonLabels": {
+    "alertgroup": "Linux",
+    "alertname": "CPUHigh",
+    "component": "component-y",
+    "cpu": "cpu-total",
+    "db": "telegraf",
+    "description": "cpu usage is high than 20% for 5 minutes",
+    "host": "10.30.1.161",
+    "instance": "10.30.1.161",
+    "product": "product-y",
+    "region": "region-y",
+    "severity": "warning",
+    "vmalert": "10.30.12.22",
+    "zone": "zone-y"
+  },
+  "commonAnnotations": {},
+  "externalURL": "http://10.30.12.22:9193",
+  "version": "4",
+  "groupKey": "{}:{alertname=\"CPUHigh\"}",
+  "truncatedAlerts": 0
+}

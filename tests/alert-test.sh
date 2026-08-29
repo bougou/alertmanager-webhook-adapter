@@ -1,10 +1,26 @@
 #!/bin/bash
 
+# Optional first arg: firing | resolved. Omit for mixed firing+resolved.
+alert_payload() {
+  local kind="${1:-}"
+  local file
+  case "${kind}" in
+    "") file="./alert.json" ;;
+    firing) file="./alert-firing.json" ;;
+    resolved) file="./alert-resolved.json" ;;
+    *)
+      echo "unknown alert kind: ${kind} (use firing, resolved, or omit for mixed)" >&2
+      return 1
+      ;;
+  esac
+  cat "${file}"
+}
+
 dingtalk() {
   token="${DINGTALK_TOKEN}"
   channel_type="dingtalk"
   msg_type="markdown"
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&token=${token}&msg_type=${msg_type}" -d @-
 }
@@ -14,7 +30,7 @@ feishu() {
   channel_type="feishu"
   msg_type="markdown"
 
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&token=${token}&msg_type=${msg_type}" -d @-
 
@@ -27,7 +43,7 @@ slack() {
   msg_type="markdown"
   channel="jenkins-ci"
 
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&token=${token}&channel=${channel}" -d @-
 
@@ -40,7 +56,7 @@ weixin() {
   channel_type="weixin"
   msg_type="markdown"
 
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&token=${token}&msg_type=${msg_type}" -d @-
 }
@@ -55,7 +71,7 @@ weixinapp() {
   channel_type="weixinapp"
   msg_type="markdown"
 
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&msg_type=${msg_type}&corp_id=${corpID}&agent_id=${agentID}&agent_secret=${agentSecret}&to_party=${toParty}" -d @-
 }
@@ -66,7 +82,7 @@ discord-webhook() {
 
   channel_type="discord-webhook"
   msg_type="markdown"
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&msg_type=${msg_type}&id=${id}&token=${token}" -d @-
 }
@@ -82,7 +98,7 @@ failed-test-1() {
   channel_type="notsupported"
   msg_type="markdown"
 
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&msg_type=${msg_type}&corp_id=${corpID}&agent_id=${agentID}&agent_secret=${agentSecret}&to_party=${toParty}" -d @-
 }
@@ -92,7 +108,7 @@ weixin_fail_msg_type() {
   channel_type="weixin"
   msg_type="type-not-exist"
 
-  payload=$(cat ./alert.json)
+  payload=$(alert_payload "$1") || return
 
   echo "$payload" | curl -s -H "Content-Type: application/json" -v -XPOST "http://127.0.0.1:8090/webhook/send?channel_type=${channel_type}&token=${token}&msg_type=${msg_type}" -d @-
 }

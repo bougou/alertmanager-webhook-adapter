@@ -1,5 +1,17 @@
 package models
 
+import "strings"
+
+const (
+	StatusFiring   = "firing"
+	StatusResolved = "resolved"
+
+	SeverityCritical = "critical"
+	SeverityWarning  = "warning"
+	SeverityInfo     = "info"
+	SeverityOK       = "ok"
+)
+
 // The purpse of Payload is to hide the complexity of constructing channel-specific Msg.
 // Because each specific channel provides suitable Payload2MsgFn(s) convertion functions for its supported msgType(s).
 type Payload struct {
@@ -12,6 +24,10 @@ type Payload struct {
 	Links    []Link   `json:"links"`
 	Buttons  []Button `json:"buttons"`
 	At       At       `json:"at"`
+
+	// Status and Severity come from the Alertmanager webhook, not from rendered title text.
+	Status   string `json:"status"`   // firing | resolved
+	Severity string `json:"severity"` // critical | warning | info | ok
 }
 
 type PayloadGenerator interface {
@@ -38,4 +54,21 @@ type Button struct {
 type At struct {
 	AtMobiles []string `json:"atMobiles"`
 	AtAll     bool     `json:"atAll"`
+}
+
+// EffectiveSeverity is the severity channels should use for coloring and emphasis.
+// A fully resolved group is treated as ok, even if original labels were higher.
+func (p *Payload) EffectiveSeverity() string {
+	if p == nil {
+		return ""
+	}
+	if strings.EqualFold(p.Status, StatusResolved) {
+		return SeverityOK
+	}
+	switch s := strings.ToLower(p.Severity); s {
+	case SeverityCritical, SeverityWarning, SeverityInfo, SeverityOK:
+		return s
+	default:
+		return ""
+	}
 }

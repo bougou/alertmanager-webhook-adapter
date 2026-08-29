@@ -89,6 +89,41 @@ func (as Alerts) Resolved() []Alert {
 	return res
 }
 
+func severityRank(severity string) int {
+	switch severity {
+	case "critical":
+		return 4
+	case "warning":
+		return 3
+	case "info":
+		return 2
+	case "ok":
+		return 1
+	default:
+		return 0
+	}
+}
+
+// HighestSeverity returns the most severe label among firing alerts.
+// If none are firing, it uses resolved alerts. Empty string if unknown.
+func (m *AlertmanagerWebhookMessage) HighestSeverity() string {
+	candidates := m.Alerts.Firing()
+	if len(candidates) == 0 {
+		candidates = m.Alerts
+	}
+	best := ""
+	bestRank := -1
+	for _, a := range candidates {
+		sev := a.Labels["severity"]
+		rank := severityRank(sev)
+		if rank > bestRank {
+			bestRank = rank
+			best = sev
+		}
+	}
+	return best
+}
+
 func (alert *Alert) UnmarshalJSON(data []byte) error {
 	m := make(map[string]interface{})
 
@@ -210,6 +245,8 @@ func (m *AlertmanagerWebhookMessage) ToPayload(channel string, raw []byte) (*mod
 		return nil, fmt.Errorf("render prom.markdown failed, err: %s", err)
 	}
 	payload.Markdown = markdown
+	payload.Status = m.Status
+	payload.Severity = m.HighestSeverity()
 
 	return payload, nil
 }

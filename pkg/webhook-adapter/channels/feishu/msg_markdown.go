@@ -10,7 +10,7 @@ func init() {
 }
 
 func NewMsgMarkdown(title string, markdown string) *Msg {
-	card := NewCardMarkdown(title, markdown)
+	card := NewCardMarkdown(title, markdown, "")
 	return &Msg{
 		MsgType: MsgTypeInteractive,
 		Card:    card,
@@ -18,14 +18,14 @@ func NewMsgMarkdown(title string, markdown string) *Msg {
 }
 
 func NewMsgMarkdownFromPayload(payload *models.Payload) *Msg {
-	card := NewCardMarkdown(payload.Title, payload.Markdown)
+	card := NewCardMarkdown(payload.Title, payload.Markdown, headerColor(payload.EffectiveSeverity()))
 	return &Msg{
 		MsgType: MsgTypeInteractive,
 		Card:    card,
 	}
 }
 
-func NewCardMarkdown(title string, markdown string) *Card {
+func NewCardMarkdown(title string, markdown string, headerColor string) *Card {
 	elements := []card.CardModule{}
 
 	// see: https://open.feishu.cn/document/ukTMukTMukTM/uADOwUjLwgDM14CM4ATN
@@ -42,6 +42,10 @@ func NewCardMarkdown(title string, markdown string) *Card {
 
 	elements = append(elements, module)
 
+	if headerColor == "" {
+		headerColor = "turquoise"
+	}
+
 	return &Card{
 		Config: &CardConfig{
 			EnableForward: false,
@@ -51,7 +55,24 @@ func NewCardMarkdown(title string, markdown string) *Card {
 				Tag:     "plain_text",
 				Content: title,
 			},
+			Template: headerColor,
 		},
 		Elements: elements,
+	}
+}
+
+// headerColor maps shared effective severity to Feishu card header colors.
+func headerColor(severity string) string {
+	switch severity {
+	case models.SeverityCritical:
+		return "red"
+	case models.SeverityWarning:
+		return "orange"
+	case models.SeverityInfo:
+		return "blue"
+	case models.SeverityOK:
+		return "green"
+	default:
+		return "turquoise"
 	}
 }

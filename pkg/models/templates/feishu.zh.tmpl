@@ -1,20 +1,35 @@
 {{ define "__subject" -}}
 【{{ .Signature }}】
-{{- if eq (index .Alerts 0).Labels.severity "ok" }} OK{{ end }}
-{{- if eq (index .Alerts 0).Labels.severity "info" }} INFO{{ end }}
-{{- if eq (index .Alerts 0).Labels.severity "warning" }} WARNING{{ end }}
-{{- if eq (index .Alerts 0).Labels.severity "critical" }} CRITICAL{{ end }}
+{{- $sev := .HighestSeverity -}}
+{{- $nFiring := .Alerts.Firing | len -}}
+{{- $nResolved := .Alerts.Resolved | len -}}
+{{- if eq $sev "ok" }} OK
+{{- else if eq $sev "info" }} INFO
+{{- else if eq $sev "warning" }} WARNING
+{{- else if eq $sev "critical" }} CRITICAL
+{{- end }}
 {{- ` • ` }}
-{{- if .CommonLabels.alertname_cn }}{{ .CommonLabels.alertname_cn }}{{ else if .CommonLabels.alertname_custom }}{{ .CommonLabels.alertname_custom }}{{ else if .CommonAnnotations.alertname  }}{{ .CommonAnnotations.alertname }}{{ else }}{{ .GroupLabels.alertname }}{{ end }}
+{{- template "__group_alertname" . }}
 {{- ` • ` }}
-{{- if gt (.Alerts.Firing|len) 0 }}告警中:{{ .Alerts.Firing|len }}{{ end }}
-{{- if and (gt (.Alerts.Firing|len) 0) (gt (.Alerts.Resolved|len) 0) }}/{{ end }}
-{{- if gt (.Alerts.Resolved|len) 0 }}已恢复:{{ .Alerts.Resolved|len }}{{ end }}
+{{- if gt $nFiring 0 }}告警中:{{ $nFiring }}{{ end }}
+{{- if and (gt $nFiring 0) (gt $nResolved 0) }}/{{ end }}
+{{- if gt $nResolved 0 }}已恢复:{{ $nResolved }}{{ end }}
 {{ end }}
 
+{{ define "__group_alertname" -}}
+{{- if .CommonLabels.alertname_cn }}{{ .CommonLabels.alertname_cn }}
+{{- else if .CommonLabels.alertname_custom }}{{ .CommonLabels.alertname_custom }}
+{{- else if .CommonAnnotations.alertname }}{{ .CommonAnnotations.alertname }}
+{{- else }}{{ .GroupLabels.alertname }}
+{{- end -}}
+{{- end }}
 
-{{ define "__externalURL" -}}
-{{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }}
+{{ define "__alert_alertname" -}}
+{{- if .Labels.alertname_cn }}{{ .Labels.alertname_cn }}
+{{- else if .Labels.alertname_custom }}{{ .Labels.alertname_custom }}
+{{- else if .Annotations.alertname }}{{ .Annotations.alertname }}
+{{- else }}{{ .Labels.alertname }}
+{{- end -}}
 {{- end }}
 
 {{ define "__alertinstance" -}}
@@ -28,75 +43,114 @@
 {{- end -}}
 {{- end }}
 
+{{ define "__severity_tag" -}}
+{{- if eq . "ok" -}}
+<text_tag color='purple'>OK</text_tag>
+{{- else if eq . "info" -}}
+<text_tag color='lime'>INFO</text_tag>
+{{- else if eq . "warning" -}}
+<text_tag color='yellow'>WARNING</text_tag>
+{{- else if eq . "critical" -}}
+<text_tag color='red'>CRITICAL</text_tag>
+{{- end -}}
+{{- end }}
+
+{{ define "__alert_status" -}}
+{{- if eq .Status "firing" -}}
+🚨 <text_tag color='carmine'>{{ .Status | toUpper }}</text_tag>
+{{- else -}}
+✅ <text_tag color='green'>{{ .Status | toUpper }}</text_tag>
+{{- end -}}
+{{- end }}
+
+{{ define "__alert_description" -}}
+{{- if .Annotations.description_cn }}{{ .Annotations.description_cn }}
+{{- else }}{{ .Annotations.description }}
+{{- end -}}
+{{- end }}
+
+{{ define "__firing_title" -}}
+<font color='red'>🚨 触发中告警 [{{ len . }}]</font>
+{{- end }}
+
+{{ define "__resolved_title" -}}
+<font color='green'>✅ 已恢复告警 [{{ len . }}]</font>
+{{- end }}
+
 {{ define "__alert_list" }}
-{{ $timeFormat:="2006-01-02 15:04:05" }}
-{{ range . }}
-- 告警名称: <text_tag color='blue'>{{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}</text_tag>
-告警级别:{{ ` ` }}
-{{- if eq .Labels.severity "ok" }}<text_tag color='purple'>OK</text_tag>{{ end -}}
-{{- if eq .Labels.severity "info" }}<text_tag color='lime'>INFO</text_tag>{{ end -}}
-{{- if eq .Labels.severity "warning" }}<text_tag color='yellow'>WARNING</text_tag>{{ end -}}
-{{- if eq .Labels.severity "critical" }}<text_tag color='red'>CRITICAL</text_tag>{{ end }}
-实例: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
+{{- $timeFormat := "2006-01-02 15:04:05 MST" -}}
+{{- range $i, $_ := . -}}
+{{- if $i -}}
+{{- print "\n\n" -}}
+{{- end -}}
+- **实例**: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
+**告警名称**: <text_tag color='blue'>{{ template "__alert_alertname" . }}</text_tag>
+**告警级别**: {{ template "__severity_tag" .Labels.severity }}
 {{- if .Labels.region }}
-地域: <text_tag color='neutral'>{{ .Labels.region }}</text_tag>
+**地域**: <text_tag color='neutral'>{{ .Labels.region }}</text_tag>
 {{- end }}
 {{- if .Labels.zone }}
-可用区: <text_tag color='neutral'>{{ .Labels.zone }}</text_tag>
+**可用区**: <text_tag color='neutral'>{{ .Labels.zone }}</text_tag>
 {{- end }}
 {{- if .Labels.product }}
-产品: <text_tag color='neutral'>{{ .Labels.product }}</text_tag>
+**产品**: <text_tag color='neutral'>{{ .Labels.product }}</text_tag>
 {{- end }}
-{{- if .Labels.component  }}
-组件: <text_tag color='neutral'>{{ .Labels.component }}</text_tag>
+{{- if .Labels.component }}
+**组件**: <text_tag color='neutral'>{{ .Labels.component }}</text_tag>
 {{- end }}
-告警状态: {{ if eq .Status "firing" }}🚨 <text_tag color='carmine'>{{ .Status | toUpper }}</text_tag>{{ else }}✅ <text_tag color='green'>{{ .Status | toUpper }}</text_tag>{{ end }}
-开始: <text_tag color='neutral'>{{ .StartsAt.Format $timeFormat }}</text_tag>
-结束: <text_tag color='neutral'>{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}Not End{{ end }}</text_tag>
+**告警状态**: {{ template "__alert_status" . }}
+**开始**: <text_tag color='neutral'>{{ .StartsAt.Format $timeFormat }}</text_tag>
+**结束**: <text_tag color='neutral'>{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}</text_tag>
 {{- if eq .Status "firing" }}
-告警描述: {{ if .Annotations.description_cn }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
-{{ end }}
-{{ end }}{{ end }}
+**告警描述**: {{ template "__alert_description" . }}
+{{- end -}}
+{{- print "\n" -}}
+{{- end }}
+{{- end }}
 
 {{ define "__alert_summary" }}
-{{ range . -}}
-- {{ if eq .Status "firing" -}}
-<text_tag color='red'>{{ template "__alertinstance" . }}</text_tag>
-{{- else -}}
-<text_tag color='green'>{{ template "__alertinstance" . }}</text_tag>
-{{- end }}
+{{- range . -}}
+- <text_tag color='{{ if eq .Status "firing" }}red{{ else }}green{{ end }}'>{{ template "__alertinstance" . }}</text_tag>
 {{ end }}
 {{- end }}
 
 {{ define "prom.title" -}}
-{{ template "__subject" . -}}{{ end }}
+{{ template "__subject" . -}}
+{{- end }}
 
-{{ define "prom.markdown" }}
-<font color='grey'>{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}</font>
----
+{{ define "prom.markdown" -}}
+{{- $firing := .Alerts.Firing -}}
+{{- $resolved := .Alerts.Resolved -}}
+<font color='grey'>{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}</font>
+{{- print "\n\n ---\n" -}}
 **摘要**
-
-{{ if gt (.Alerts.Firing|len ) 0 -}}
-**🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
-
-{{ template "__alert_summary" .Alerts.Firing }}{{ end }}
-
-{{ if gt (.Alerts.Resolved|len) 0 -}}
-**✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
-
-{{ template "__alert_summary" .Alerts.Resolved }}{{ end }}
-
----
-**详请**
-
-{{ if gt (.Alerts.Firing|len ) 0 -}}
-**🚨 触发中告警 [{{ .Alerts.Firing|len }}]**
-{{ template "__alert_list" .Alerts.Firing }}{{ end }}
-
-{{ if gt (.Alerts.Resolved|len) 0 -}}
-**✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]**
-{{ template "__alert_list" .Alerts.Resolved }}{{ end }}
-{{ end }}
+{{- if gt (len $firing) 0 -}}
+{{- print "\n\n" -}}
+{{ template "__firing_title" $firing }}
+{{- print "\n\n\n" -}}
+{{ template "__alert_summary" $firing -}}
+{{- end -}}
+{{- if gt (len $resolved) 0 -}}
+{{- print "\n\n" -}}
+{{ template "__resolved_title" $resolved }}
+{{- print "\n\n\n" -}}
+{{ template "__alert_summary" $resolved -}}
+{{- end -}}
+{{- print "\n\n ---\n" -}}
+**详情**
+{{- if gt (len $firing) 0 -}}
+{{- print "\n\n" -}}
+{{ template "__firing_title" $firing }}
+{{- print "\n\n\n" -}}
+{{ template "__alert_list" $firing -}}
+{{- end -}}
+{{- if gt (len $resolved) 0 -}}
+{{- print "\n\n" -}}
+{{ template "__resolved_title" $resolved }}
+{{- print "\n\n\n" -}}
+{{ template "__alert_list" $resolved -}}
+{{- end -}}
+{{- end }}
 
 {{ define "prom.text" }}
 {{ template "prom.markdown" . }}
