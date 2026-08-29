@@ -16,7 +16,16 @@
 
 ### dingtalk
 
+Custom group robot (`oapi.dingtalk.com/robot/send`) markdown:
+
 - https://open.dingtalk.com/document/orgapp/enterprise-internal-robots-send-markdown-messages
+- https://open.dingtalk.com/document/development/message-types-and-data-format#title-afc-2nh-5kk
+- Official syntax: headings `#`–`######`, quote `>`, `**bold**`, `*italic*`, links, images, lists
+- Line break: `\n` with two spaces around it. A lone `\n` does not start a new paragraph.
+- Empty lines next to `#` headings are collapsed by the renderer.
+- Do not use `<br>` in custom-robot markdown: DingTalk mobile often hides the following section (commonly everything until the next `---`).
+- Color: `<font color="#RRGGBB">text</font>` with double quotes (PC and mobile). Named colors like `red` are PC-only.
+- Do not use Feishu `<text_tag>` or card `colorTokenV2` / `sizeToken` (those apply to interactive-card markdown, not custom robots)
 
 ### slack
 

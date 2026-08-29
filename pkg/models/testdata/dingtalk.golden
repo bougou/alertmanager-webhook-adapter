@@ -1,0 +1,141 @@
+TITLE:
+【Bougou】 CRITICAL • CPUHigh • Firing:3/Resolved:2
+
+MARKDOWN:
+<font color="#8C8C8C">2026-08-29 17:31:23 CST</font>
+
+#### **Summary**
+
+##### <font color="#FF4D4F">**🚨 Firing Alerts [3]**</font>
+
+- 10.30.1.160
+- 10.30.1.162
+- 10.30.1.163
+
+##### <font color="#52C41A">**✅ Resolved Alerts [2]**</font>
+
+- 10.30.1.161
+- 10.30.1.164
+
+#### **Detail**
+
+##### <font color="#FF4D4F">**🚨 Firing Alerts [3]**</font>
+
+> **Instance**: <font color="#722ED1">10.30.1.160</font>
+>
+> **Alert Name**: <font color="#1677FF">CPUHigh</font>
+>
+> **Alert Level**: <font color="#FAAD14">**WARNING**</font>
+>
+> **Region**: <font color="#8C8C8C">region-x</font>
+>
+> **Zone**: <font color="#8C8C8C">zone-x</font>
+>
+> **Product**: <font color="#8C8C8C">product-x</font>
+>
+> **Component**: <font color="#8C8C8C">component-x</font>
+>
+> **Alert Status**: 🚨 <font color="#CF1322">**FIRING**</font>
+>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+>
+> **End At**: <font color="#8C8C8C">Not End</font>
+>
+> **Description**: cpu usage is high than 20% for 5 minutes
+>
+
+---
+
+> **Instance**: <font color="#722ED1">10.30.1.162</font>
+>
+> **Alert Name**: <font color="#1677FF">CPUHigh1</font>
+>
+> **Alert Level**: <font color="#FF4D4F">**CRITICAL**</font>
+>
+> **Region**: <font color="#8C8C8C">region-x</font>
+>
+> **Zone**: <font color="#8C8C8C">zone-x</font>
+>
+> **Product**: <font color="#8C8C8C">product-x</font>
+>
+> **Component**: <font color="#8C8C8C">component-x</font>
+>
+> **Alert Status**: 🚨 <font color="#CF1322">**FIRING**</font>
+>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+>
+> **End At**: <font color="#8C8C8C">Not End</font>
+>
+> **Description**: cpu usage is high than 20% for 5 minutes
+>
+
+---
+
+> **Instance**: <font color="#722ED1">10.30.1.163</font>
+>
+> **Alert Name**: <font color="#1677FF">CPUHigh2</font>
+>
+> **Alert Level**: <font color="#52C41A">**INFO**</font>
+>
+> **Region**: <font color="#8C8C8C">region-x</font>
+>
+> **Zone**: <font color="#8C8C8C">zone-x</font>
+>
+> **Product**: <font color="#8C8C8C">product-x</font>
+>
+> **Component**: <font color="#8C8C8C">component-x</font>
+>
+> **Alert Status**: 🚨 <font color="#CF1322">**FIRING**</font>
+>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+>
+> **End At**: <font color="#8C8C8C">Not End</font>
+>
+> **Description**: cpu usage is high than 20% for 5 minutes
+>
+
+##### <font color="#52C41A">**✅ Resolved Alerts [2]**</font>
+
+> **Instance**: <font color="#722ED1">10.30.1.161</font>
+>
+> **Alert Name**: <font color="#1677FF">CPUHigh</font>
+>
+> **Alert Level**: <font color="#FAAD14">**WARNING**</font>
+>
+> **Region**: <font color="#8C8C8C">region-y</font>
+>
+> **Zone**: <font color="#8C8C8C">zone-y</font>
+>
+> **Product**: <font color="#8C8C8C">product-y</font>
+>
+> **Component**: <font color="#8C8C8C">component-y</font>
+>
+> **Alert Status**: ✅ <font color="#52C41A">**RESOLVED**</font>
+>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+>
+> **End At**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+>
+
+---
+
+> **Instance**: <font color="#722ED1">10.30.1.164</font>
+>
+> **Alert Name**: <font color="#1677FF">CPUHigh</font>
+>
+> **Alert Level**: <font color="#FAAD14">**WARNING**</font>
+>
+> **Region**: <font color="#8C8C8C">region-y</font>
+>
+> **Zone**: <font color="#8C8C8C">zone-y</font>
+>
+> **Product**: <font color="#8C8C8C">product-y</font>
+>
+> **Component**: <font color="#8C8C8C">component-y</font>
+>
+> **Alert Status**: ✅ <font color="#52C41A">**RESOLVED**</font>
+>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+>
+> **End At**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+>

@@ -61,7 +61,7 @@ func (bot *DingtalkGroupBot) Send(msg *Msg) error {
 func (bot *DingtalkGroupBot) UploadFile(filename string, fileReader io.Reader) (meidaID string, err error) {
 
 	// Todo
-	// 要求文件大小在5B~20M之间
+	// 要求文件大小在 5B~20M 之间
 
 	body := new(bytes.Buffer)
 	w := multipart.NewWriter(body)
@@ -90,8 +90,8 @@ func (bot *DingtalkGroupBot) UploadFile(filename string, fileReader io.Reader) (
 	type ResponseBody struct {
 		ErrCode   int       `json:"errcode"`
 		ErrMsg    string    `json:"errmsg"`
-		Type      string    `json:"type"`       // 媒体文件类型，分别有图片（image）、语音（voice）、视频（video），普通文件(file)
-		MediaID   string    `json:"media_id"`   // 媒体文件上传后获取的唯一标识，3天内有效
+		Type      string    `json:"type"`       // 媒体文件类型，分别有图片（image）、语音（voice）、视频（video），普通文件 (file)
+		MediaID   string    `json:"media_id"`   // 媒体文件上传后获取的唯一标识，3 天内有效
 		CreatedAt time.Time `json:"created_at"` // 媒体文件上传时间戳
 	}
 

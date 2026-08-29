@@ -9,7 +9,7 @@ func init() {
 type ActionCard struct {
 	Title          string `json:"title"`          // seems no meaning now
 	Text           string `json:"text"`           // support markdown format
-	Btnorientation string `json:"btnOrientation"` // 0：按钮竖直排列, 1：按钮横向排列
+	Btnorientation string `json:"btnOrientation"` // 0：按钮竖直排列，1：按钮横向排列
 	Hideavatar     string `json:"hideAvatar,omitempty"`
 
 	Singletitle string `json:"singleTitle,omitempty"`
