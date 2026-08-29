@@ -1,26 +1,35 @@
 {{ define "__subject" -}}
 【{{ .Signature }}】
-
-{{- if eq (index .Alerts 0).Labels.severity "ok" }} OK{{ end }}
-{{- if eq (index .Alerts 0).Labels.severity "info" }} INFO{{ end }}
-{{- if eq (index .Alerts 0).Labels.severity "warning" }} WARNING{{ end }}
-{{- if eq (index .Alerts 0).Labels.severity "critical" }} CRITICAL{{ end }}
-
+{{- $sev := .HighestSeverity -}}
+{{- $nFiring := .Alerts.Firing | len -}}
+{{- $nResolved := .Alerts.Resolved | len -}}
+{{- if eq $sev "ok" }} OK
+{{- else if eq $sev "info" }} INFO
+{{- else if eq $sev "warning" }} WARNING
+{{- else if eq $sev "critical" }} CRITICAL
+{{- end }}
 {{- ` • ` }}
-
-{{- if .CommonLabels.alertname_cn }}{{ .CommonLabels.alertname_cn }}{{ else if .CommonLabels.alertname_custom }}{{ .CommonLabels.alertname_custom }}{{ else if .CommonAnnotations.alertname  }}{{ .CommonAnnotations.alertname }}{{ else }}{{ .GroupLabels.alertname }}{{ end }}
-
+{{- template "__group_alertname" . }}
 {{- ` • ` }}
-
-{{- if gt (.Alerts.Firing|len) 0 }}告警中:{{ .Alerts.Firing|len }}{{ end }}
-{{- if and (gt (.Alerts.Firing|len) 0) (gt (.Alerts.Resolved|len) 0) }}/{{ end }}
-{{- if gt (.Alerts.Resolved|len) 0 }}已恢复:{{ .Alerts.Resolved|len }}{{ end }}
-
+{{- if gt $nFiring 0 }}告警中:{{ $nFiring }}{{ end }}
+{{- if and (gt $nFiring 0) (gt $nResolved 0) }}/{{ end }}
+{{- if gt $nResolved 0 }}已恢复:{{ $nResolved }}{{ end }}
 {{ end }}
 
+{{ define "__group_alertname" -}}
+{{- if .CommonLabels.alertname_cn }}{{ .CommonLabels.alertname_cn }}
+{{- else if .CommonLabels.alertname_custom }}{{ .CommonLabels.alertname_custom }}
+{{- else if .CommonAnnotations.alertname }}{{ .CommonAnnotations.alertname }}
+{{- else }}{{ .GroupLabels.alertname }}
+{{- end -}}
+{{- end }}
 
-{{ define "__externalURL" -}}
-{{ .ExternalURL }}/#/alerts?receiver={{ .Receiver }}
+{{ define "__alert_alertname" -}}
+{{- if .Labels.alertname_cn }}{{ .Labels.alertname_cn }}
+{{- else if .Labels.alertname_custom }}{{ .Labels.alertname_custom }}
+{{- else if .Annotations.alertname }}{{ .Annotations.alertname }}
+{{- else }}{{ .Labels.alertname }}
+{{- end -}}
 {{- end }}
 
 {{ define "__alertinstance" -}}
@@ -34,86 +43,115 @@
 {{- end -}}
 {{- end }}
 
-{{ define "__alert_list" }}
-{{ range . }}
-> <font color="comment"> 告警名称 </font>: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
->
-> <font color="comment"> 告警级别 </font>:{{ ` ` }}
-{{- if eq .Labels.severity "ok" }}OK{{ end -}}
-{{- if eq .Labels.severity "info" }}INFO{{ end -}}
-{{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
-{{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
->
-> <font color="comment"> 实例 </font>: `{{ template "__alertinstance" . }}`
->
+{{ define "__severity_tag" -}}
+{{- if eq . "ok" -}}
+<font color="comment">OK</font>
+{{- else if eq . "info" -}}
+<font color="info">INFO</font>
+{{- else if eq . "warning" -}}
+<font color="warning">WARNING</font>
+{{- else if eq . "critical" -}}
+<font color="warning">CRITICAL</font>
+{{- end -}}
+{{- end }}
+
+{{ define "__alert_status" -}}
+{{- if eq .Status "firing" -}}
+🚨 <font color="warning">{{ .Status | toUpper }}</font>
+{{- else -}}
+✅ <font color="info">{{ .Status | toUpper }}</font>
+{{- end -}}
+{{- end }}
+
+{{ define "__alert_description" -}}
+{{- if .Annotations.description_cn }}{{ .Annotations.description_cn }}
+{{- else }}{{ .Annotations.description }}
+{{- end -}}
+{{- end }}
+
+{{ define "__firing_title" -}}
+##### 🚨 <font color="warning">触发中告警 [{{ len . }}]</font>
+{{- end }}
+
+{{ define "__resolved_title" -}}
+##### ✅ <font color="info">已恢复告警 [{{ len . }}]</font>
+{{- end }}
+
+{{ define "__alert_list" -}}
+{{- $timeFormat := "2006-01-02 15:04:05 MST" -}}
+{{- range $i, $_ := . -}}
+{{- if $i -}}
+{{ print "\n\n" -}}
+{{- end -}}
+> <font color="comment">实例</font>: `{{ template "__alertinstance" . }}`
+> <font color="comment">告警名称</font>: {{ template "__alert_alertname" . }}
+> <font color="comment">告警级别</font>: {{ template "__severity_tag" .Labels.severity }}
 {{- if .Labels.region }}
-> <font color="comment"> 地域 </font>: {{ .Labels.region }}
->
+> <font color="comment">地域</font>: {{ .Labels.region }}
 {{- end }}
 {{- if .Labels.zone }}
-> <font color="comment"> 可用区 </font>: {{ .Labels.zone }}
->
+> <font color="comment">可用区</font>: {{ .Labels.zone }}
 {{- end }}
 {{- if .Labels.product }}
-> <font color="comment"> 产品 </font>: {{ .Labels.product }}
->
+> <font color="comment">产品</font>: {{ .Labels.product }}
 {{- end }}
-{{- if .Labels.component  }}
-> <font color="comment"> 组件 </font>: {{ .Labels.component }}
->
+{{- if .Labels.component }}
+> <font color="comment">组件</font>: {{ .Labels.component }}
 {{- end }}
-> <font color="comment"> 告警状态 </font>: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ .Status | toUpper }}</font>
->
-> <font color="comment"> 开始时间 </font>: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
->
-> <font color="comment"> 结束时间 </font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+> <font color="comment">告警状态</font>: {{ template "__alert_status" . }}
+> <font color="comment">开始</font>: {{ .StartsAt.Format $timeFormat }}
+> <font color="comment">结束</font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}
 {{- if eq .Status "firing" }}
->
-> <font color="comment"> 告警描述 </font>: {{ if .Annotations.description_cn }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
+> <font color="comment">告警描述</font>: {{ template "__alert_description" . }}
+{{- end -}}
+{{- end -}}
 {{- end }}
-
-{{ end }}
-{{ end }}
-
 
 {{ define "__alert_summary" -}}
-{{ range . }}
-<font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ template "__alertinstance" . }}</font>
-{{ end }}
-{{ end }}
+{{- range $i, $_ := . -}}
+{{- if $i -}}
+{{ print "\n" -}}
+{{- end -}}
+- <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ template "__alertinstance" . }}</font>
+{{- end -}}
+{{- end }}
 
 {{ define "prom.title" -}}
-{{ template "__subject" . }}
-{{ end }}
+{{ template "__subject" . -}}
+{{- end }}
 
-
-{{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
+{{ define "prom.markdown" -}}
+{{- $firing := .Alerts.Firing -}}
+{{- $resolved := .Alerts.Resolved -}}
+<font color="comment">{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}</font>
+{{- print "\n\n\n" -}}
 #### 摘要
-
-{{ if gt (.Alerts.Firing|len ) 0 }}
-##### <font color="warning">🚨 触发中告警 [{{ .Alerts.Firing|len }}]</font>
-{{ template "__alert_summary" .Alerts.Firing }}
-{{ end }}
-
-
-{{ if gt (.Alerts.Resolved|len) 0 }}
-#####  <font color="info">✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]</font>
-{{ template "__alert_summary" .Alerts.Resolved }}
-{{ end }}
-
-#### 详请
-
-{{ if gt (.Alerts.Firing|len ) 0 }}
-##### <font color="warning">🚨 触发中告警 [{{ .Alerts.Firing|len }}]</font>
-{{ template "__alert_list" .Alerts.Firing }}
-{{ end }}
-
-
-{{ if gt (.Alerts.Resolved|len) 0 }}
-#####  <font color="info">✅ 已恢复告警 [{{ .Alerts.Resolved|len }}]</font>
-{{ template "__alert_list" .Alerts.Resolved }}
-{{ end }}
+{{- if gt (len $firing) 0 -}}
+{{- print "\n\n\n" -}}
+{{ template "__firing_title" $firing }}
+{{- print "\n\n" -}}
+{{ template "__alert_summary" $firing -}}
+{{- end -}}
+{{- if gt (len $resolved) 0 -}}
+{{- print "\n\n\n" -}}
+{{ template "__resolved_title" $resolved }}
+{{- print "\n\n" -}}
+{{ template "__alert_summary" $resolved -}}
+{{- end -}}
+{{- print "\n\n\n" -}}
+#### 详情
+{{- if gt (len $firing) 0 -}}
+{{- print "\n\n\n" -}}
+{{ template "__firing_title" $firing }}
+{{- print "\n\n" -}}
+{{ template "__alert_list" $firing -}}
+{{- end -}}
+{{- if gt (len $resolved) 0 -}}
+{{- print "\n\n\n" -}}
+{{ template "__resolved_title" $resolved }}
+{{- print "\n\n" -}}
+{{ template "__alert_list" $resolved -}}
+{{- end }}
 {{ end }}
 
 {{ define "prom.text" }}

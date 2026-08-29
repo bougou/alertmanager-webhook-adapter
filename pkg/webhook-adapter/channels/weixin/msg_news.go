@@ -10,7 +10,7 @@ func init() {
 }
 
 type News struct {
-	Articles []*Article `json:"articles"` // 图文消息，一个图文消息支持1到8条图文
+	Articles []*Article `json:"articles"` // 图文消息，一个图文消息支持 1 到 8 条图文
 }
 
 func NewNews(articles []*Article) *News {
@@ -23,7 +23,7 @@ type Article struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	URL         string `json:"url"`    // 点击后跳转的链接
-	PicURL      string `json:"picurl"` // 图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图 1068*455，小图150*150
+	PicURL      string `json:"picurl"` // 图文消息的图片链接，支持 JPG、PNG 格式，较好的效果为大图 1068*455，小图 150*150
 }
 
 func NewArticle(title string, url string) *Article {
