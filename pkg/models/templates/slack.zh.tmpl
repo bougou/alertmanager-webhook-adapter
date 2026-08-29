@@ -36,13 +36,13 @@
 
 {{ define "__alert_list" }}
 {{ range . }}
+> 实例: `{{ template "__alertinstance" . }}`
 > 告警名称: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 > 告警级别:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
-> 实例: `{{ template "__alertinstance" . }}`
 {{- if .Labels.region }}
 > 地域: {{ .Labels.region }}
 {{- end }}
@@ -56,8 +56,8 @@
 > 组件: {{ .Labels.component }}
 {{- end }}
 > 告警状态: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} {{ .Status | toUpper }}
-> 开始时间: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
-> 结束时间: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+> 开始时间: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+> 结束时间: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05 MST" }}{{ else }}Not End{{ end }}
 {{- if eq .Status "firing" }}
 > 告警描述: {{ if .Annotations.description_cn }}{{ .Annotations.description_cn }}{{ else }}{{ .Annotations.description }}{{ end }}
 {{- end }}
@@ -76,7 +76,7 @@
 {{ end }}
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
+{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}
 
 *摘要*
 

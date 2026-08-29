@@ -43,6 +43,9 @@ var DefaultTmplSlackZH string
 //go:embed discord-webhook.tmpl
 var DefaultTmplDiscordWebhook string
 
+//go:embed discord-webhook.zh.tmpl
+var DefaultTmplDiscordWebhookZH string
+
 var DefaultTmplByLang = map[string]string{
 	"en": DefaultTmpl,
 	"zh": DefaultTmplZH,
@@ -59,11 +62,12 @@ var ChannelsDefaultTmplMapByLang = map[string]map[string]string{
 		"discord-webhook": DefaultTmplDiscordWebhook,
 	},
 	"zh": {
-		"dingtalk":  DefaultTmplDingTalkZH,
-		"feishu":    DefaultTmplFeishuZH,
-		"slack":     DefaultTmplSlackZH,
-		"weixin":    DefaultTmplWeixinZH,
-		"weixinapp": DefaultTmplWeixinappZH,
+		"dingtalk":        DefaultTmplDingTalkZH,
+		"feishu":          DefaultTmplFeishuZH,
+		"slack":           DefaultTmplSlackZH,
+		"weixin":          DefaultTmplWeixinZH,
+		"weixinapp":       DefaultTmplWeixinappZH,
+		"discord-webhook": DefaultTmplDiscordWebhookZH,
 	},
 }
 

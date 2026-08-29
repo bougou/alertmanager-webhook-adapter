@@ -37,13 +37,13 @@
 {{ define "__alert_list" }}
 {{- range . }}
 
+> Instance: `{{ template "__alertinstance" . }}`
 > Alert Name: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 > Alert Level:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
-> Instance: `{{ template "__alertinstance" . }}`
 {{- if .Labels.region }}
 > Region: {{ .Labels.region }}
 {{- end }}
@@ -57,8 +57,8 @@
 > Component: {{ .Labels.component }}
 {{- end }}
 > Alert Status: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} {{ .Status | toUpper }}
-> Start At: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
-> End At: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+> Start At: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+> End At: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05 MST" }}{{ else }}Not End{{ end }}
 {{- if eq .Status "firing" }}
 > Description: {{ if .Annotations.description_en }}{{ .Annotations.description_en }}{{ else }}{{ .Annotations.description }}{{ end }}
 {{- end }}
@@ -78,7 +78,7 @@
 
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
+{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}
 ## Summary
 
 {{ if gt (.Alerts.Firing|len ) 0 }}
