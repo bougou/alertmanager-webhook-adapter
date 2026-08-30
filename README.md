@@ -97,9 +97,9 @@ $ systemctl start
 
 ```bash
 # expose the host port (127.0.0.1:8090) to container port (8090)
-docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.11
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.13
 
-docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.11 --signature MyIDC --lang zh --debug
+docker run --rm -it -p 127.0.0.1:8090:8090 bougou/alertmanager-webhook-adapter:v1.1.13 --signature MyIDC --lang zh --debug
 ```
 
 ### Run in K8S
@@ -126,7 +126,7 @@ helm upgrade alertmanager-webhook-adapter \
   bougoucharts/alertmanager-webhook-adapter \
   --install \
   --namespace infra \
-  --version 1.1.0 \
+  --version 1.1.1 \
   --values values.yaml
 ```
 
@@ -137,7 +137,7 @@ helm upgrade alertmanager-webhook-adapter \
   oci://registry-1.docker.io/bougoucharts/alertmanager-webhook-adapter \
   --install \
   --namespace infra \
-  --version 1.1.0 \
+  --version 1.1.1 \
   --values values.yaml
 ```
 
