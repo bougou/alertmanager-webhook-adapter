@@ -57,14 +57,20 @@ func TestWeixinZHTitleUsesHighestSeverity(t *testing.T) {
 	}
 }
 
-func TestWeixinZHMarkdownSummaryIsCompactList(t *testing.T) {
+func TestWeixinZHMarkdownSummaryIsPlainInstanceList(t *testing.T) {
 	msg := loadWebhookJSON(t, filepath.Join("..", "..", "tests", "alert.json"))
 	out := renderWeixinZH(t, msg, "prom.markdown")
 	summary := out[strings.Index(out, "#### 摘要"):strings.Index(out, "#### 详情")]
-	if strings.Contains(summary, "10.30.1.160</font>\n\n- ") {
+	if strings.Contains(summary, "- <font") {
+		t.Fatalf("summary items should not use markdown list markers, got:\n%s", summary)
+	}
+	if !strings.Contains(summary, "• <font") {
+		t.Fatalf("summary items should use bullet prefix, got:\n%s", summary)
+	}
+	if strings.Contains(summary, "10.30.1.160</font>\n\n• <font") {
 		t.Fatalf("summary list items should be consecutive, got:\n%s", summary)
 	}
-	if !strings.Contains(summary, "10.30.1.160</font>\n- ") {
+	if !strings.Contains(summary, "10.30.1.160</font>\n• <font") {
 		t.Fatalf("summary list items should be separated by a single newline, got:\n%s", summary)
 	}
 }
@@ -95,8 +101,8 @@ func TestWeixinZHDetailUsesWeixinMarkdown(t *testing.T) {
 		t.Fatalf("missing firing title in detail, got:\n%s", detail)
 	}
 	afterTitle := detail[idx+len(title):]
-	if !strings.HasPrefix(afterTitle, "\n\n> <font color=\"comment\">实例</font>:") {
-		t.Fatalf("detail title should be followed by one blank line then a quote, got:\n%s", afterTitle[:min(80, len(afterTitle))])
+	if !strings.HasPrefix(afterTitle, "\n\n\n> <font color=\"comment\">实例</font>:") {
+		t.Fatalf("detail title should be followed by two blank lines then a quote, got:\n%s", afterTitle[:min(80, len(afterTitle))])
 	}
 
 	first := strings.Index(detail, "> <font color=\"comment\">实例</font>: `10.30.1.160`")
@@ -108,7 +114,7 @@ func TestWeixinZHDetailUsesWeixinMarkdown(t *testing.T) {
 	if strings.Contains(gap, "\n>\n>") {
 		t.Fatalf("weixin quotes should be consecutive without empty > lines, gap:\n%s", gap)
 	}
-	if !strings.HasSuffix(gap, "\n\n") {
-		t.Fatalf("detail items should be separated by one blank line, gap ending %q", gap[len(gap)-12:])
+	if !strings.HasSuffix(gap, "\n\n\n") {
+		t.Fatalf("detail items should be separated by two blank lines, gap ending %q", gap[len(gap)-12:])
 	}
 }

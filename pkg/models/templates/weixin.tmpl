@@ -81,7 +81,7 @@
 {{- $timeFormat := "2006-01-02 15:04:05 MST" -}}
 {{- range $i, $_ := . -}}
 {{- if $i -}}
-{{ print "\n\n" -}}
+{{ print "\n\n\n" -}}
 {{- end -}}
 > <font color="comment">Instance</font>: `{{ template "__alertinstance" . }}`
 > <font color="comment">Alert Name</font>: {{ template "__alert_alertname" . }}
@@ -112,7 +112,7 @@
 {{- if $i -}}
 {{ print "\n" -}}
 {{- end -}}
-- <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ template "__alertinstance" . }}</font>
+• <font color="{{ if eq .Status "firing" }}warning{{ else }}info{{ end }}">{{ template "__alertinstance" . }}</font>
 {{- end -}}
 {{- end }}
 
@@ -123,19 +123,20 @@
 {{ define "prom.markdown" -}}
 {{- $firing := .Alerts.Firing -}}
 {{- $resolved := .Alerts.Resolved -}}
+{{- print "\n" -}}
 <font color="comment">{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}</font>
 {{- print "\n\n\n" -}}
 #### Summary
 {{- if gt (len $firing) 0 -}}
 {{- print "\n\n\n" -}}
 {{ template "__firing_title" $firing }}
-{{- print "\n\n" -}}
+{{- print "\n\n\n" -}}
 {{ template "__alert_summary" $firing -}}
 {{- end -}}
 {{- if gt (len $resolved) 0 -}}
 {{- print "\n\n\n" -}}
 {{ template "__resolved_title" $resolved }}
-{{- print "\n\n" -}}
+{{- print "\n\n\n" -}}
 {{ template "__alert_summary" $resolved -}}
 {{- end -}}
 {{- print "\n\n\n" -}}
@@ -143,13 +144,13 @@
 {{- if gt (len $firing) 0 -}}
 {{- print "\n\n\n" -}}
 {{ template "__firing_title" $firing }}
-{{- print "\n\n" -}}
+{{- print "\n\n\n" -}}
 {{ template "__alert_list" $firing -}}
 {{- end -}}
 {{- if gt (len $resolved) 0 -}}
 {{- print "\n\n\n" -}}
 {{ template "__resolved_title" $resolved }}
-{{- print "\n\n" -}}
+{{- print "\n\n\n" -}}
 {{ template "__alert_list" $resolved -}}
 {{- end }}
 {{ end }}

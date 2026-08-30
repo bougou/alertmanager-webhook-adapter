@@ -11,21 +11,24 @@ MARKDOWN:
 
 #### <font color="warning">🚨 触发中告警 [3]</font>
 
-<font color="warning">10.30.1.160</font>
-<font color="warning">10.30.1.162</font>
-<font color="warning">10.30.1.163</font>
+
+• <font color="warning">10.30.1.160</font>
+• <font color="warning">10.30.1.162</font>
+• <font color="warning">10.30.1.163</font>
 
 
 #### <font color="info">✅ 已恢复告警 [2]</font>
 
-<font color="info">10.30.1.161</font>
-<font color="info">10.30.1.164</font>
+
+• <font color="info">10.30.1.161</font>
+• <font color="info">10.30.1.164</font>
 
 
 ### 告警详请
 
 
 #### <font color="warning">🚨 触发中告警 [3]</font>
+
 
 <font color="comment"></font>
 > <font color="comment">实例</font>: `10.30.1.160`
@@ -40,6 +43,7 @@ MARKDOWN:
 > <font color="comment">结束</font>: 未结束
 > <font color="comment">告警描述</font>: cpu usage is high than 20% for 5 minutes
 
+
 <font color="comment"></font>
 > <font color="comment">实例</font>: `10.30.1.162`
 > <font color="comment">告警名称</font>: CPUHigh1
@@ -52,6 +56,7 @@ MARKDOWN:
 > <font color="comment">开始</font>: 2021-03-30 20:17:50 CST
 > <font color="comment">结束</font>: 未结束
 > <font color="comment">告警描述</font>: cpu usage is high than 20% for 5 minutes
+
 
 <font color="comment"></font>
 > <font color="comment">实例</font>: `10.30.1.163`
@@ -69,6 +74,7 @@ MARKDOWN:
 
 #### <font color="info">✅ 已恢复告警 [2]</font>
 
+
 <font color="comment"></font>
 > <font color="comment">实例</font>: `10.30.1.161`
 > <font color="comment">告警名称</font>: CPUHigh
@@ -80,6 +86,7 @@ MARKDOWN:
 > <font color="comment">告警状态</font>: ✅ <font color="info">RESOLVED</font>
 > <font color="comment">开始</font>: 2021-03-30 20:17:50 CST
 > <font color="comment">结束</font>: 2021-03-30 21:17:50 CST
+
 
 <font color="comment"></font>
 > <font color="comment">实例</font>: `10.30.1.164`
