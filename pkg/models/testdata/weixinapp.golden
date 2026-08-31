@@ -3,7 +3,7 @@ TITLE:
 
 MARKDOWN:
 
-<font color="comment">2026-08-29 17:31:23 CST</font>
+<font color="comment">2026-08-29 17:31:23 +08</font>
 
 
 ### Alert Summary
@@ -39,7 +39,7 @@ MARKDOWN:
 > <font color="comment">Product</font>: product-x
 > <font color="comment">Component</font>: component-x
 > <font color="comment">Alert Status</font>: 🚨 <font color="warning">FIRING</font>
-> <font color="comment">Start At</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">Start At</font>: 2021-03-30 20:17:50 +08
 > <font color="comment">End At</font>: Not End
 > <font color="comment">Description</font>: cpu usage is high than 20% for 5 minutes
 
@@ -53,7 +53,7 @@ MARKDOWN:
 > <font color="comment">Product</font>: product-x
 > <font color="comment">Component</font>: component-x
 > <font color="comment">Alert Status</font>: 🚨 <font color="warning">FIRING</font>
-> <font color="comment">Start At</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">Start At</font>: 2021-03-30 20:17:50 +08
 > <font color="comment">End At</font>: Not End
 > <font color="comment">Description</font>: cpu usage is high than 20% for 5 minutes
 
@@ -67,7 +67,7 @@ MARKDOWN:
 > <font color="comment">Product</font>: product-x
 > <font color="comment">Component</font>: component-x
 > <font color="comment">Alert Status</font>: 🚨 <font color="warning">FIRING</font>
-> <font color="comment">Start At</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">Start At</font>: 2021-03-30 20:17:50 +08
 > <font color="comment">End At</font>: Not End
 > <font color="comment">Description</font>: cpu usage is high than 20% for 5 minutes
 
@@ -84,8 +84,8 @@ MARKDOWN:
 > <font color="comment">Product</font>: product-y
 > <font color="comment">Component</font>: component-y
 > <font color="comment">Alert Status</font>: ✅ <font color="info">RESOLVED</font>
-> <font color="comment">Start At</font>: 2021-03-30 20:17:50 CST
-> <font color="comment">End At</font>: 2021-03-30 21:17:50 CST
+> <font color="comment">Start At</font>: 2021-03-30 20:17:50 +08
+> <font color="comment">End At</font>: 2021-03-30 21:17:50 +08
 
 
 <font color="comment"></font>
@@ -97,5 +97,5 @@ MARKDOWN:
 > <font color="comment">Product</font>: product-y
 > <font color="comment">Component</font>: component-y
 > <font color="comment">Alert Status</font>: ✅ <font color="info">RESOLVED</font>
-> <font color="comment">Start At</font>: 2021-03-30 20:17:50 CST
-> <font color="comment">End At</font>: 2021-03-30 21:17:50 CST
+> <font color="comment">Start At</font>: 2021-03-30 20:17:50 +08
+> <font color="comment">End At</font>: 2021-03-30 21:17:50 +08

@@ -78,7 +78,7 @@
 {{- end }}
 
 {{ define "__alert_list" -}}
-{{- $timeFormat := "2006-01-02 15:04:05 MST" -}}
+{{- $timeFormat := "2006-01-02 15:04:05 -07" -}}
 {{- range $i, $_ := . -}}
 {{- if gt $i 0 -}}
 {{ print "\n\n---\n\n" -}}
@@ -134,7 +134,7 @@
 {{ define "prom.markdown" -}}
 {{- $firing := .Alerts.Firing -}}
 {{- $resolved := .Alerts.Resolved -}}
-<font color="#8C8C8C">{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}</font>
+<font color="#8C8C8C">{{ .MessageAt.Format "2006-01-02 15:04:05 -07" }}</font>
 
 #### **Summary**
 {{- if gt (len $firing) 0 -}}

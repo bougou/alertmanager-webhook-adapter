@@ -64,9 +64,9 @@
 {{- end }}
 > 告警状态: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }}{{ .Status | toUpper }}
 >
-> 开始时间: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
+> 开始: {{ .StartsAt.Format "2006-01-02T15:04:05-07" }}
 >
-> 结束时间: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+> 结束: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05-07" }}{{ else }}Not End{{ end }}
 {{- if eq .Status "firing" }}
 >
 > 告警描述: {{ .Annotations.description }}
@@ -87,7 +87,7 @@
 
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
+{{ .MessageAt.Format "2006-01-02T15:04:05-07" }}
 #### 摘要
 
 {{ if gt (.Alerts.Firing|len ) 0 }}

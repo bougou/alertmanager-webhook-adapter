@@ -78,7 +78,7 @@
 {{- end }}
 
 {{ define "__alert_list" -}}
-{{- $timeFormat := "2006-01-02 15:04:05 MST" -}}
+{{- $timeFormat := "2006-01-02 15:04:05 -07" -}}
 {{- range $i, $_ := . -}}
 {{- if gt $i 0 -}}
 {{ print "\n\n---\n\n" -}}
@@ -107,9 +107,9 @@
 {{- end }}
 > **告警状态**: {{ template "__alert_status" . }}
 >
-> **开始时间**: <font color="#8C8C8C">{{ .StartsAt.Format $timeFormat }}</font>
+> **开始**: <font color="#8C8C8C">{{ .StartsAt.Format $timeFormat }}</font>
 >
-> **结束时间**: <font color="#8C8C8C">{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}</font>
+> **结束**: <font color="#8C8C8C">{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}</font>
 >
 {{- if eq .Status "firing" }}
 > **告警描述**: {{ template "__alert_description" . }}
@@ -134,7 +134,7 @@
 {{ define "prom.markdown" -}}
 {{- $firing := .Alerts.Firing -}}
 {{- $resolved := .Alerts.Resolved -}}
-<font color="#8C8C8C">{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}</font>
+<font color="#8C8C8C">{{ .MessageAt.Format "2006-01-02 15:04:05 -07" }}</font>
 
 #### **摘要**
 {{- if gt (len $firing) 0 -}}

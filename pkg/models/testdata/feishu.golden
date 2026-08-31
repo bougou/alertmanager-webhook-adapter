@@ -2,7 +2,7 @@ TITLE:
 【Bougou】 CRITICAL • CPUHigh • Firing:3/Resolved:2
 
 MARKDOWN:
-<font color='grey'>2026-08-29 17:31:23 CST</font>
+<font color='grey'>2026-08-29 17:31:23 +08</font>
 
  ---
 **Summary**
@@ -36,7 +36,7 @@ MARKDOWN:
 **Product**: <text_tag color='neutral'>product-x</text_tag>
 **Component**: <text_tag color='neutral'>component-x</text_tag>
 **Alert Status**: 🚨 <text_tag color='carmine'>FIRING</text_tag>
-**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
+**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
 **End At**: <text_tag color='neutral'>Not End</text_tag>
 **Description**: cpu usage is high than 20% for 5 minutes
 
@@ -49,7 +49,7 @@ MARKDOWN:
 **Product**: <text_tag color='neutral'>product-x</text_tag>
 **Component**: <text_tag color='neutral'>component-x</text_tag>
 **Alert Status**: 🚨 <text_tag color='carmine'>FIRING</text_tag>
-**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
+**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
 **End At**: <text_tag color='neutral'>Not End</text_tag>
 **Description**: cpu usage is high than 20% for 5 minutes
 
@@ -62,7 +62,7 @@ MARKDOWN:
 **Product**: <text_tag color='neutral'>product-x</text_tag>
 **Component**: <text_tag color='neutral'>component-x</text_tag>
 **Alert Status**: 🚨 <text_tag color='carmine'>FIRING</text_tag>
-**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
+**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
 **End At**: <text_tag color='neutral'>Not End</text_tag>
 **Description**: cpu usage is high than 20% for 5 minutes
 
@@ -78,8 +78,8 @@ MARKDOWN:
 **Product**: <text_tag color='neutral'>product-y</text_tag>
 **Component**: <text_tag color='neutral'>component-y</text_tag>
 **Alert Status**: ✅ <text_tag color='green'>RESOLVED</text_tag>
-**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
-**End At**: <text_tag color='neutral'>2021-03-30 21:17:50 CST</text_tag>
+**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
+**End At**: <text_tag color='neutral'>2021-03-30 21:17:50 +08</text_tag>
 
 
 - **Alert Instance**: <text_tag color='purple'>10.30.1.164</text_tag>
@@ -90,5 +90,5 @@ MARKDOWN:
 **Product**: <text_tag color='neutral'>product-y</text_tag>
 **Component**: <text_tag color='neutral'>component-y</text_tag>
 **Alert Status**: ✅ <text_tag color='green'>RESOLVED</text_tag>
-**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
-**End At**: <text_tag color='neutral'>2021-03-30 21:17:50 CST</text_tag>
+**Start At**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
+**End At**: <text_tag color='neutral'>2021-03-30 21:17:50 +08</text_tag>

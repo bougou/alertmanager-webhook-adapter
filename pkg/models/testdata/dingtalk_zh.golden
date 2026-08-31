@@ -2,7 +2,7 @@ TITLE:
 【Bougou】 CRITICAL • CPUHigh • 告警中:3/已恢复:2
 
 MARKDOWN:
-<font color="#8C8C8C">2026-08-29 17:31:23 CST</font>
+<font color="#8C8C8C">2026-08-29 17:31:23 +08</font>
 
 #### **摘要**
 
@@ -37,9 +37,9 @@ MARKDOWN:
 >
 > **告警状态**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
-> **结束时间**: <font color="#8C8C8C">未结束</font>
+> **结束**: <font color="#8C8C8C">未结束</font>
 >
 > **告警描述**: cpu usage is high than 20% for 5 minutes
 >
@@ -62,9 +62,9 @@ MARKDOWN:
 >
 > **告警状态**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
-> **结束时间**: <font color="#8C8C8C">未结束</font>
+> **结束**: <font color="#8C8C8C">未结束</font>
 >
 > **告警描述**: cpu usage is high than 20% for 5 minutes
 >
@@ -87,9 +87,9 @@ MARKDOWN:
 >
 > **告警状态**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
-> **结束时间**: <font color="#8C8C8C">未结束</font>
+> **结束**: <font color="#8C8C8C">未结束</font>
 >
 > **告警描述**: cpu usage is high than 20% for 5 minutes
 >
@@ -112,9 +112,9 @@ MARKDOWN:
 >
 > **告警状态**: ✅ <font color="#52C41A">**RESOLVED**</font>
 >
-> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
-> **结束时间**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+> **结束**: <font color="#8C8C8C">2021-03-30 21:17:50 +08</font>
 >
 
 ---
@@ -135,7 +135,7 @@ MARKDOWN:
 >
 > **告警状态**: ✅ <font color="#52C41A">**RESOLVED**</font>
 >
-> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
-> **结束时间**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+> **结束**: <font color="#8C8C8C">2021-03-30 21:17:50 +08</font>
 >

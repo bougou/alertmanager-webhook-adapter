@@ -78,7 +78,7 @@
 {{- end }}
 
 {{ define "__alert_list" -}}
-{{- $timeFormat := "2006-01-02 15:04:05 MST" -}}
+{{- $timeFormat := "2006-01-02 15:04:05 -07" -}}
 {{- range $i, $_ := . -}}
 {{- if $i -}}
 {{ print "\n\n\n" -}}
@@ -125,7 +125,7 @@
 {{- $firing := .Alerts.Firing -}}
 {{- $resolved := .Alerts.Resolved -}}
 {{- print "\n" -}}
-<font color="comment">{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}</font>
+<font color="comment">{{ .MessageAt.Format "2006-01-02 15:04:05 -07" }}</font>
 {{- print "\n\n\n" -}}
 ### Alert Summary
 {{- if gt (len $firing) 0 -}}

@@ -2,7 +2,7 @@ TITLE:
 【Bougou】 CRITICAL • CPUHigh • 告警中:3/已恢复:2
 
 MARKDOWN:
-<font color='grey'>2026-08-29 17:31:23 CST</font>
+<font color='grey'>2026-08-29 17:31:23 +08</font>
 
  ---
 **摘要**
@@ -36,8 +36,8 @@ MARKDOWN:
 **产品**: <text_tag color='neutral'>product-x</text_tag>
 **组件**: <text_tag color='neutral'>component-x</text_tag>
 **告警状态**: 🚨 <text_tag color='carmine'>FIRING</text_tag>
-**开始时间**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
-**结束时间**: <text_tag color='neutral'>未结束</text_tag>
+**开始**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
+**结束**: <text_tag color='neutral'>未结束</text_tag>
 **告警描述**: cpu usage is high than 20% for 5 minutes
 
 
@@ -49,8 +49,8 @@ MARKDOWN:
 **产品**: <text_tag color='neutral'>product-x</text_tag>
 **组件**: <text_tag color='neutral'>component-x</text_tag>
 **告警状态**: 🚨 <text_tag color='carmine'>FIRING</text_tag>
-**开始时间**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
-**结束时间**: <text_tag color='neutral'>未结束</text_tag>
+**开始**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
+**结束**: <text_tag color='neutral'>未结束</text_tag>
 **告警描述**: cpu usage is high than 20% for 5 minutes
 
 
@@ -62,8 +62,8 @@ MARKDOWN:
 **产品**: <text_tag color='neutral'>product-x</text_tag>
 **组件**: <text_tag color='neutral'>component-x</text_tag>
 **告警状态**: 🚨 <text_tag color='carmine'>FIRING</text_tag>
-**开始时间**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
-**结束时间**: <text_tag color='neutral'>未结束</text_tag>
+**开始**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
+**结束**: <text_tag color='neutral'>未结束</text_tag>
 **告警描述**: cpu usage is high than 20% for 5 minutes
 
 
@@ -78,8 +78,8 @@ MARKDOWN:
 **产品**: <text_tag color='neutral'>product-y</text_tag>
 **组件**: <text_tag color='neutral'>component-y</text_tag>
 **告警状态**: ✅ <text_tag color='green'>RESOLVED</text_tag>
-**开始时间**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
-**结束时间**: <text_tag color='neutral'>2021-03-30 21:17:50 CST</text_tag>
+**开始**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
+**结束**: <text_tag color='neutral'>2021-03-30 21:17:50 +08</text_tag>
 
 
 - **告警实例**: <text_tag color='purple'>10.30.1.164</text_tag>
@@ -90,5 +90,5 @@ MARKDOWN:
 **产品**: <text_tag color='neutral'>product-y</text_tag>
 **组件**: <text_tag color='neutral'>component-y</text_tag>
 **告警状态**: ✅ <text_tag color='green'>RESOLVED</text_tag>
-**开始时间**: <text_tag color='neutral'>2021-03-30 20:17:50 CST</text_tag>
-**结束时间**: <text_tag color='neutral'>2021-03-30 21:17:50 CST</text_tag>
+**开始**: <text_tag color='neutral'>2021-03-30 20:17:50 +08</text_tag>
+**结束**: <text_tag color='neutral'>2021-03-30 21:17:50 +08</text_tag>

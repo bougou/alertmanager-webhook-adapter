@@ -64,9 +64,9 @@
 {{- end }}
 > Status: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }}"> {{ .Status | toUpper }}
 >
-> Starts At: {{ .StartsAt.Format "2006-01-02T15:04:05Z07:00" }}
+> Starts At: {{ .StartsAt.Format "2006-01-02T15:04:05-07" }}
 >
-> Ends At: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05Z07:00" }}{{ else }}Not End{{ end }}
+> Ends At: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02T15:04:05-07" }}{{ else }}Not End{{ end }}
 {{- if eq .Status "firing" }}
 >
 > Description : {{ .Annotations.description }}
@@ -87,7 +87,7 @@
 
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02T15:04:05Z07:00" }}
+{{ .MessageAt.Format "2006-01-02T15:04:05-07" }}
 #### Summary
 
 {{ if gt (.Alerts.Firing|len ) 0 }}

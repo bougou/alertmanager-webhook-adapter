@@ -57,8 +57,8 @@
 > Component: {{ .Labels.component }}
 {{- end }}
 > Alert Status: {{ if eq .Status "firing" }}🚨{{ else }}✅{{ end }} {{ .Status | toUpper }}
-> Start At: {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
-> End At: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05 MST" }}{{ else }}Not End{{ end }}
+> Start At: {{ .StartsAt.Format "2006-01-02 15:04:05 -07" }}
+> End At: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format "2006-01-02 15:04:05 -07" }}{{ else }}Not End{{ end }}
 {{- if eq .Status "firing" }}
 > Description: {{ if .Annotations.description_en }}{{ .Annotations.description_en }}{{ else }}{{ .Annotations.description }}{{ end }}
 {{- end }}
@@ -78,7 +78,7 @@
 
 
 {{ define "prom.markdown" }}
-{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}
+{{ .MessageAt.Format "2006-01-02 15:04:05 -07" }}
 ## Summary
 
 {{ if gt (.Alerts.Firing|len ) 0 }}

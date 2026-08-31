@@ -2,7 +2,7 @@ TITLE:
 【Bougou】 CRITICAL • CPUHigh • Firing:3/Resolved:2
 
 MARKDOWN:
-<font color="#8C8C8C">2026-08-29 17:31:23 CST</font>
+<font color="#8C8C8C">2026-08-29 17:31:23 +08</font>
 
 #### **Summary**
 
@@ -37,7 +37,7 @@ MARKDOWN:
 >
 > **Alert Status**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
 > **End At**: <font color="#8C8C8C">Not End</font>
 >
@@ -62,7 +62,7 @@ MARKDOWN:
 >
 > **Alert Status**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
 > **End At**: <font color="#8C8C8C">Not End</font>
 >
@@ -87,7 +87,7 @@ MARKDOWN:
 >
 > **Alert Status**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
 > **End At**: <font color="#8C8C8C">Not End</font>
 >
@@ -112,9 +112,9 @@ MARKDOWN:
 >
 > **Alert Status**: ✅ <font color="#52C41A">**RESOLVED**</font>
 >
-> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
-> **End At**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+> **End At**: <font color="#8C8C8C">2021-03-30 21:17:50 +08</font>
 >
 
 ---
@@ -135,7 +135,7 @@ MARKDOWN:
 >
 > **Alert Status**: ✅ <font color="#52C41A">**RESOLVED**</font>
 >
-> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **Start At**: <font color="#8C8C8C">2021-03-30 20:17:50 +08</font>
 >
-> **End At**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+> **End At**: <font color="#8C8C8C">2021-03-30 21:17:50 +08</font>
 >

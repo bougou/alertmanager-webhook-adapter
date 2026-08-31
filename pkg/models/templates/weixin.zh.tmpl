@@ -78,7 +78,7 @@
 {{- end }}
 
 {{ define "__alert_list" -}}
-{{- $timeFormat := "2006-01-02 15:04:05 MST" -}}
+{{- $timeFormat := "2006-01-02 15:04:05 -07" -}}
 {{- range $i, $_ := . -}}
 {{- if $i -}}
 {{ print "\n\n\n" -}}
@@ -99,8 +99,8 @@
 > <font color="comment">组件</font>: {{ .Labels.component }}
 {{- end }}
 > <font color="comment">告警状态</font>: {{ template "__alert_status" . }}
-> <font color="comment">开始时间</font>: {{ .StartsAt.Format $timeFormat }}
-> <font color="comment">结束时间</font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}
+> <font color="comment">开始</font>: {{ .StartsAt.Format $timeFormat }}
+> <font color="comment">结束</font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}
 {{- if eq .Status "firing" }}
 > <font color="comment">告警描述</font>: {{ template "__alert_description" . }}
 {{- end -}}
@@ -124,7 +124,7 @@
 {{- $firing := .Alerts.Firing -}}
 {{- $resolved := .Alerts.Resolved -}}
 {{- print "\n" -}}
-<font color="comment">{{ .MessageAt.Format "2006-01-02 15:04:05 MST" }}</font>
+<font color="comment">{{ .MessageAt.Format "2006-01-02 15:04:05 -07" }}</font>
 {{- print "\n\n\n" -}}
 #### 摘要
 {{- if gt (len $firing) 0 -}}

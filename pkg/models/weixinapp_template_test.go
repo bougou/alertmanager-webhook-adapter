@@ -66,7 +66,7 @@ func weixinappZHToEN(s string) string {
 		"地域", "Region",
 		"产品", "Product",
 		"组件", "Component",
-		"开始时间", "Start At",
-		"结束时间", "End At",
+		"开始", "Start At",
+		"结束", "End At",
 	).Replace(s)
 }
