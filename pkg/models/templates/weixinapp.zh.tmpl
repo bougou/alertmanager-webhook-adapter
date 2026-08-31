@@ -84,7 +84,7 @@
 {{ print "\n\n\n" -}}
 {{- end -}}
 <font color="comment"></font>
-> <font color="comment">实例</font>: `{{ template "__alertinstance" . }}`
+> <font color="comment">告警实例</font>: `{{ template "__alertinstance" . }}`
 > <font color="comment">告警名称</font>: {{ template "__alert_alertname" . }}
 > <font color="comment">告警级别</font>: {{ template "__severity_tag" .Labels.severity }}
 {{- if .Labels.region }}
@@ -100,8 +100,8 @@
 > <font color="comment">组件</font>: {{ .Labels.component }}
 {{- end }}
 > <font color="comment">告警状态</font>: {{ template "__alert_status" . }}
-> <font color="comment">开始</font>: {{ .StartsAt.Format $timeFormat }}
-> <font color="comment">结束</font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}
+> <font color="comment">开始时间</font>: {{ .StartsAt.Format $timeFormat }}
+> <font color="comment">结束时间</font>: {{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}
 {{- if eq .Status "firing" }}
 > <font color="comment">告警描述</font>: {{ template "__alert_description" . }}
 {{- end -}}

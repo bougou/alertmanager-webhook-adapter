@@ -37,7 +37,7 @@
 {{ define "__alert_list" }}
 {{- range . }}
 
-> 实例: `{{ template "__alertinstance" . }}`
+> 告警实例: `{{ template "__alertinstance" . }}`
 > 告警名称: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 > 告警级别:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}

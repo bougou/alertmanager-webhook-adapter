@@ -37,7 +37,7 @@
 {{ define "__alert_list" }}
 {{- range . }}
 
-> Instance: `{{ template "__alertinstance" . }}`
+> Alert Instance: `{{ template "__alertinstance" . }}`
 > Alert Name: {{ if .Labels.alertname_cn  }}{{ .Labels.alertname_cn }}{{ else if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 > Alert Level:{{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}

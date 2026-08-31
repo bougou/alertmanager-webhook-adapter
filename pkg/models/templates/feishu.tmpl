@@ -83,7 +83,7 @@
 {{- if $i -}}
 {{- print "\n\n" -}}
 {{- end -}}
-- **Instance**: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
+- **Alert Instance**: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
 **Alert Name**: <text_tag color='blue'>{{ template "__alert_alertname" . }}</text_tag>
 **Alert Level**: {{ template "__severity_tag" .Labels.severity }}
 {{- if .Labels.region }}

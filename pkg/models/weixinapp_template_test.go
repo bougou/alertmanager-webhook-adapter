@@ -61,12 +61,12 @@ func weixinappZHToEN(s string) string {
 		"已恢复:", "Resolved:",
 		"### 告警摘要", "### Alert Summary",
 		"### 告警详请", "### Alert Detail",
-		"实例", "Instance",
+		"告警实例", "Alert Instance",
 		"可用区", "Zone",
 		"地域", "Region",
 		"产品", "Product",
 		"组件", "Component",
-		"开始", "Start At",
-		"结束", "End At",
+		"开始时间", "Start At",
+		"结束时间", "End At",
 	).Replace(s)
 }

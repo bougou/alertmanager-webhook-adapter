@@ -36,15 +36,15 @@
 
 {{ define "__alert_list" }}
 {{ range . }}
+> Alert Instance: `{{ template "__alertinstance" . }}`
+>
 > Alert Name: {{ if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 >
-> Severity:{{ ` ` }}
+> Severity: {{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
->
-> Instance: `{{ template "__alertinstance" . }}`
 >
 {{- if .Labels.region }}
 > Region: {{ .Labels.region }}

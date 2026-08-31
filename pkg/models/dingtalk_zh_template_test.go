@@ -82,12 +82,12 @@ func TestDingtalkZHDetailSeparatesAlerts(t *testing.T) {
 		t.Fatalf("missing firing title in detail, got:\n%s", detail)
 	}
 	afterTitle := detail[idx+len(title):]
-	if !strings.Contains(afterTitle, "\n> **实例**:") {
+	if !strings.Contains(afterTitle, "\n> **告警实例**:") {
 		t.Fatalf("detail title should be followed by a quoted alert, got:\n%s", afterTitle[:min(80, len(afterTitle))])
 	}
 
-	first := strings.Index(detail, `> **实例**: <font color="#722ED1">10.30.1.160</font>`)
-	second := strings.Index(detail, `> **实例**: <font color="#722ED1">10.30.1.162</font>`)
+	first := strings.Index(detail, `> **告警实例**: <font color="#722ED1">10.30.1.160</font>`)
+	second := strings.Index(detail, `> **告警实例**: <font color="#722ED1">10.30.1.162</font>`)
 	if first < 0 || second < 0 {
 		t.Fatalf("missing firing detail items, got:\n%s", detail)
 	}
@@ -95,10 +95,10 @@ func TestDingtalkZHDetailSeparatesAlerts(t *testing.T) {
 	if !strings.Contains(gap, "\n\n---\n\n") {
 		t.Fatalf("quoted alerts should be separated by a blank line, ---, and a blank line, gap ending %q", gap[len(gap)-24:])
 	}
-	if strings.Contains(gap, "\n- **实例**") {
+	if strings.Contains(gap, "\n- **告警实例**") {
 		t.Fatalf("detail alerts should use blockquote, not unordered list, gap:\n%s", gap)
 	}
-	if strings.Contains(gap, "**实例**:  \n<font") {
+	if strings.Contains(gap, "**告警实例**:  \n<font") {
 		t.Fatalf("key and value should stay on the same line, gap:\n%s", gap)
 	}
 	if !strings.Contains(gap, "\n>\n> **告警名称**:") {

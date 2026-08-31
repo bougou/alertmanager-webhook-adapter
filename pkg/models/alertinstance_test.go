@@ -162,7 +162,7 @@ func TestFeishuMarkdownKeepsVerticalFields(t *testing.T) {
 	for _, want := range []string{
 		"**Alert Name**:",
 		"**Alert Level**:",
-		"**Instance**:",
+		"**Alert Instance**:",
 		"**Region**:",
 		"**Start At**:",
 		"**End At**:",
@@ -182,10 +182,10 @@ func TestFeishuMarkdownKeepsVerticalFields(t *testing.T) {
 	if strings.Contains(out, "**Firing") {
 		t.Errorf("Firing subtitle should not be bold like Summary/Detail, got:\n%s", out)
 	}
-	inst := strings.Index(out, "**Instance**:")
+	inst := strings.Index(out, "**Alert Instance**:")
 	name := strings.Index(out, "**Alert Name**:")
 	if inst < 0 || name < 0 || inst > name {
-		t.Errorf("Instance should be the first field of each detail item, got:\n%s", out)
+		t.Errorf("Alert Instance should be the first field of each detail item, got:\n%s", out)
 	}
 }
 
@@ -229,8 +229,8 @@ func TestFeishuZHMarkdownSeparatesResolvedAlerts(t *testing.T) {
 
 	out := renderFeishuZHMarkdown(t, msg)
 
-	first := strings.Index(out, "- **实例**: <text_tag color='purple'>10.30.1.161</text_tag>")
-	second := strings.Index(out, "- **实例**: <text_tag color='purple'>10.30.1.164</text_tag>")
+	first := strings.Index(out, "- **告警实例**: <text_tag color='purple'>10.30.1.161</text_tag>")
+	second := strings.Index(out, "- **告警实例**: <text_tag color='purple'>10.30.1.164</text_tag>")
 	if first < 0 || second < 0 || first > second {
 		t.Fatalf("expected both resolved instances in detail list, got:\n%s", out)
 	}

@@ -83,7 +83,7 @@
 {{- if $i -}}
 {{- print "\n\n" -}}
 {{- end -}}
-- **实例**: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
+- **告警实例**: <text_tag color='purple'>{{ template "__alertinstance" . }}</text_tag>
 **告警名称**: <text_tag color='blue'>{{ template "__alert_alertname" . }}</text_tag>
 **告警级别**: {{ template "__severity_tag" .Labels.severity }}
 {{- if .Labels.region }}
@@ -99,8 +99,8 @@
 **组件**: <text_tag color='neutral'>{{ .Labels.component }}</text_tag>
 {{- end }}
 **告警状态**: {{ template "__alert_status" . }}
-**开始**: <text_tag color='neutral'>{{ .StartsAt.Format $timeFormat }}</text_tag>
-**结束**: <text_tag color='neutral'>{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}</text_tag>
+**开始时间**: <text_tag color='neutral'>{{ .StartsAt.Format $timeFormat }}</text_tag>
+**结束时间**: <text_tag color='neutral'>{{ if .EndsAt.After .StartsAt }}{{ .EndsAt.Format $timeFormat }}{{ else }}未结束{{ end }}</text_tag>
 {{- if eq .Status "firing" }}
 **告警描述**: {{ template "__alert_description" . }}
 {{- end -}}

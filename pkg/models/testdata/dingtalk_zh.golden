@@ -21,7 +21,7 @@ MARKDOWN:
 
 ##### <font color="#FF4D4F">**🚨 触发中告警 [3]**</font>
 
-> **实例**: <font color="#722ED1">10.30.1.160</font>
+> **告警实例**: <font color="#722ED1">10.30.1.160</font>
 >
 > **告警名称**: <font color="#1677FF">CPUHigh</font>
 >
@@ -37,16 +37,16 @@ MARKDOWN:
 >
 > **告警状态**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
 >
-> **结束**: <font color="#8C8C8C">未结束</font>
+> **结束时间**: <font color="#8C8C8C">未结束</font>
 >
 > **告警描述**: cpu usage is high than 20% for 5 minutes
 >
 
 ---
 
-> **实例**: <font color="#722ED1">10.30.1.162</font>
+> **告警实例**: <font color="#722ED1">10.30.1.162</font>
 >
 > **告警名称**: <font color="#1677FF">CPUHigh1</font>
 >
@@ -62,16 +62,16 @@ MARKDOWN:
 >
 > **告警状态**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
 >
-> **结束**: <font color="#8C8C8C">未结束</font>
+> **结束时间**: <font color="#8C8C8C">未结束</font>
 >
 > **告警描述**: cpu usage is high than 20% for 5 minutes
 >
 
 ---
 
-> **实例**: <font color="#722ED1">10.30.1.163</font>
+> **告警实例**: <font color="#722ED1">10.30.1.163</font>
 >
 > **告警名称**: <font color="#1677FF">CPUHigh2</font>
 >
@@ -87,16 +87,16 @@ MARKDOWN:
 >
 > **告警状态**: 🚨 <font color="#CF1322">**FIRING**</font>
 >
-> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
 >
-> **结束**: <font color="#8C8C8C">未结束</font>
+> **结束时间**: <font color="#8C8C8C">未结束</font>
 >
 > **告警描述**: cpu usage is high than 20% for 5 minutes
 >
 
 ##### <font color="#52C41A">**✅ 已恢复告警 [2]**</font>
 
-> **实例**: <font color="#722ED1">10.30.1.161</font>
+> **告警实例**: <font color="#722ED1">10.30.1.161</font>
 >
 > **告警名称**: <font color="#1677FF">CPUHigh</font>
 >
@@ -112,14 +112,14 @@ MARKDOWN:
 >
 > **告警状态**: ✅ <font color="#52C41A">**RESOLVED**</font>
 >
-> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
 >
-> **结束**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+> **结束时间**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
 >
 
 ---
 
-> **实例**: <font color="#722ED1">10.30.1.164</font>
+> **告警实例**: <font color="#722ED1">10.30.1.164</font>
 >
 > **告警名称**: <font color="#1677FF">CPUHigh</font>
 >
@@ -135,7 +135,7 @@ MARKDOWN:
 >
 > **告警状态**: ✅ <font color="#52C41A">**RESOLVED**</font>
 >
-> **开始**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
+> **开始时间**: <font color="#8C8C8C">2021-03-30 20:17:50 CST</font>
 >
-> **结束**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
+> **结束时间**: <font color="#8C8C8C">2021-03-30 21:17:50 CST</font>
 >

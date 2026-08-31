@@ -84,7 +84,7 @@
 {{ print "\n\n\n" -}}
 {{- end -}}
 <font color="comment"></font>
-> <font color="comment">Instance</font>: `{{ template "__alertinstance" . }}`
+> <font color="comment">Alert Instance</font>: `{{ template "__alertinstance" . }}`
 > <font color="comment">Alert Name</font>: {{ template "__alert_alertname" . }}
 > <font color="comment">Alert Level</font>: {{ template "__severity_tag" .Labels.severity }}
 {{- if .Labels.region }}

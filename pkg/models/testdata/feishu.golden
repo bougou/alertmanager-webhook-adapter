@@ -28,7 +28,7 @@ MARKDOWN:
 <font color='red'>🚨 Firing [3] alerts</font>
 
 
-- **Instance**: <text_tag color='purple'>10.30.1.160</text_tag>
+- **Alert Instance**: <text_tag color='purple'>10.30.1.160</text_tag>
 **Alert Name**: <text_tag color='blue'>CPUHigh</text_tag>
 **Alert Level**: <text_tag color='yellow'>WARNING</text_tag>
 **Region**: <text_tag color='neutral'>region-x</text_tag>
@@ -41,7 +41,7 @@ MARKDOWN:
 **Description**: cpu usage is high than 20% for 5 minutes
 
 
-- **Instance**: <text_tag color='purple'>10.30.1.162</text_tag>
+- **Alert Instance**: <text_tag color='purple'>10.30.1.162</text_tag>
 **Alert Name**: <text_tag color='blue'>CPUHigh1</text_tag>
 **Alert Level**: <text_tag color='red'>CRITICAL</text_tag>
 **Region**: <text_tag color='neutral'>region-x</text_tag>
@@ -54,7 +54,7 @@ MARKDOWN:
 **Description**: cpu usage is high than 20% for 5 minutes
 
 
-- **Instance**: <text_tag color='purple'>10.30.1.163</text_tag>
+- **Alert Instance**: <text_tag color='purple'>10.30.1.163</text_tag>
 **Alert Name**: <text_tag color='blue'>CPUHigh2</text_tag>
 **Alert Level**: <text_tag color='lime'>INFO</text_tag>
 **Region**: <text_tag color='neutral'>region-x</text_tag>
@@ -70,7 +70,7 @@ MARKDOWN:
 <font color='green'>✅ Resolved [2] alerts</font>
 
 
-- **Instance**: <text_tag color='purple'>10.30.1.161</text_tag>
+- **Alert Instance**: <text_tag color='purple'>10.30.1.161</text_tag>
 **Alert Name**: <text_tag color='blue'>CPUHigh</text_tag>
 **Alert Level**: <text_tag color='yellow'>WARNING</text_tag>
 **Region**: <text_tag color='neutral'>region-y</text_tag>
@@ -82,7 +82,7 @@ MARKDOWN:
 **End At**: <text_tag color='neutral'>2021-03-30 21:17:50 CST</text_tag>
 
 
-- **Instance**: <text_tag color='purple'>10.30.1.164</text_tag>
+- **Alert Instance**: <text_tag color='purple'>10.30.1.164</text_tag>
 **Alert Name**: <text_tag color='blue'>CPUHigh</text_tag>
 **Alert Level**: <text_tag color='yellow'>WARNING</text_tag>
 **Region**: <text_tag color='neutral'>region-y</text_tag>

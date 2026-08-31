@@ -31,7 +31,7 @@ MARKDOWN:
 
 
 <font color="comment"></font>
-> <font color="comment">实例</font>: `10.30.1.160`
+> <font color="comment">告警实例</font>: `10.30.1.160`
 > <font color="comment">告警名称</font>: CPUHigh
 > <font color="comment">告警级别</font>: <font color="warning">WARNING</font>
 > <font color="comment">地域</font>: region-x
@@ -39,13 +39,13 @@ MARKDOWN:
 > <font color="comment">产品</font>: product-x
 > <font color="comment">组件</font>: component-x
 > <font color="comment">告警状态</font>: 🚨 <font color="warning">FIRING</font>
-> <font color="comment">开始</font>: 2021-03-30 20:17:50 CST
-> <font color="comment">结束</font>: 未结束
+> <font color="comment">开始时间</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">结束时间</font>: 未结束
 > <font color="comment">告警描述</font>: cpu usage is high than 20% for 5 minutes
 
 
 <font color="comment"></font>
-> <font color="comment">实例</font>: `10.30.1.162`
+> <font color="comment">告警实例</font>: `10.30.1.162`
 > <font color="comment">告警名称</font>: CPUHigh1
 > <font color="comment">告警级别</font>: <font color="warning">CRITICAL</font>
 > <font color="comment">地域</font>: region-x
@@ -53,13 +53,13 @@ MARKDOWN:
 > <font color="comment">产品</font>: product-x
 > <font color="comment">组件</font>: component-x
 > <font color="comment">告警状态</font>: 🚨 <font color="warning">FIRING</font>
-> <font color="comment">开始</font>: 2021-03-30 20:17:50 CST
-> <font color="comment">结束</font>: 未结束
+> <font color="comment">开始时间</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">结束时间</font>: 未结束
 > <font color="comment">告警描述</font>: cpu usage is high than 20% for 5 minutes
 
 
 <font color="comment"></font>
-> <font color="comment">实例</font>: `10.30.1.163`
+> <font color="comment">告警实例</font>: `10.30.1.163`
 > <font color="comment">告警名称</font>: CPUHigh2
 > <font color="comment">告警级别</font>: <font color="info">INFO</font>
 > <font color="comment">地域</font>: region-x
@@ -67,8 +67,8 @@ MARKDOWN:
 > <font color="comment">产品</font>: product-x
 > <font color="comment">组件</font>: component-x
 > <font color="comment">告警状态</font>: 🚨 <font color="warning">FIRING</font>
-> <font color="comment">开始</font>: 2021-03-30 20:17:50 CST
-> <font color="comment">结束</font>: 未结束
+> <font color="comment">开始时间</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">结束时间</font>: 未结束
 > <font color="comment">告警描述</font>: cpu usage is high than 20% for 5 minutes
 
 
@@ -76,7 +76,7 @@ MARKDOWN:
 
 
 <font color="comment"></font>
-> <font color="comment">实例</font>: `10.30.1.161`
+> <font color="comment">告警实例</font>: `10.30.1.161`
 > <font color="comment">告警名称</font>: CPUHigh
 > <font color="comment">告警级别</font>: <font color="warning">WARNING</font>
 > <font color="comment">地域</font>: region-y
@@ -84,12 +84,12 @@ MARKDOWN:
 > <font color="comment">产品</font>: product-y
 > <font color="comment">组件</font>: component-y
 > <font color="comment">告警状态</font>: ✅ <font color="info">RESOLVED</font>
-> <font color="comment">开始</font>: 2021-03-30 20:17:50 CST
-> <font color="comment">结束</font>: 2021-03-30 21:17:50 CST
+> <font color="comment">开始时间</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">结束时间</font>: 2021-03-30 21:17:50 CST
 
 
 <font color="comment"></font>
-> <font color="comment">实例</font>: `10.30.1.164`
+> <font color="comment">告警实例</font>: `10.30.1.164`
 > <font color="comment">告警名称</font>: CPUHigh
 > <font color="comment">告警级别</font>: <font color="warning">WARNING</font>
 > <font color="comment">地域</font>: region-y
@@ -97,5 +97,5 @@ MARKDOWN:
 > <font color="comment">产品</font>: product-y
 > <font color="comment">组件</font>: component-y
 > <font color="comment">告警状态</font>: ✅ <font color="info">RESOLVED</font>
-> <font color="comment">开始</font>: 2021-03-30 20:17:50 CST
-> <font color="comment">结束</font>: 2021-03-30 21:17:50 CST
+> <font color="comment">开始时间</font>: 2021-03-30 20:17:50 CST
+> <font color="comment">结束时间</font>: 2021-03-30 21:17:50 CST

@@ -101,12 +101,12 @@ func TestWeixinZHDetailUsesWeixinMarkdown(t *testing.T) {
 		t.Fatalf("missing firing title in detail, got:\n%s", detail)
 	}
 	afterTitle := detail[idx+len(title):]
-	if !strings.HasPrefix(afterTitle, "\n\n\n> <font color=\"comment\">实例</font>:") {
+	if !strings.HasPrefix(afterTitle, "\n\n\n> <font color=\"comment\">告警实例</font>:") {
 		t.Fatalf("detail title should be followed by two blank lines then a quote, got:\n%s", afterTitle[:min(80, len(afterTitle))])
 	}
 
-	first := strings.Index(detail, "> <font color=\"comment\">实例</font>: `10.30.1.160`")
-	second := strings.Index(detail, "> <font color=\"comment\">实例</font>: `10.30.1.162`")
+	first := strings.Index(detail, "> <font color=\"comment\">告警实例</font>: `10.30.1.160`")
+	second := strings.Index(detail, "> <font color=\"comment\">告警实例</font>: `10.30.1.162`")
 	if first < 0 || second < 0 {
 		t.Fatalf("missing firing detail items, got:\n%s", detail)
 	}

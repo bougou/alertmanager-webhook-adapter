@@ -23,9 +23,12 @@ func loadWebhookJSON(t *testing.T, rel string) *AlertmanagerWebhookMessage {
 	if err := json.Unmarshal(b, &msg); err != nil {
 		t.Fatal(err)
 	}
-	loc := time.FixedZone("CST", 8*3600)
 	msg.Signature = "Bougou"
-	msg.MessageAt = time.Date(2026, 8, 29, 17, 31, 23, 0, loc)
+	msg.MessageAt = time.Date(2026, 8, 29, 17, 31, 23, 0, testCST)
+	for i := range msg.Alerts {
+		msg.Alerts[i].StartsAt = msg.Alerts[i].StartsAt.In(testCST)
+		msg.Alerts[i].EndsAt = msg.Alerts[i].EndsAt.In(testCST)
+	}
 	return &msg
 }
 
@@ -102,15 +105,15 @@ func TestFeishuZHDetailUsesTwoBlankLines(t *testing.T) {
 		t.Fatalf("missing firing title in detail, got:\n%s", detail)
 	}
 	afterTitle := detail[idx+len(title):]
-	if !strings.HasPrefix(afterTitle, "\n\n\n- **实例**:") {
+	if !strings.HasPrefix(afterTitle, "\n\n\n- **告警实例**:") {
 		t.Fatalf("detail title should be followed by two blank lines, got:\n%s", afterTitle[:min(80, len(afterTitle))])
 	}
 	if strings.HasPrefix(afterTitle, "\n\n\n\n") {
 		t.Fatalf("detail title has more than two blank lines, got:\n%s", afterTitle[:min(80, len(afterTitle))])
 	}
 
-	first := strings.Index(detail, "- **实例**: <text_tag color='purple'>10.30.1.160</text_tag>")
-	second := strings.Index(detail, "- **实例**: <text_tag color='purple'>10.30.1.162</text_tag>")
+	first := strings.Index(detail, "- **告警实例**: <text_tag color='purple'>10.30.1.160</text_tag>")
+	second := strings.Index(detail, "- **告警实例**: <text_tag color='purple'>10.30.1.162</text_tag>")
 	if first < 0 || second < 0 {
 		t.Fatalf("missing firing detail items, got:\n%s", detail)
 	}
@@ -168,13 +171,13 @@ func feishuZHToEN(s string) string {
 		"**告警级别**", "**Alert Level**",
 		"**告警状态**", "**Alert Status**",
 		"**告警描述**", "**Description**",
-		"**实例**", "**Instance**",
+		"**告警实例**", "**Alert Instance**",
 		"**可用区**", "**Zone**",
 		"**地域**", "**Region**",
 		"**产品**", "**Product**",
 		"**组件**", "**Component**",
-		"**开始**", "**Start At**",
-		"**结束**", "**End At**",
+		"**开始时间**", "**Start At**",
+		"**结束时间**", "**End At**",
 		"告警中:", "Firing:",
 		"已恢复:", "Resolved:",
 		"未结束", "Not End",

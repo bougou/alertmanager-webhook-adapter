@@ -36,15 +36,15 @@
 
 {{ define "__alert_list" }}
 {{ range . }}
+> 告警实例: `{{ template "__alertinstance" . }}`
+>
 > 告警名称: {{ if .Labels.alertname_custom  }}{{ .Labels.alertname_custom }}{{ else if .Annotations.alertname  }}{{ .Annotations.alertname }}{{ else }}{{ .Labels.alertname }}{{ end }}
 >
-> Severity:{{ ` ` }}
+> 告警级别: {{ ` ` }}
 {{- if eq .Labels.severity "ok" }}OK{{ end -}}
 {{- if eq .Labels.severity "info" }}INFO{{ end -}}
 {{- if eq .Labels.severity "warning" }}WARNING{{ end -}}
 {{- if eq .Labels.severity "critical" }}CRITICAL{{ end }}
->
-> 告警实例: `{{ template "__alertinstance" . }}`
 >
 {{- if .Labels.region }}
 > 地域: {{ .Labels.region }}
